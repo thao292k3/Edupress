@@ -6,7 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Lesson extends Model
 {
-   protected $guarded = [];
+    protected $guarded = [];
+
+   public function section()
+    {
+        return $this->belongsTo(Section::class);
+    }
+
+    // Nội dung mô tả
+    public function content()
+    {
+        return $this->hasOne(LessonContents::class);
+    }
 
     public function course()
     {

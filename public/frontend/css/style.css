@@ -5379,6 +5379,18 @@ div.datedropper .picker .pick-lg-b li {
       display: -ms-flex;
       display: flex; } }
 
+.logo-box .logo img {
+    width: 60px; /* Đặt chiều rộng mới */
+    height: 60px; /* Đặt chiều cao mới */
+    /* optional: object-fit: contain; nếu logo bị biến dạng */
+}
+
+/* Sửa logo trong box ẩn/hiện trên di động (logo--box) */
+.logo--box .logo img {
+    width: 40px; /* Đặt chiều rộng mới */
+    height: 40px; /* Đặt chiều cao mới */
+}
+
 /*====== menu-category =======*/
 @media (max-width: 1199px) {
   .menu-category {

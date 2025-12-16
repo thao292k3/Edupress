@@ -12,8 +12,8 @@
     <!--navigation-->
     <ul class="metismenu" id="menu">
         <li>
-            <a href="{{ route('instructor.dashboard') }}">
-                <div class="parent-icon"><i class='bx bx-category'></i>
+            <a href="{{ route('instructor.dashboard') }}" class="has-arrow">
+                <div class="parent-icon"><i class='fadeIn animated bx bx-home'></i>
                 </div>
                 <div class="menu-title">Dashboard</div>
             </a>
@@ -21,56 +21,61 @@
         </li>
 
         @if (isApprovedUser())
-            <li class="{{ setSidebar(['instructor.course*', 'instructor.course-section*']) }}">
+            <li class="{{ setSidebar(['instructor.course*', 'instructor.course.section*']) }}">
                 <a href="javascript:;" class="has-arrow">
-                    <div class="parent-icon"><i class="bx bx-category"></i>
+                    <div class="parent-icon"><i class="lni lni-clipboard"></i>
                     </div>
-                    <div class="menu-title">Manage Courses</div>
+                    <div class="menu-title">Quản lý khóa học </div>
                 </a>
+
                 <ul>
-                    <li class="{{ setSidebar(['instructor.course*', 'instructor.course-section']) }}">
-                        <a href="{{ route('instructor.course.index') }}"><i class='bx bx-radio-circle'></i>All
-                            Course</a>
-                    </li>
 
-                    <li class="{{ setSidebar(['instructor.videos*']) }}">
-                        <a href="{{ route('instructor.videos.index') }}">
-                            <div class="parent-icon"><i class="bx bx-video"></i></div>
-                            <div class="menu-title">Course Videos</div>
+                    <li
+                        class="{{ setSidebar(['instructor.course*', 'instructor.course.content', 'instructor.course-section', 'instructor.lessons*', 'instructor.videos*']) }}">
+                        <a href="{{ route('instructor.course.index') }}">
+                            <div class="parent-icon"><i class='bx bx-book-content'></i></div>
+                            <div class="menu-title"> Khóa học</div>
                         </a>
                     </li>
-
-                    <li class="{{ setSidebar(['instructor.lessons*']) }}">
-                        <a href="{{ route('instructor.lessons.index') }}">
-                            <div class="parent-icon"><i class="bx bx-video"></i></div>
-                            <div class="menu-title">Course Lessons</div>
-                        </a>
-                    </li>
-
-
-
-
-                    {{-- <li class="{{ setSidebar(['admin.instructor.active']) }}">
-                    <a href="{{route('admin.instructor.active')}}"><i class='bx bx-radio-circle'></i>Active Instructor</a>
-                </li> --}}
 
                 </ul>
 
-            </li>
+                <li class="menu-label text-truncate mb-2" data-bs-toggle="tooltip" data-bs-placement="right"
+                    title="Quiz & Questions">Quản lý Bài kiểm tra</li>
 
-            {{-- <li class="{{ setSidebar(['instructor.coupon*']) }}">
-            <a href="javascript:;" class="has-arrow">
-                <div class="parent-icon"><i class="bx bx-category"></i>
-                </div>
-                <div class="menu-title">Managed Coupon</div>
-            </a>
-            <ul>
-                <li class="{{ setSidebar(['instructor.coupon*']) }}">
-                    <a href="{{route('instructor.coupon.index')}}"><i class='bx bx-radio-circle'></i>All Coupon</a>
+                <li class="nav-item">
+                    <a href="{{ route('instructor.quizzes.index') }}"
+                        class="nav-link @if (Route::is('instructor.quizzes.*')) active @endif">
+                        <i class="fas fa-question-circle"></i>
+                        <span class="text-truncate"> Quản lý Quiz</span>
+                    </a>
                 </li>
 
-            </ul>
-        </li> --}}
+                <li class="nav-item">
+                    <a href="{{ route('instructor.live-sessions.index') }}"
+                        class="nav-link @if (Route::is('instructor.live-sessions.*')) active @endif">
+                        <i class="fadeIn animated bx bx-video-recording"></i>
+                        <span class="text-truncate"> Quản lý Buổi dạy Trực tiếp</span>
+                    </a>
+                </li>
+
+                </li>
+
+
+
+                <li class="{{ setSidebar(['instructor.coupon*']) }}">
+                <a href="javascript:;" class="has-arrow">
+                    <div class="parent-icon"><i class="fadeIn animated bx bx-credit-card"></i>
+                    </div>
+                    <div class="menu-title">Phiếu giảm giá </div>
+                </a>
+                <ul>
+                    <li class="{{ setSidebar(['instructor.coupon*']) }}">
+                        <a href="{{route('instructor.coupon.index')}}"><i class='fas fa-'></i>Tất cả mã giảm giá </a>
+                    </li>
+
+                </ul>
+        </li>
         @endif
 
 

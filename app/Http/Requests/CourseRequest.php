@@ -26,7 +26,12 @@ class CourseRequest extends FormRequest
         $isFree = $this->input('is_free');
 
         return [
+            'category_id' => 'required|exists:categories,id',
+
             'course_title' => 'required|string|max:255',
+
+            // 'instructor_id' => 'required|exists:users,id',
+
 
             'course_name_slug' => [
                 'required',
@@ -53,9 +58,10 @@ class CourseRequest extends FormRequest
             ],
 
             'description' => 'nullable|string',
+            // 'course_benefits' => 'nullable|string',
 
-            'video_urls' => 'nullable|array',
-            'video_urls.*' => 'nullable|url|max:255',
+            // 'video_urls' => 'nullable|array',
+            // 'video_urls.*' => 'nullable|url|max:255',
 
             'course_level' => 'nullable|string|max:100',
             'course_duration' => 'nullable|string|max:100',
@@ -66,6 +72,8 @@ class CourseRequest extends FormRequest
 
             'selling_price' => 'nullable|numeric|min:0',
             'discount_price' => 'nullable|numeric|min:0|lt:selling_price',
+
+            'limit_duration_months' => 'nullable|integer|min:1',
 
             'bestseller' => 'nullable|in:yes,no',
             'featured' => 'nullable|in:yes,no',
@@ -80,6 +88,9 @@ class CourseRequest extends FormRequest
                 'min:1',
                 $isFree ? 'max:200' : 'max:10'
             ],
+
+            'course_goals.*'=> 'nullable',
+            'course_goals.*' => 'nullable|string|max:255',
         ];
     }
 }

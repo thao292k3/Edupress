@@ -10,7 +10,7 @@
     rel="stylesheet">
 
 <!-- Favicon -->
-<link rel="icon" sizes="16x16" href="{{asset('frontend/images/logo-dai-hoc-vinh.jpg')}}">
+<link rel="icon" sizes="16x16" href="{{asset('frontend/images/Logoo.png')}}">
 
 <!-- inject:css -->
 <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap.min.css') }}">

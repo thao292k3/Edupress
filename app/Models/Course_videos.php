@@ -15,11 +15,11 @@ class Course_videos extends Model
     }
 
 
-    public function videoFileUrl()
-    {
-        if ($this->video_file) {
-            return Storage::disk('public')->url($this->video_file);
-        }
-        return null;
-    }
+    // public function videoFileUrl()
+    // {
+    //     if ($this->video_file) {
+    //         return Storage::disk('public')->url($this->video_file);
+    //     }
+    //     return null;
+    // }
 }

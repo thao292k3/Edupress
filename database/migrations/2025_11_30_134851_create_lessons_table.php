@@ -13,18 +13,17 @@ return new class extends Migration
     {
         Schema::create('lessons', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('course_id')->constrained('courses')->cascadeOnDelete();
+            $table->integer('course_id')->nullable();
+            $table->unsignedBigInteger('section_id');
             $table->string('title');
-            $table->string('slug')->nullable();
-            $table->longText('description')->nullable();
-            $table->integer('order')->default(0);
-            $table->boolean('is_preview')->default(false);
-            $table->string('video_url')->nullable();    // youtube link
-            $table->string('video_file')->nullable();   // upload path (disk public)
-            $table->string('lesson_file')->nullable();
-            $table->string('lesson_document_link')->nullable();
-            $table->integer('duration')->nullable();    // duration in seconds or minutes
+            $table->string('video_url')->nullable(); 
+            $table->decimal('duration', 8, 2)->default(0);
+            $table->integer('position')->default(0);
+            $table->boolean('is_preview')->default(false);                                  
+
             $table->timestamps();
+
+            $table->foreign('section_id')->references('id')->on('sections')->onDelete('cascade');
         });
     }
 

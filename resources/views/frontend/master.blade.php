@@ -3,7 +3,7 @@
 
 <head>
 
-    <title> Hệ thống Edupress </title>
+    <title>Edupress</title>
 
     <!-- Google fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -11,7 +11,7 @@
         rel="stylesheet">
 
     <!-- Favicon -->
-    <link rel="icon" sizes="16x16" href="{{ asset('frontend/images/logo-dai-hoc-vinh.jpg') }}">
+    <link rel="icon" sizes="16x16" href="{{ asset('frontend/images/Logoo.png') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- inject:css -->
@@ -34,7 +34,7 @@
 
 
     <!--START COURSE First AREA-->
-
+ 
 
 
     <!--START COURSE AREA-->

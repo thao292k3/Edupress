@@ -10,7 +10,7 @@
 
 @include('frontend.section.course-area-first')
 
-@include('frontend.section.course-area')
+{{-- @include('frontend.section.course-area')
 
 @include('frontend.section.funfact')
 
@@ -22,9 +22,14 @@
 
 @include('frontend.section.register-area')
 
-@include('frontend.section.client')
+ @include('frontend.section.client')
 
 @include('frontend.section.blog')
 
-@include('frontend.section.subscribe')
+@include('frontend.section.subscribe') --}}
+
+
+
+
+
 @endsection

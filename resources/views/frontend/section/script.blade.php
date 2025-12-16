@@ -68,8 +68,8 @@
 
 
 
-{{-- <script src="{{ asset('customjs/wishlist/index.js') }}"></script>
-<script src="{{asset('customjs/cart/index.js')}}"></script> --}}
+<script src="{{ asset('customjs/wishlist/index.js') }}"></script>
+<script src="{{asset('customjs/cart/index.js')}}"></script>
 
 
 

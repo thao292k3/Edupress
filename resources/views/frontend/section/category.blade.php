@@ -6,7 +6,7 @@
                     <div class="section-heading">
                         <h5 class="ribbon ribbon-lg mb-2">Categories</h5>
                         <h2 class="section__title">Popular Categories</h2>
-                        {{-- <span class="section-divider"></span> --}}
+                        <span class="section-divider"></span>
                     </div><!-- end section-heading -->
                 </div>
             </div><!-- end col-lg-9 -->

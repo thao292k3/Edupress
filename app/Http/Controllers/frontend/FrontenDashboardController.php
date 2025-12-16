@@ -4,9 +4,13 @@ namespace App\Http\Controllers\frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Course;
 use App\Models\InfoBox;
+use App\Models\Lesson;
+use App\Models\Section;
 use App\Models\Slider;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FrontenDashboardController extends Controller
 {
@@ -18,7 +22,63 @@ class FrontenDashboardController extends Controller
 
         $all_categories = Category::inRandomOrder()->limit(6)->get();
 
-        return view('frontend.index', compact('all_slider', 'all_info', 'all_categories'));
+        $categories = Category::all();
+
+        $course_category = Category::with('course', 'course.user', 'course.course_goal')->get();
+        $featured_courses = Course::latest() 
+            ->with(['user']) 
+            ->where('status', 1) 
+            ->take(6) 
+            ->get();
+
+        
+
+        return view('frontend.index', compact('all_slider', 'all_info', 'all_categories', 'categories', 'course_category', 'featured_courses'));
+    }
+
+
+    public function view($slug)
+    {
+
+        $course = Course::where('course_name_slug', $slug)->with('category', 'subcategory', 'user', 'course_goal')->first();
+        $total_lecture = Lesson::where('course_id', $course->id)->count();
+        $course_content = Section::where('course_id', $course->id)->with('lesson')->get();
+
+        
+        $userId = Auth::id();
+
+        
+        $similarCourses = Course::where('category_id', $course->category_id)
+            ->where('id', '!=', $course->id)->get();
+
+        $all_category = Category::orderBy('name', 'asc')->get();
+
+        
+
+        $more_course_instructor = Course::where('instructor_id', $course->instructor_id)->where('id', '!=', $course->id)->with('user')->get();
+
+        $preview_lesson = Lesson::where('course_id', $course->id)
+                            ->where('is_preview', true) 
+                            ->first();
+    
+    
+        $preview_video_url = $preview_lesson ? $preview_lesson->url : null;
+
+        $total_lecture = Lesson::where('course_id', $course->id)->count();
+
+
+
+        $total_minutes = Lesson::where('course_id', $course->id)->sum('duration');
+
+        $hours = floor($total_minutes / 60);
+        $minutes = floor($total_minutes % 60);
+        $seconds = round(($total_minutes - floor($total_minutes)) * 60);
+
+        $total_lecture_duration = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+
+
+        return view('frontend.pages.course-details.index', compact('course', 'total_lecture', 'course_content', 'similarCourses', 'all_category', 
+        'more_course_instructor', 'total_minutes', 'total_lecture_duration', 'preview_lesson', 'preview_video_url'));
     }
     
 }

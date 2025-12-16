@@ -14,71 +14,24 @@ $(document).ready(function () {
 
 /*   Dynamic form addd */
 
+$(document).ready(function () {
+    // Add new input field for course goal
+    $('#addGoalInput').on('click', function (e) {
+        e.preventDefault(); // Prevent default behavior
 
-        /* ========== 1. Preview video file upload ========== */
-        $(document).ready(function () {
-            $('#video_file').on('change', function (e) {
-                const file = e.target.files[0];
+        $('#goalContainer').append(`
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                <input type="text" class="form-control" name="course_goals[]" placeholder="Enter Course Goal" />
+                <button type="button" class="btn btn-danger removeGoalInput">-</button>
+            </div>
+        `);
+    });
 
-                if (file) {
-                    const validTypes = ['video/mp4', 'video/webm', 'video/ogg'];
-                    if (!validTypes.includes(file.type)) {
-                        alert('Please upload a valid video file (MP4, WebM, OGG).');
-                        $(this).val('');
-                        return;
-                    }
-
-                    const preview = document.getElementById('videoFilePreview');
-                    preview.src = URL.createObjectURL(file);
-                    preview.style.display = 'block';
-                    preview.load();
-                    preview.onloadeddata = function () {
-                        URL.revokeObjectURL(this.src);
-                    };
-                }
-            });
-        });
-
-
-        /* ========== 2. Add multiple YouTube URLs ========== */
-        $('#addVideo').on('click', function () {
-            $('#videoInputs').append(`
-                <div class="input-group mb-2">
-                    <input type="url" name="video_urls[]" class="form-control" placeholder="Enter YouTube URL" required>
-                    <button type="button" class="btn btn-danger removeVideo">X</button>
-                </div>
-                <iframe class="video-preview" style="width:100%; height:350px; display:none; margin-bottom:10px;" frameborder="0" allowfullscreen></iframe>
-            `);
-        });
-
-        /* Remove YouTube URL input */
-        $(document).on('click', '.removeVideo', function () {
-            $(this).closest('.input-group').next('.video-preview').remove();
-            $(this).closest('.input-group').remove();
-        });
-
-
-        /* ========== 3. Preview YouTube URL automatically ========== */
-        $(document).on("input", "input[name='video_urls[]']", function () {
-            let url = $(this).val();
-            let embedUrl = "";
-
-            if (url.includes("youtube.com/watch?v=")) {
-                embedUrl = url.replace("watch?v=", "embed/");
-            } else if (url.includes("youtu.be/")) {
-                embedUrl = url.replace("youtu.be/", "youtube.com/embed/");
-            }
-
-            let preview = $(this).closest('.input-group').next('.video-preview');
-
-            if (embedUrl !== "") {
-                preview.attr("src", embedUrl).show();
-            } else {
-                preview.hide();
-            }
-        });
-
-
+    // Remove an input field
+    $(document).on('click', '.removeGoalInput', function () {
+        $(this).closest('div').remove();
+    });
+});
 
     /* dynamic dependent jquery   */
 
@@ -147,5 +100,6 @@ $(document).ready(function () {
             }
         });
     });
+
 
 

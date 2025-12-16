@@ -19,7 +19,8 @@
                     </div><!-- end card-image -->
                     <div class="card-body">
                         <h6 class="ribbon ribbon-blue-bg fs-14 mb-3">All Levels</h6>
-                        <h5 class="card-title"><a href="course-details.html">The Complete WordPress Website Business Course</a></h5>
+                        <h5 class="card-title"><a href="course-details.html">The Complete WordPress Website
+                                Business Course</a></h5>
                         <p class="card-text"><a href="teacher-detail.html">Jose Portilla</a></p>
                         <div class="rating-wrap d-flex align-items-center py-2">
                             <div class="review-stars">
@@ -33,8 +34,10 @@
                             <span class="rating-total pl-1">(20,230)</span>
                         </div><!-- end rating-wrap -->
                         <div class="d-flex justify-content-between align-items-center">
-                            <p class="card-price text-black font-weight-bold">12.99 <span class="before-price font-weight-medium">129.99</span></p>
-                            <div class="icon-element icon-element-sm shadow-sm cursor-pointer" title="Add to Wishlist"><i class="la la-heart-o"></i></div>
+                            <p class="card-price text-black font-weight-bold">12.99 <span
+                                    class="before-price font-weight-medium">129.99</span></p>
+                            <div class="icon-element icon-element-sm shadow-sm cursor-pointer"
+                                title="Add to Wishlist"><i class="la la-heart-o"></i></div>
                         </div>
                     </div><!-- end card-body -->
                 </div><!-- end card -->
@@ -49,7 +52,8 @@
                     </div><!-- end card-image -->
                     <div class="card-body">
                         <h6 class="ribbon ribbon-blue-bg fs-14 mb-3">All Levels</h6>
-                        <h5 class="card-title"><a href="course-details.html">The Complete WordPress Website Business Course</a></h5>
+                        <h5 class="card-title"><a href="course-details.html">The Complete WordPress Website
+                                Business Course</a></h5>
                         <p class="card-text"><a href="teacher-detail.html">Jose Portilla</a></p>
                         <div class="rating-wrap d-flex align-items-center py-2">
                             <div class="review-stars">
@@ -64,7 +68,8 @@
                         </div><!-- end rating-wrap -->
                         <div class="d-flex justify-content-between align-items-center">
                             <p class="card-price text-black font-weight-bold">129.99</p>
-                            <div class="icon-element icon-element-sm shadow-sm cursor-pointer" title="Add to Wishlist"><i class="la la-heart-o"></i></div>
+                            <div class="icon-element icon-element-sm shadow-sm cursor-pointer"
+                                title="Add to Wishlist"><i class="la la-heart-o"></i></div>
                         </div>
                     </div><!-- end card-body -->
                 </div><!-- end card -->
@@ -79,7 +84,8 @@
                     </div><!-- end card-image -->
                     <div class="card-body">
                         <h6 class="ribbon ribbon-blue-bg fs-14 mb-3">All Levels</h6>
-                        <h5 class="card-title"><a href="course-details.html">The Complete WordPress Website Business Course</a></h5>
+                        <h5 class="card-title"><a href="course-details.html">The Complete WordPress Website
+                                Business Course</a></h5>
                         <p class="card-text"><a href="teacher-detail.html">Jose Portilla</a></p>
                         <div class="rating-wrap d-flex align-items-center py-2">
                             <div class="review-stars">
@@ -94,7 +100,8 @@
                         </div><!-- end rating-wrap -->
                         <div class="d-flex justify-content-between align-items-center">
                             <p class="card-price text-black font-weight-bold">Free</p>
-                            <div class="icon-element icon-element-sm shadow-sm cursor-pointer" title="Add to Wishlist"><i class="la la-heart-o"></i></div>
+                            <div class="icon-element icon-element-sm shadow-sm cursor-pointer"
+                                title="Add to Wishlist"><i class="la la-heart-o"></i></div>
                         </div>
                     </div><!-- end card-body -->
                 </div><!-- end card -->
@@ -106,7 +113,8 @@
                     </div><!-- end card-image -->
                     <div class="card-body">
                         <h6 class="ribbon ribbon-blue-bg fs-14 mb-3">All Levels</h6>
-                        <h5 class="card-title"><a href="course-details.html">The Complete WordPress Website Business Course</a></h5>
+                        <h5 class="card-title"><a href="course-details.html">The Complete WordPress Website
+                                Business Course</a></h5>
                         <p class="card-text"><a href="teacher-detail.html">Jose Portilla</a></p>
                         <div class="rating-wrap d-flex align-items-center py-2">
                             <div class="review-stars">
@@ -121,7 +129,8 @@
                         </div><!-- end rating-wrap -->
                         <div class="d-flex justify-content-between align-items-center">
                             <p class="card-price text-black font-weight-bold">129.99</p>
-                            <div class="icon-element icon-element-sm shadow-sm cursor-pointer" title="Add to Wishlist"><i class="la la-heart-o"></i></div>
+                            <div class="icon-element icon-element-sm shadow-sm cursor-pointer"
+                                title="Add to Wishlist"><i class="la la-heart-o"></i></div>
                         </div>
                     </div><!-- end card-body -->
                 </div><!-- end card -->
@@ -136,7 +145,8 @@
                     </div><!-- end card-image -->
                     <div class="card-body">
                         <h6 class="ribbon ribbon-blue-bg fs-14 mb-3">All Levels</h6>
-                        <h5 class="card-title"><a href="course-details.html">The Complete WordPress Website Business Course</a></h5>
+                        <h5 class="card-title"><a href="course-details.html">The Complete WordPress Website
+                                Business Course</a></h5>
                         <p class="card-text"><a href="teacher-detail.html">Jose Portilla</a></p>
                         <div class="rating-wrap d-flex align-items-center py-2">
                             <div class="review-stars">
@@ -151,7 +161,8 @@
                         </div><!-- end rating-wrap -->
                         <div class="d-flex justify-content-between align-items-center">
                             <p class="card-price text-black font-weight-bold">129.99</p>
-                            <div class="icon-element icon-element-sm shadow-sm cursor-pointer" title="Add to Wishlist"><i class="la la-heart-o"></i></div>
+                            <div class="icon-element icon-element-sm shadow-sm cursor-pointer"
+                                title="Add to Wishlist"><i class="la la-heart-o"></i></div>
                         </div>
                     </div><!-- end card-body -->
                 </div><!-- end card -->
@@ -166,7 +177,8 @@
                     </div><!-- end card-image -->
                     <div class="card-body">
                         <h6 class="ribbon ribbon-blue-bg fs-14 mb-3">All Levels</h6>
-                        <h5 class="card-title"><a href="course-details.html">The Complete WordPress Website Business Course</a></h5>
+                        <h5 class="card-title"><a href="course-details.html">The Complete WordPress Website
+                                Business Course</a></h5>
                         <p class="card-text"><a href="teacher-detail.html">Jose Portilla</a></p>
                         <div class="rating-wrap d-flex align-items-center py-2">
                             <div class="review-stars">
@@ -181,11 +193,12 @@
                         </div><!-- end rating-wrap -->
                         <div class="d-flex justify-content-between align-items-center">
                             <p class="card-price text-black font-weight-bold">129.99</p>
-                            <div class="icon-element icon-element-sm shadow-sm cursor-pointer" title="Add to Wishlist"><i class="la la-heart-o"></i></div>
+                            <div class="icon-element icon-element-sm shadow-sm cursor-pointer"
+                                title="Add to Wishlist"><i class="la la-heart-o"></i></div>
                         </div>
                     </div><!-- end card-body -->
                 </div><!-- end card -->
             </div><!-- end tab-content -->
         </div><!-- end container -->
     </div><!-- end course-wrapper -->
-</section>
+</section><!-- end courses-area -->

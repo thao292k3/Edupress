@@ -22,7 +22,8 @@ return new class extends Migration
             $table->string('course_name_slug')->nullable();
             $table->string('course_title')->nullable();
             $table->longText('description')->nullable();
-            $table->string('video_url')->nullable();
+            $table->longText('course_benefits')->nullable();
+            
             $table->string('course_level')->nullable();
             $table->string('course_duration')->nullable();
             $table->string('resources')->nullable();
@@ -44,6 +45,7 @@ return new class extends Migration
            $table->tinyInteger('status')
                 ->default(0)
                 ->comment('0 = Inactive, 1 = Active');
+
 
 
             $table->timestamps();

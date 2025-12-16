@@ -32,12 +32,12 @@ if (!function_exists('getCategories')) {
 }
 
 
-// if (!function_exists('getCourseCategories')) {
-//     function getCourseCategories()
-//     {
-//         return Category::with('course', 'course.user', 'course.course_goal')->get();
-//     }
-// }
+if (!function_exists('getCourseCategories')) {
+    function getCourseCategories()
+    {
+        return Category::with('course', 'course.user', 'course.course_goal')->get();
+    }
+}
 
 
 /** set admin sidebar active */
@@ -69,31 +69,31 @@ if (!function_exists('setSidebar')) {
 // }
 
 
-// /*  wishlist data */
-// if (!function_exists('getWishlist')) {
-//     function getWishlist()
-//     {
+/*  wishlist data */
+if (!function_exists('getWishlist')) {
+    function getWishlist()
+    {
 
-//         // Check if user is authenticated
-//         if (Auth::check()) {
-//             $user_id = Auth::user()->id;
-//             return Wishlist::where('user_id', $user_id)->with('course', 'course.user')->get();
-//         }
-//         // If user is not logged in, return an empty collection or handle as needed
-//         return collect();
-//     }
-// }
+       
+        if (Auth::check()) {
+            $user_id = Auth::user()->id;
+            return Wishlist::where('user_id', $user_id)->with('course', 'course.user')->get();
+        }
+       
+        return collect();
+    }
+}
 
 
-// //Global Auth Check
+//Global Auth Check
 
-// function auth_check_json()
-// {
-//     if (!Auth::check()) {
-//         return response()->json([
-//             'status' => 'error',
-//             'message' => 'You must be logged in to perform this action.',
-//         ], 401); // 401 Unauthorized
-//     }
-//     return null;
-// }
+function auth_check_json()
+{
+    if (!Auth::check()) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'You must be logged in to perform this action.',
+        ], 401); // 401 Unauthorized
+    }
+    return null;
+}

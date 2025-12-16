@@ -17,9 +17,11 @@
             <div class="col-lg-5 ml-auto">
                 <form method="post" class="subscriber-form">
                     <div class="input-group">
-                        <input type="email" name="email" class="form-control form--control pl-3" placeholder="Enter email address">
+                        <input type="email" name="email" class="form-control form--control pl-3"
+                            placeholder="Enter email address">
                         <div class="input-group-append">
-                            <button class="btn theme-btn" type="button">Subscribe <i class="la la-arrow-right icon ml-1"></i></button>
+                            <button class="btn theme-btn" type="button">Subscribe <i
+                                    class="la la-arrow-right icon ml-1"></i></button>
                         </div>
                     </div>
                     <p class="fs-14 mt-1">
@@ -29,4 +31,4 @@
             </div><!-- end col-lg-6 -->
         </div><!-- end row -->
     </div><!-- end container -->
-</section>
+</section><!-- end subscriber-area -->

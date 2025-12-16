@@ -55,7 +55,39 @@
             </ul>
         </li> 
 
-        <li class="{{ setSidebar(['admin.slider*']) }}">
+
+        <li class="{{ setSidebar(['admin.course*']) }}">
+            <a href="javascript:;" class="has-arrow">
+                <div class="parent-icon"><i class="bx bx-category"></i>
+                </div>
+                <div class="menu-title">Manage Course</div>
+            </a>
+            <ul>
+                <li class="{{ setSidebar(['admin.course*']) }}">
+                    <a href="{{route('admin.course.index')}}"><i class='bx bx-radio-circle'></i>All Courses</a>
+                </li>
+
+
+            </ul>
+        </li>
+
+         <li class="{{ setSidebar(['admin.order*']) }}">
+            <a href="javascript:;" class="has-arrow">
+                <div class="parent-icon"><i class="bx bx-category"></i>
+                </div>
+                <div class="menu-title">Manage Order</div>
+            </a>
+            <ul>
+                <li class="{{ setSidebar(['admin.order*']) }}">
+                    <a href="{{route('admin.order.index')}}"><i class='bx bx-radio-circle'></i>All Orders</a>
+                </li>
+
+
+            </ul>
+        </li>
+
+
+        <li class="{{ setSidebar(['admin.slider*', 'admin.info*', 'admin.partner*', 'admin.subscriber*', 'admin.site-setting*', 'admin.page-setting*']) }}">
             <a href="javascript:;" class="has-arrow">
 
                 <div class="parent-icon"><i class="bx bx-category"></i>
@@ -63,17 +95,50 @@
                 <div class="menu-title">Application Settings</div>
             </a>
             <ul>
-                <li  class="{{ setSidebar(['admin.slider']) }}">
-                     <a href="{{route('admin.slider.index')}}"><i class='bx bx-radio-circle'></i>Manage Sliders</a>
-                </li>
-            </ul>
 
-            <ul>
-                <li  class="{{ setSidebar(['admin.info']) }}">
-                     <a href="{{route('admin.info.index')}}"><i class='bx bx-radio-circle'></i>Manage Info</a>
+                <li class="{{ setSidebar(['admin.slider*']) }}">
+                    <a href="{{route('admin.slider.index')}}"><i class='bx bx-radio-circle'></i>Manage Slider</a>
                 </li>
+
+                <li class="{{ setSidebar(['admin.info*']) }}">
+                    <a href="{{route('admin.info.index')}}"><i class='bx bx-radio-circle'></i>Manage Info</a>
+                </li>
+
+                 <li class="{{ setSidebar(['admin.partner*']) }}">
+                    <a href="{{route('admin.partner.index')}}"><i class='bx bx-radio-circle'></i>Manage Partner</a>
+                </li>
+
+                 <li class="{{ setSidebar(['admin.site-setting*']) }}">
+                    <a href="{{route('admin.site-setting.index')}}"><i class='bx bx-radio-circle'></i>Site Settings</a>
+                </li>
+
+
             </ul>
         </li>
+
+        <li>
+            <a href="javascript:;" class="has-arrow">
+                <div class="parent-icon"><i class="bx bx-category"></i>
+                </div>
+                <div class="menu-title">Config Setting</div>
+            </a>
+            <ul>
+
+                <li> <a href="{{route('admin.mailSetting')}}"><i class='bx bx-radio-circle'></i>Mail Setting</a>
+                </li>
+
+                <li>
+                    <a href="{{route('admin.stripeSetting')}}"><i class='bx bx-radio-circle'></i>Stripe Setting</a>
+                </li>
+
+                <li>
+                    <a href="{{route('admin.googleSetting ')}}"><i class='bx bx-radio-circle'></i>Google Setting</a>
+                </li>
+
+            </ul>
+        </li>
+
+
 
 
 
