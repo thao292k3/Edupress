@@ -18,9 +18,14 @@ class RoleMiddleware
     public function handle(Request $request, Closure $next, $role): Response
     {
         if (Auth::check() && Auth::user()->role == $role) {
-            return $next($request);
+       
+        if (Auth::user()->status === '0') {
+            Auth::guard('web')->logout();
+            return redirect()->route('login')->with('error', 'Tài khoản chưa được kích hoạt.');
         }
+        return $next($request);
+    }
 
-        abort(403, 'Unauthorized action.');
+    abort(403, 'Unauthorized action.');
     }
 }

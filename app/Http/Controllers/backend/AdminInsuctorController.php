@@ -11,7 +11,10 @@ class AdminInsuctorController extends Controller
 
     public function index()
     {
-        $all_instructors = User::where('role', 'instructor')->get();
+        $all_instructors = User::where('role', 'instructor')
+                            ->where('status', '0')
+                            ->orderBy('id', 'desc')
+                            ->get();
         return view('backend.admin.instructor.index', compact('all_instructors'));
     }
 
@@ -35,5 +38,17 @@ class AdminInsuctorController extends Controller
     {
         $active_instructor = User::where('status', '1')->where('role', 'instructor')->latest()->get();
         return view('backend.admin.instructor.active', compact('active_instructor'));
+    }
+
+    public function updateInstructorStatus(Request $request)
+    {
+        $userId = $request->instructor_id;
+        $user = User::findOrFail($userId);
+        
+        
+        $user->status = $request->status;
+        $user->save();
+
+        return response()->json(['success' => 'Cập nhật trạng thái NCC thành công!']);
     }
 }

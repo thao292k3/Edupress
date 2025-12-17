@@ -85,63 +85,65 @@
     <script>
         $(document).ready(function() {
             $('.form-check-input').on('change', function() {
-                const userId = $(this).data('user-id'); // Get user ID
-                const status = $(this).is(':checked') ? 1 : 0; // Get status (1: Active, 0: Inactive)
-                const row = $(this).closest('tr'); // Find the parent row of the checkbox
+                const $this = $(this); // Lưu lại đối tượng checkbox
+                const userId = $this.data('user-id');
+                const status = $this.is(':checked') ? 1 : 0;
+                const row = $this.closest('tr');
+                const statusBadge = row.find('td:nth-child(6) .badge');
+
+                // Vô hiệu hóa tạm thời để tránh click nhiều lần
+                $this.prop('disabled', true);
 
                 $.ajax({
                     url: '{{ route('admin.instructor.status') }}',
                     type: 'POST',
                     data: {
-                        _token: '{{ csrf_token() }}', // CSRF token for security
+                        _token: '{{ csrf_token() }}',
                         user_id: userId,
                         status: status
                     },
                     success: function(response) {
+                        $this.prop('disabled', false); // Mở lại checkbox
+                        
                         if (response.success) {
-                            // Update the status badge dynamically
-                            const statusBadge = row.find('td:nth-child(6) .badge');
+                            // Cập nhật Badge
                             if (status === 1) {
-                                statusBadge
-                                    .removeClass('bg-danger')
-                                    .addClass('bg-primary')
-                                    .text('Active');
+                                statusBadge.removeClass('bg-danger').addClass('bg-primary').text('Active');
                             } else {
-                                statusBadge
-                                    .removeClass('bg-primary')
-                                    .addClass('bg-danger')
-                                    .text('Inactive');
+                                statusBadge.removeClass('bg-primary').addClass('bg-danger').text('Inactive');
                             }
 
-                            // Show SweetAlert Toast Notification
-                            Swal.fire({
+                            // Thông báo Toast thành công
+                            const Toast = Swal.mixin({
                                 toast: true,
                                 position: 'top-end',
-                                icon: 'success',
-                                title: response.message,
                                 showConfirmButton: false,
-                                timer: 3000
+                                timer: 3000,
+                                timerProgressBar: true,
+                            });
+                            Toast.fire({
+                                icon: 'success',
+                                title: response.message
                             });
                         } else {
+                            // Nếu server trả về lỗi, rollback trạng thái checkbox
+                            $this.prop('checked', !status);
                             Swal.fire({
-                                toast: true,
-                                position: 'top-end',
                                 icon: 'error',
-                                title: 'Error: ' + response.message,
-                                showConfirmButton: false,
-                                timer: 3000
+                                title: 'Lỗi',
+                                text: response.message
                             });
                         }
                     },
-                    error: function(xhr, status, error) {
-                        console.error('AJAX Error:', error);
+                    error: function(xhr) {
+                        $this.prop('disabled', false);
+                        $this.prop('checked', !status); // Rollback
+                        console.error('AJAX Error:', xhr);
+                        
                         Swal.fire({
-                            toast: true,
-                            position: 'top-end',
                             icon: 'error',
-                            title: 'An error occurred while updating the status.',
-                            showConfirmButton: false,
-                            timer: 3000
+                            title: 'Thất bại',
+                            text: 'Không thể kết nối đến máy chủ. Vui lòng thử lại.'
                         });
                     }
                 });

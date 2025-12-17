@@ -35,7 +35,7 @@
                             <h3 class="card-title text-center fs-24 lh-35 pb-4">Create an Account and <br> Start
                                 Learning!</h3>
                             <div class="section-block"></div>
-                            <form method="post" class="pt-4" action="{{route('register')}}">
+                            <form method="post" class="pt-4" action="{{ route('register') }}">
 
                                 @csrf
 
@@ -89,13 +89,36 @@
                                     </div>
                                 </div><!-- end input-box -->
 
+                                <div class="col-lg-12">
+                                    <div class="input-box">
+                                        <label class="label-text">Đăng ký với tư cách <span
+                                                class="text-danger">*</span></label>
+                                        <div class="form-group d-flex align-items-center">
+                                            <div class="custom-control custom-radio mr-3">
+                                                <input type="radio" name="role" value="user" id="roleUser"
+                                                    class="custom-control-input" checked>
+                                                <label class="custom-control-label" for="roleUser">Học viên</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" name="role" value="instructor" id="roleInstructor"
+                                                    class="custom-control-input">
+                                                <label class="custom-control-label" for="roleInstructor">Nhà cung cấp (Giảng
+                                                    viên)</label>
+                                            </div>
+                                        </div>
+                                        @error('role')
+                                            <span class="text-danger fs-12">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+
 
                                 <div class="input-box">
                                     <label class="label-text">Confirm Password</label>
                                     <div class="input-group mb-3">
                                         <span class="la la-lock input-icon"></span>
                                         <input class="form-control form--control" type="password"
-                                        name="password_confirmation" placeholder="Password">
+                                            name="password_confirmation" placeholder="Password">
 
 
                                         <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />

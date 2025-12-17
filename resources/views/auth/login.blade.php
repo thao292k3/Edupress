@@ -74,7 +74,8 @@
                                         <input type="checkbox" class="custom-control-input" id="rememberMeCheckbox" required>
                                         <label class="custom-control-label custom--control-label" for="rememberMeCheckbox">Remember Me</label>
                                     </div><!-- end custom-control -->
-                                    <a href="/forgot-password" class="btn-text">Forgot my password?</a>
+                                    {{-- <a href="/forgot-password" class="btn-text">Forgot my password?</a> --}}
+                                    <a href="{{ route('password.request') }}" class="btn-text">Forgot my password?</a>
                                 </div>
                                 <button class="btn theme-btn" type="submit">Login Account <i class="la la-arrow-right icon ml-1"></i></button>
                                 <p class="fs-14 pt-2">Don't have an account? <a href="{{route('register')}}" class="text-color hover-underline">Register</a></p>
@@ -90,6 +91,52 @@
 @endsection
 
 @push('scripts')
+<script type="module">
+    // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyDKd2YwAIp7tPvy1VqxyaJRmjipNZDUugM",
+  authDomain: "edupress-fcd98.firebaseapp.com",
+  projectId: "edupress-fcd98",
+  storageBucket: "edupress-fcd98.firebasestorage.app",
+  messagingSenderId: "1069126653028",
+  appId: "1:1069126653028:web:8713ce15f45dcc9810bb71",
+  measurementId: "G-T919VZTL7B"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
+document.getElementById('google-login-btn').addEventListener('click', () => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const user = result.user;
+        // Gửi thông tin user về Laravel Backend qua Ajax
+        fetch('/auth/firebase/google', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+          },
+          body: JSON.stringify({
+            uid: user.uid,
+            email: user.email,
+            name: user.displayName,
+            photo: user.photoURL
+          })
+        }).then(res => window.location.href = '/user/dashboard');
+      }).catch((error) => {
+        console.error(error);
+      });
+  });
+</script>
 
 <script>
     @if (session('error'))

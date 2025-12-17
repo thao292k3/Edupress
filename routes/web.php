@@ -7,6 +7,7 @@ use App\Http\Controllers\backend\AdminController;
 use App\Http\Controllers\backend\AdminCourseController;
 use App\Http\Controllers\backend\AdminInsuctorController;
 use App\Http\Controllers\backend\BackendOrderController;
+use App\Http\Controllers\backend\BlogController;
 use App\Http\Controllers\backend\CategoryController;
 use App\Http\Controllers\backend\CouponController;
 use App\Http\Controllers\backend\CourseContentController;
@@ -23,7 +24,9 @@ use App\Http\Controllers\backend\OrderController;
 use App\Http\Controllers\backend\PartnerController;
 use App\Http\Controllers\backend\QuestionController;
 use App\Http\Controllers\backend\QuizController;
+use App\Http\Controllers\backend\ReviewController;
 use App\Http\Controllers\backend\SettingController;
+use App\Http\Controllers\backend\SiteSetingController;
 use App\Http\Controllers\backend\SiteSettingController;
 use App\Http\Controllers\backend\SliderController;
 use App\Http\Controllers\backend\SubcategoryController;
@@ -46,6 +49,7 @@ Route::get('/dashboard', function () {
 
 Route::get('/auth/google', [SocialController::class, 'googleLogin'])->name('auth.google');
 Route::get('/auth/google-callback', [SocialController::class, 'googleAuthentication'])->name('auth.google-callback');
+Route::post('/auth/firebase/google', [SocialController::class, 'firebaseGoogleLogin']);
 
 //Admin Login 
 Route::get('/admin/login', [AdminController::class, 'login'])->name('admin.login');
@@ -75,6 +79,12 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::resource('instructor', AdminInsuctorController::class);
     Route::post('/update-status',[AdminInsuctorController::class,'updateStatus'])->name('instructor.status');
     Route::get('instructor-active-list', [AdminInsuctorController::class, 'instructorActive'])->name('instructor.active');
+    Route::get('/all/instructor', [AdminInsuctorController::class, 'index'])
+    ->name('all.instructor');
+
+    Route::post('/update/instructor/status', [AdminInsuctorController::class, 'updateInstructorStatus'])
+    ->name('update.instructor.status');
+
 
      /*  order controller  */
     Route::resource('order', BackendOrderController::class);
@@ -100,7 +110,17 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::resource('partner', PartnerController::class);
 
      /* Manage Site Seetings */
-    Route::resource('site-setting', SiteSettingController::class);
+    Route::resource('site-setting', SiteSetingController::class);
+
+
+
+    Route::resource('blog', BlogController::class);
+
+    Route::get('/review/pending', [ReviewController::class, 'pendingReview'])->name('review.pending');
+    Route::get('/review/active', [ReviewController::class, 'activeReview'])->name('review.active');
+    Route::post('/review/update-status', [ReviewController::class, 'updateReviewStatus'])->name('review.update.status');
+    Route::get('/review/delete/{id}', [ReviewController::class, 'deleteReview'])->name('review.delete');
+    
 
 
 });
@@ -226,6 +246,7 @@ Route::middleware(['auth', 'verified', 'role:user'])->prefix('user')->name('user
     Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
     Route::post('/logout', [UserController::class, 'destroy'])
         ->name('logout');
+      
 
     //Profile
 
@@ -266,6 +287,8 @@ Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.in
 // Coupon Apply
 
 Route::post('/apply-coupon', [CouponController::class, 'applyCoupon'])->name('apply.coupon');
+
+Route::post('/user/account/delete', [UserController::class, 'deleteAccount'])->name('user.account.delete');  
 
 // Checkout coupon
 Route::post('/apply-checkout-coupon', [CouponController::class, 'applyCheckoutCoupon'])->name('checkoutCoupon');

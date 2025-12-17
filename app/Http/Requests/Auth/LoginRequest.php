@@ -49,6 +49,15 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        $user = Auth::user();
+        if ($user->status === '0') {
+            Auth::guard('web')->logout(); 
+            
+            throw ValidationException::withMessages([
+                'email' => 'Tài khoản của bạn hiện đang chờ Admin phê duyệt. Vui lòng quay lại sau.',
+            ]);
+        }
+
         RateLimiter::clear($this->throttleKey());
     }
 

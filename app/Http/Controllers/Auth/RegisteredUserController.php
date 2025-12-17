@@ -33,15 +33,26 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'role' => ['required', 'in:user,instructor'],
         ]);
+
+        $role = $request->role;
+    
+        $status = ($role === 'instructor') ? '0' : '1';
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => $role,
+            'status' => $status,
         ]);
 
         event(new Registered($user));
+
+        if ($role === 'instructor') {
+        return redirect()->route('login')->with('success', 'Đăng ký thành công! Vui lòng đợi Admin phê duyệt tài khoản.');
+    }
 
         Auth::login($user);
 
