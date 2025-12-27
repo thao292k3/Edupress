@@ -175,4 +175,5 @@
             </div><!-- end more-btn-box -->
         </div><!-- end container -->
     </div><!-- end card-content-wrapper -->
+    
 </section><!-- end courses-area -->

@@ -35,14 +35,21 @@ class LiveSessionController extends Controller
             ->with('success', 'Buổi dạy trực tiếp đã được tạo thành công.');
     }
 
+    
     public function edit(LiveSessions $live_session)
     {
+        
         if ($live_session->course->instructor_id !== Auth::id()) {
             abort(403);
         }
+        
+        
         $courses = Course::where('instructor_id', Auth::id())->get();
-        return view('backend.instructor.live_session.show', compact('live_session', 'courses'));
+        
+    
+        return view('backend.instructor.live_session.edit', compact('live_session', 'courses'));
     }
+
 
     public function update(LiveSessionRequest $request, LiveSessions $live_session)
     {
@@ -51,8 +58,6 @@ class LiveSessionController extends Controller
         }
 
         $validated = $request->validated();
-        
-       
         if ($live_session->start_at != $validated['start_at']) {
             $validated['is_teacher_joined'] = false; 
         }
@@ -60,9 +65,10 @@ class LiveSessionController extends Controller
         $live_session->update($validated);
 
         return redirect()->route('instructor.live-sessions.index')
-            ->with('success', 'Thông tin buổi học đã được cập nhật.');
+            ->with('success', 'Thông tin buổi học đã được cập nhật thành công.');
     }
 
+    
     public function destroy(LiveSessions $live_session)
     {
         if ($live_session->course->instructor_id !== Auth::id()) {
@@ -93,5 +99,22 @@ class LiveSessionController extends Controller
     
    
     return view('backend.instructor.live_session.show', compact('live_session', 'teacherAttendance', 'studentAttendances'));
+}
+
+public function joinSession($id)
+{
+    // 1. Tìm buổi học trực tuyến
+    // Giả sử model của bạn tên là LiveSession hoặc Session
+    $session = LiveSessions::findOrFail($id);
+
+    // 2. Logic kiểm tra thời gian (tùy chọn)
+    // Ví dụ: chỉ cho vào nếu hiện tại nằm trong khoảng thời gian học
+
+    // 3. Chuyển hướng đến link Zoom/Google Meet hoặc trang học trực tuyến
+    if ($session->meeting_link) {
+        return redirect()->away($session->meeting_link);
+    }
+
+    return back()->with('error', 'Liên kết buổi học chưa được cập nhật.');
 }
 }

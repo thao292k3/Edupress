@@ -15,8 +15,8 @@
                 <div class="card-body p-4">
 
                     <div style="display: flex; align-items:center; justify-content:space-between">
-                        <h5 class="mb-4">Add Category</h5>
-                        <a href="{{ route('admin.category.index') }}" class="btn btn-primary">Back</a>
+                        <h5 class="mb-4">Thêm mới bài viết</h5>
+                        <a href="{{ route('admin.category.index') }}" class="btn btn-primary">Quay lại</a>
 
                     </div>
 

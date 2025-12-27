@@ -27,16 +27,18 @@ class UserProfileController extends Controller
     public function store(ProfileRequest $request)
     {
 
-        // Pass data and files to the service
+        
         $this->profileService->saveProfile($request->validated(), $request->file('photo'));
         return redirect()->back()->with('success', 'Profile Updated successfully');
     }
 
     public function passwordSetting(ProfilePasswordUpdateRequest $request){
 
-        // Pass data and files to the service
+        
         $this->passwordUpdateService->updatePassword($request->validated());
         return redirect()->back()->with('success', 'Password Updated successfully');
 
     }
+
+    
 }

@@ -27,7 +27,8 @@
                     <div class="col-lg-8">
 
                         <div class="card">
-                            <form method="post" enctype="multipart/form-data" action="{{ route('instructor.profile.store') }}">
+                            <form method="post" enctype="multipart/form-data"
+                                action="{{ route('instructor.profile.store') }}">
                                 @csrf
 
                                 <div class="card-body">
@@ -101,7 +102,7 @@
                                                 <option value="female">Female</option>
                                                 <option value="other">Other</option>
 
-                                              </select>
+                                            </select>
                                         </div>
                                     </div>
 
@@ -111,7 +112,7 @@
                                         </div>
                                         <div class="col-sm-9 text-secondary">
                                             <textarea type="text" name="experience" class="form-control"
-                                                 placeholder="Example : Web Developer, Designer, and Teacher" >{{ auth()->user()->experience }}</textarea>
+                                                placeholder="Example : Web Developer, Designer, and Teacher">{{ auth()->user()->experience }}</textarea>
                                         </div>
                                     </div>
 
@@ -144,12 +145,43 @@
                                         </div>
                                     </div>
 
-
-                                    <div class="row">
-                                        <div class="col-sm-3"></div>
-                                        <div class="col-sm-9 text-secondary">
-                                            <input type="submit" class="btn btn-primary px-4 w-100" value="Update" />
+                                    <div class="row mb-3">
+                                        <div class="col-sm-3">
+                                            <h6 class="mb-0">Tên ngân hàng</h6>
                                         </div>
+                                        <div class="col-sm-9 text-secondary">
+                                            <input type="text" name="bank_name" class="form-control"
+                                                value="{{ auth()->user()->bank_name }}"
+                                                placeholder="Ví dụ: Vietcombank" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-sm-3">
+                                            <h6 class="mb-0">Số tài khoản</h6>
+                                        </div>
+                                        <div class="col-sm-9 text-secondary">
+                                            <input type="text" name="bank_account_number" class="form-control"
+                                                value="{{ auth()->user()->bank_account_number }}" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-sm-3">
+                                            <h6 class="mb-0">Chủ tài khoản</h6>
+                                        </div>
+                                        <div class="col-sm-9 text-secondary">
+                                            <input type="text" name="bank_account_name" class="form-control"
+                                                value="{{ auth()->user()->bank_account_name }}"
+                                                placeholder="NGUYEN VAN A" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-3"></div>
+                                    <div class="col-sm-9 text-secondary">
+                                        <input type="submit" class="btn btn-primary px-4 w-100" value="Update" />
                                     </div>
                                 </div>
 

@@ -4,13 +4,13 @@
     <div class="page-content">
         <!--breadcrumb-->
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-            <div class="breadcrumb-title pe-3">Order</div>
+            <div class="breadcrumb-title pe-3">Đơn hàng</div>
             <div class="ps-3">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0 p-0">
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                         </li>
-                        <li class="breadcrumb-item active" aria-current="page">View Order</li>
+                        <li class="breadcrumb-item active" aria-current="page">Chi tiết đơn hàng</li>
                         
                     </ol>
                 </nav>
@@ -21,9 +21,9 @@
         
 
         <div style="display: flex; align-items:center; justify-content:space-between">
-            <h6 class="mb-0 text-uppercase">View Order Details</h6>
+            <h6 class="mb-0 text-uppercase">Xem chi tiết đơn hàng</h6>
 
-            <a href="{{ route('admin.order.index') }}" class="btn btn-primary px-5">Back</a>
+            <a href="{{ route('admin.order.index') }}" class="btn btn-primary px-5">Quay lại</a>
 
         </div>
 
@@ -72,11 +72,11 @@
 
 
                             <div style="display: flex; flex-direction:column; gap: 10px;">
-                               <span>Total Amount : {{ number_format($payment_info->total_amount, 0, ',', '.') }} VND</span>
+                               <span> Tổng tiền : {{ number_format($payment_info->total_amount, 0, ',', '.') }} VND</span>
                                 
-                                <span>Payment Type : {{$payment_info->payment_type}}</span>
-                                <span>Invoice Number : {{$payment_info->invoice_no}}</span>
-                                <span>Order Date: {{ $payment_info->created_at->format('F d, Y') }}</span>
+                                <span> Phương thức thanh toán : {{$payment_info->payment_type}}</span>
+                                <span> Số hóa đơn : {{$payment_info->invoice_no}}</span>
+                                <span> Ngày mua khóa học : {{ $payment_info->created_at->format('F d, Y') }}</span>
 
                                 <span>Trx Id: {{$payment_info->transaction_id}}</span>
 
@@ -102,11 +102,11 @@
                         <table class="table mb-0">
                             <thead class="table-light">
                                 <tr>
-                                    <th>Image</th>
-                                    <th>Course Name</th>
-                                    <th>Category</th>
-                                    <th>Instructor</th>
-                                    <th>Price</th>
+                                    <th>Hình ảnh</th>
+                                    <th>Tên khóa học</th>
+                                    <th>Tên danh mục </th>
+                                    <th>Tên giáo viên</th>
+                                    <th>Giá</th>
 
                                 </tr>
                             </thead>

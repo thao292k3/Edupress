@@ -15,7 +15,7 @@
             <a href="{{ route('admin.dashboard') }}">
                 <div class="parent-icon"><i class='bx bx-category'></i>
                 </div>
-                <div class="menu-title">Dashboard</div>
+                <div class="menu-title">Bảng điều khiển</div>
             </a>
 
         </li>
@@ -25,15 +25,14 @@
 
                 <div class="parent-icon"><i class="bx bx-category"></i>
                 </div>
-                <div class="menu-title">Manage Category</div>
+                <div class="menu-title">Quản lý danh mục</div>
             </a>
             <ul>
                 <li class="{{ setSidebar(['admin.category*']) }}">
-                    <a href="{{ route('admin.category.index') }}"><i class='bx bx-radio-circle'></i>All Category</a>
+                    <a href="{{ route('admin.category.index') }}"><i class='bx bx-radio-circle'></i>Tất cả danh mục</a>
                 </li>
                 <li class="{{ setSidebar(['admin.subcategory*']) }}">
-                    <a href="{{ route('admin.subcategory.index') }}"><i class='bx bx-radio-circle'></i>All
-                        SubCategory</a>
+                    <a href="{{ route('admin.subcategory.index') }}"><i class='bx bx-radio-circle'></i>Danh mục con</a>
                 </li>
 
             </ul>
@@ -43,16 +42,14 @@
             <a href="javascript:;" class="has-arrow">
                 <div class="parent-icon"><i class="bx bx-category"></i>
                 </div>
-                <div class="menu-title">Manage Instructor</div>
+                <div class="menu-title">Quản lý giảng viên</div>
             </a>
             <ul>
                 <li class="{{ setSidebar(['admin.instructor.index']) }}">
-                    <a href="{{ route('admin.instructor.index') }}"><i class='bx bx-radio-circle'></i>All
-                        Instructor</a>
+                    <a href="{{ route('admin.instructor.index') }}"><i class='bx bx-radio-circle'></i>Danh sách giảng viên</a>
                 </li>
                 <li class="{{ setSidebar(['admin.instructor.active']) }}">
-                    <a href="{{ route('admin.instructor.active') }}"><i class='bx bx-radio-circle'></i>Active
-                        Instructor</a>
+                    <a href="{{ route('admin.instructor.active') }}"><i class='bx bx-radio-circle'></i>Giảng viên đang hoạt động</a>
                 </li>
 
             </ul>
@@ -63,11 +60,11 @@
             <a href="javascript:;" class="has-arrow">
                 <div class="parent-icon"><i class="bx bx-category"></i>
                 </div>
-                <div class="menu-title">Manage Course</div>
+                <div class="menu-title">Quản lý khóa học</div>
             </a>
             <ul>
                 <li class="{{ setSidebar(['admin.course*']) }}">
-                    <a href="{{ route('admin.course.index') }}"><i class='bx bx-radio-circle'></i>All Courses</a>
+                    <a href="{{ route('admin.course.index') }}"><i class='bx bx-radio-circle'></i>Tất cả khóa học</a>
                 </li>
 
 
@@ -78,14 +75,12 @@
             <a href="javascript:;" class="has-arrow">
                 <div class="parent-icon"><i class="bx bx-category"></i>
                 </div>
-                <div class="menu-title">Manage Order</div>
+                <div class="menu-title">Quản lý đơn hàng</div>
             </a>
             <ul>
                 <li class="{{ setSidebar(['admin.order*']) }}">
-                    <a href="{{ route('admin.order.index') }}"><i class='bx bx-radio-circle'></i>All Orders</a>
+                    <a href="{{ route('admin.order.index') }}"><i class='bx bx-radio-circle'></i>Danh sách đơn hàng</a>
                 </li>
-
-
             </ul>
         </li>
 
@@ -96,57 +91,35 @@
 
                 <div class="parent-icon"><i class="bx bx-category"></i>
                 </div>
-                <div class="menu-title">Application Settings</div>
+                <div class="menu-title">Cài đặt ứng dụng</div>
             </a>
             <ul>
 
                 <li class="{{ setSidebar(['admin.slider*']) }}">
-                    <a href="{{ route('admin.slider.index') }}"><i class='bx bx-radio-circle'></i>Manage Slider</a>
+                    <a href="{{ route('admin.slider.index') }}"><i class='bx bx-radio-circle'></i>Quản lý hình ảnh trượt</a>
                 </li>
 
                 <li class="{{ setSidebar(['admin.info*']) }}">
-                    <a href="{{ route('admin.info.index') }}"><i class='bx bx-radio-circle'></i>Manage Info</a>
+                    <a href="{{ route('admin.info.index') }}"><i class='bx bx-radio-circle'></i>Quản lý thông tin cá nhân </a>
                 </li>
 
                 <li class="{{ setSidebar(['admin.partner*']) }}">
-                    <a href="{{ route('admin.partner.index') }}"><i class='bx bx-radio-circle'></i>Manage Partner</a>
+                    <a href="{{ route('admin.partner.index') }}"><i class='bx bx-radio-circle'></i>Quản lý đối tác</a>
                 </li>
 
                 <li class="{{ setSidebar(['admin.site-setting*']) }}">
-                    <a href="{{ route('admin.site-setting.index') }}"><i class='bx bx-radio-circle'></i>Site
-                        Settings</a>
-                </li>
-
-
-            </ul>
-        </li>
-
-        <li>
-            <a href="javascript:;" class="has-arrow">
-                <div class="parent-icon"><i class="bx bx-category"></i>
-                </div>
-                <div class="menu-title">Config Setting</div>
-            </a>
-            <ul>
-
-                <li> <a href="{{ route('admin.mailSetting') }}"><i class='bx bx-radio-circle'></i>Mail Setting</a>
-                </li>
-
-                <li>
-                    <a href="{{ route('admin.stripeSetting') }}"><i class='bx bx-radio-circle'></i>Stripe Setting</a>
-                </li>
-
-                <li>
-                    <a href="{{ route('admin.googleSetting ') }}"><i class='bx bx-radio-circle'></i>Google Setting</a>
+                    <a href="{{ route('admin.site-setting.index') }}"><i class='bx bx-radio-circle'></i>Cấu hình hệ thống</a>
                 </li>
 
             </ul>
         </li>
+
+        
 
         <li>
             <a href="javascript:;" class="has-arrow">
                 <div class="parent-icon"><i class='bx bx-news'></i></div>
-                <div class="menu-title">Quản lý Blog</div>
+                <div class="menu-title">Quản lý bài viết</div>
             </a>
             <ul>
                 <li>
@@ -160,16 +133,53 @@
 
         <li>
             <a href="javascript:;" class="has-arrow">
-                <div class="parent-icon"><i class='bx bx-star'></i></div>
-                <div class="menu-title">Manage Review</div>
+                <div class="parent-icon"><i class='bx bx-chat'></i></div>
+                <div class="menu-title">Manage bình luận</div>
             </a>
             <ul>
-                <li> <a href="{{ route('admin.review.pending') }}"><i class='bx bx-radio-circle'></i>Pending
-                        Review</a></li>
-                <li> <a href="{{ route('admin.review.active') }}"><i class='bx bx-radio-circle'></i>Active Review</a>
+                <li>
+                    <a href="{{ route('admin.comments.pending') }}"><i class='bx bx-radio-circle'></i>Bình luận đang chờ xử lý</a>
                 </li>
             </ul>
         </li>
+
+        <li>
+            <a href="javascript:;" class="has-arrow">
+                <div class="parent-icon"><i class='bx bx-star'></i></div>
+                <div class="menu-title">Quản lý đánh giá</div>
+            </a>
+            <ul>
+                <li> <a href="{{ route('admin.review.pending') }}"><i class='bx bx-radio-circle'></i>Phê duyệt đánh giá</a></li>
+                <li> <a href="{{ route('admin.review.active') }}"><i class='bx bx-radio-circle'></i>Đánh giá đã được phê duyệt</a>
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <a href="javascript:;" class="has-arrow">
+                <div class="parent-icon"><i class='bx bx-money'></i></div>
+                <div class="menu-title">Quản lý tài chính</div>
+            </a>
+            <ul class="{{ Request::is('admin/payroll*') ? 'mm-show' : '' }}">
+              
+                <li class="{{ Route::is('admin.payroll.index') ? 'mm-active' : '' }}">
+                    <a href="{{ route('admin.payroll.index') }}">
+                        <i class='bx bx-radio-circle'></i>Danh sách quyết toán
+                    </a>
+                </li>
+
+                
+                <li class="{{ Route::is('admin.payroll.create') ? 'mm-active' : '' }}">
+                    <a href="{{ route('admin.payroll.create') }}">
+                        <i class='bx bx-radio-circle'></i>Tạo bảng lương tháng
+                    </a>
+                </li>
+
+                
+            </ul>
+        </li>
+
+     
 
     </ul>
     <!--end navigation-->

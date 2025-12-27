@@ -6,13 +6,13 @@
     <div class="page-content">
         <!--breadcrumb-->
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-            <div class="breadcrumb-title pe-3">Course</div>
+            <div class="breadcrumb-title pe-3">Khóa học</div>
             <div class="ps-3">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0 p-0">
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                         </li>
-                        <li class="breadcrumb-item active" aria-current="page">All Courses</li>
+                        <li class="breadcrumb-item active" aria-current="page">Tất cả khóa học</li>
                     </ol>
                 </nav>
             </div>
@@ -20,9 +20,9 @@
         </div>
         <!--end breadcrumb-->
         <div style="display: flex; align-items:center; justify-content:space-between">
-            <h6 class="mb-0 text-uppercase">View Course</h6>
+            <h6 class="mb-0 text-uppercase">Xem khóa học</h6>
 
-            <a href="{{ route('admin.course.index') }}" class="btn btn-primary px-5">Back</a>
+            <a href="{{ route('admin.course.index') }}" class="btn btn-primary px-5">Quay lại</a>
 
         </div>
 
@@ -35,7 +35,7 @@
                     <div class="card-body">
                         <ul class="list-group">
                             <li class="list-group-item align-items-center">
-                                <h6> Course Name</h6>
+                                <h6> Tên khóa học </h6>
 
                                 <span class="">
                                     {{ $course->course_name }}
@@ -50,13 +50,13 @@
                                 </span>
                             </li>
                             <li class="list-group-item align-items-center">
-                                <h6>Category</h6>
+                                <h6>Danh mục</h6>
 
                                 <span class="">{{ $course->category->name }}</span>
                             </li>
                             <li class="list-group-item align-items-center">
                                 <h6>
-                                    Subcategory
+                                    Danh mục con
 
                                 </h6>
 
@@ -65,7 +65,7 @@
                                 </span>
                             </li>
                             <li class="list-group-item align-items-center">
-                                <h6>Instructor</h6>
+                                <h6>Nhà cung cấp</h6>
 
                                 <span class="">
                                     {{ $course->user->name }}
@@ -73,7 +73,7 @@
                             </li>
 
                             <li class="list-group-item align-items-center">
-                                <h6>Status</h6>
+                                <h6>Hiển thị</h6>
 
                                 <span class="">
                                     @if ($course->status == 0)
@@ -86,7 +86,7 @@
                             </li>
 
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <h6> Selling Price</h6>
+                                <h6> Giá bán</h6>
 
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <h6> Giá bán</h6>
@@ -95,7 +95,7 @@
                                 </span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <h6> Giá giảm</h6>
+                                <h6> Giá chiết khấu</h6>
                                 <span class="" style="font-size: 17px">
                                     {{ number_format($course->discount_price, 0, ',', '.') }} VNĐ
                                 </span>
@@ -112,7 +112,7 @@
                     <div class="card-body">
                         <ul class="list-group">
                             <li class="list-group-item align-items-center">
-                                <h6>Intro Video</h6>
+                                <h6>Video giới thiệu</h6>
 
                                 @php
                                     $first_lesson = $course
@@ -131,7 +131,7 @@
                                     @endphp
 
                                     @if ($isYoutube)
-                                        {{-- Xử lý link Youtube để chuyển thành link nhúng (embed) --}}
+                                        
                                         @php
                                             if (str_contains($url, 'watch?v=')) {
                                                 $video_id = explode('v=', $url)[1];
@@ -149,10 +149,10 @@
                                             </iframe>
                                         </div>
                                     @else
-                                        {{-- Nếu là file video upload bình thường --}}
+                                        
                                         <video width="100%" controls>
                                             <source src="{{ asset($url) }}" type="video/mp4">
-                                            Your browser does not support the video tag.
+                                            Trình duyệt của bạn không hỗ trợ thẻ video.
                                         </video>
                                     @endif
                                 @else
@@ -160,12 +160,12 @@
                                 @endif
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <h6>Resources</h6>
+                                <h6>Bài giảng</h6>
 
                                 <span class="" style="font-size: 20px">{{ $course->resources }}</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <h6>Certificate</h6>
+                                <h6>Giấy chứng nhận</h6>
 
                                 <span class="" style="font-size: 20px">
                                     @if ($course->certificate == 'yes')
@@ -183,11 +183,6 @@
 
         </div>
 
-
-
-
-
-
     </div>
 @endsection
 
@@ -195,22 +190,22 @@
     <script>
         $(document).ready(function() {
             $('.form-check-input').on('change', function() {
-                const courseId = $(this).data('course-id'); // Get user ID
+                const courseId = $(this).data('course-id');
 
-                const status = $(this).is(':checked') ? 1 : 0; // Get status (1: Active, 0: Inactive)
-                const row = $(this).closest('tr'); // Find the parent row of the checkbox
+                const status = $(this).is(':checked') ? 1 : 0; 
+                const row = $(this).closest('tr'); 
 
                 $.ajax({
                     url: '{{ route('admin.course.status') }}',
                     type: 'POST',
                     data: {
-                        _token: '{{ csrf_token() }}', // CSRF token for security
+                        _token: '{{ csrf_token() }}', 
                         course_id: courseId,
                         status: status
                     },
                     success: function(response) {
                         if (response.success) {
-                            // Update the status badge dynamically
+                            
                             const statusBadge = row.find('td:nth-child(6) .badge');
                             if (status === 1) {
                                 statusBadge
@@ -224,7 +219,7 @@
                                     .text('Inactive');
                             }
 
-                            // Show SweetAlert Toast Notification
+                            
                             Swal.fire({
                                 toast: true,
                                 position: 'top-end',

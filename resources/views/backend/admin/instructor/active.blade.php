@@ -29,8 +29,8 @@
         </div>
         <!--end breadcrumb-->
         <div style="display: flex; align-items:center; justify-content:space-between">
-            <h6 class="mb-0 text-uppercase">All Instructor</h6>
-            <a href="{{ route('admin.instructor.index') }}" class="btn btn-primary">Back</a>
+            <h6 class="mb-0 text-uppercase">Tất cả giáo viên</h6>
+            <a href="{{ route('admin.instructor.index') }}" class="btn btn-primary">Quay lại</a>
 
         </div>
 
@@ -42,13 +42,13 @@
                     <table id="example" class="table table-striped table-bordered" style="width:100%">
                         <thead>
                             <tr>
-                                <th>NO</th>
-                                <th>Image</th>
-                                <th>Name</th>
+                                <th>STT</th>
+                                <th>Hình ảnh</th>
+                                <th>Tên giáo viên</th>
                                 <th>Email</th>
-                                <th>Phone</th>
-                                <th>Status</th>
-                                <th>Action</th>
+                                <th>SĐT</th>
+                                <th>Hiển thị</th>
+                                <th>Hành động</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -59,7 +59,7 @@
                                         @if ($item->photo)
                                             <img src="{{ asset($item->photo) }}" width="70" height="70" />
                                         @else
-                                            <span>No image found</span>
+                                            <span>Không tìm thấy hình ảnh</span>
                                         @endif
                                     </td>
                                     <td>{{ $item->name }}</td>
@@ -67,9 +67,9 @@
                                     <td>{{ $item->phone }}</td>
                                     <td>
                                         @if ($item->status == 1)
-                                            <span class="badge bg-primary px-3 py-2" style="font-weight: 200">Active</span>
+                                            <span class="badge bg-primary px-3 py-2 status-badge" style="font-weight: 200">Hoạt động</span>
                                         @else
-                                            <span class="badge bg-danger px-3 py-2" style="font-weight: 200">Inactive</span>
+                                            <span class="badge bg-danger px-3 py-2 status-badge" style="font-weight: 200">không hoạt động</span>
                                         @endif
                                     </td>
                                     <td>
@@ -95,73 +95,5 @@
 @endsection
 
 @push('scripts')
-    <script>
-        $(document).ready(function() {
-            $('.form-check-input').on('change', function() {
-                const userId = $(this).data('user-id'); // Get user ID
-                const status = $(this).is(':checked') ? 1 : 0; // Get status (1: Active, 0: Inactive)
-                const row = $(this).closest('tr'); // Find the parent row of the checkbox
-
-                $.ajax({
-                    url: '{{ route('admin.instructor.status') }}',
-                    type: 'POST',
-                    data: {
-                        _token: '{{ csrf_token() }}', // CSRF token for security
-                        user_id: userId,
-                        status: status
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            // Update the status badge dynamically
-                            const statusBadge = row.find('td:nth-child(6) .badge');
-                            if (status === 1) {
-                                statusBadge
-                                    .removeClass('bg-danger')
-                                    .addClass('bg-primary')
-                                    .text('Active');
-                            } else {
-                                statusBadge
-                                    .removeClass('bg-primary')
-                                    .addClass('bg-danger')
-                                    .text('Inactive');
-                            }
-
-                            // Show SweetAlert Toast Notification
-                            Swal.fire({
-                                toast: true,
-                                position: 'top-end',
-                                icon: 'success',
-                                title: response.message,
-                                showConfirmButton: false,
-                                timer: 3000
-                            });
-
-                            window.location.reload()
-                            
-                        } else {
-                            Swal.fire({
-                                toast: true,
-                                position: 'top-end',
-                                icon: 'error',
-                                title: 'Error: ' + response.message,
-                                showConfirmButton: false,
-                                timer: 3000
-                            });
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('AJAX Error:', error);
-                        Swal.fire({
-                            toast: true,
-                            position: 'top-end',
-                            icon: 'error',
-                            title: 'An error occurred while updating the status.',
-                            showConfirmButton: false,
-                            timer: 3000
-                        });
-                    }
-                });
-            });
-        });
-    </script>
+    @include('backend.partials.status-toggle-script')
 @endpush

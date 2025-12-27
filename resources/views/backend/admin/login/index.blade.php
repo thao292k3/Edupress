@@ -36,7 +36,7 @@
 									</div>
 									<div class="text-center mb-4">
 										<h5 class="">Edupress Admin</h5>
-										<p class="mb-0">Please log in to your account</p>
+										<p class="mb-0">Vui longd đăng nhập tài khoản của bạn</p>
 									</div>
 									<div class="form-body">
 										<form class="row g-3" method="POST" action="{{ route('login') }}">
@@ -47,7 +47,7 @@
 												<x-input-error :messages="$errors->get('email')" class="mt-2 text-danger"/>
 											</div>
 											<div class="col-12">
-												<label for="inputChoosePassword" class="form-label">Password</label>
+												<label for="inputChoosePassword" class="form-label">Mật khẩu</label>
 												<div class="input-group" id="show_hide_password">
 													<input type="password" required class="form-control border-end-0" id="inputChoosePassword" name="password" value="{{ old('password') }}" placeholder="Enter Password"> <a href="javascript:;" class="input-group-text bg-transparent"><i class="bx bx-hide"></i></a>
 													<x-input-error :messages="$errors->get('password')" class="mt-2 text-danger"/>
@@ -56,25 +56,25 @@
 											<div class="col-md-6">
 												<div class="form-check form-switch">
 													<input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked">
-													<label class="form-check-label" for="flexSwitchCheckChecked">Remember Me</label>
+													<label class="form-check-label" for="flexSwitchCheckChecked">Ghi nhớ đăng nhập</label>
 												</div>
 											</div>
-											<div class="col-md-6 text-end">	<a href="authentication-forgot-password.html">Forgot Password ?</a>
+											<div class="col-md-6 text-end">	<a href="authentication-forgot-password.html">Quên mật khẩu?</a>
 											</div>
 											<div class="col-12">
 												<div class="d-grid">
-													<button type="submit" class="btn btn-primary">Sign in</button>
+													<button type="submit" class="btn btn-primary">Đăng nhập</button>
 												</div>
 											</div>
 											<div class="col-12">
 												<div class="text-center ">
-													<p class="mb-0">Don't have an account yet? <a href="authentication-signup.html">Sign up here</a>
+													<p class="mb-0">Bạn chưa có tài khoản <a href="authentication-signup.html">Đăng kí ở đây</a>
 													</p>
 												</div>
 											</div>
 										</form>
 									</div>
-									<div class="login-separater text-center mb-5"> <span>OR SIGN IN WITH</span>
+									<div class="login-separater text-center mb-5"> <span>Đăng nhập bằng</span>
 										<hr>
 									</div>
 									<div class="list-inline contacts-social text-center">

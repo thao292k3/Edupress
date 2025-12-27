@@ -84,7 +84,7 @@ class Course extends Model
 
     public function enrollments()
     {
-        return $this->hasMany(CourseEnrollment::class);
+        return $this->hasMany(CourseEnrollment::class, 'course_id', 'id');
     }
 
     public function totalStudents()
@@ -137,6 +137,11 @@ class Course extends Model
     public function course_goal(){
         return $this->hasMany(CourseGoal::class, 'course_id', 'id');
     }
+
+    public function quizzes()
+{
+    return $this->hasMany(Quiz::class, 'course_id');
+}
 
     
 

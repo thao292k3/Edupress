@@ -22,5 +22,12 @@ class Section extends Model
         return $this->hasMany(Lesson::class, 'section_id', 'id');
     }
 
+    public function quizzes()
+    {
+        return $this->hasMany(Quiz::class, 'section_id');
+    }
+
+    
+
 
 }

@@ -44,7 +44,9 @@ class LessonRequest extends FormRequest
             'lesson_file'  => 'nullable|mimes:pdf,doc,docx,zip|max:20000',
             'lesson_document_link' => 'nullable|string|max:255',
 
-            'order' => 'nullable|integer|min:0'
+            'order' => 'nullable|integer|min:0',
+
+            'quiz_id' => 'nullable|exists:quizzes,id',
         ];
     }
 }

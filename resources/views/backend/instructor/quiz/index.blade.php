@@ -39,7 +39,7 @@
                             <td>{{ $quiz->id }}</td>
                             <td>{{ $quiz->title }}</td>
                             <td>
-                                {{-- Hiển thị tên Khóa học liên quan --}}
+                                
                                 @if($quiz->course)
                                     <span class="badge bg-info">{{ $quiz->course->course_title ?? 'N/A' }}</span>
                                 @else
@@ -57,19 +57,19 @@
                                 @endif
                             </td>
                             <td>
-                                {{-- Nút Xem/Quản lý Câu hỏi (Show) --}}
+                               
                                 <a href="{{ route('instructor.quizzes.show', $quiz->id) }}" 
                                     class="btn btn-sm btn-info text-white" title="Quản lý Câu hỏi">
                                     <i class="fas fa-list-alt"></i> Quản lý
                                 </a>
 
-                                {{-- Nút Sửa (Edit) --}}
+                                
                                 <a href="{{ route('instructor.quizzes.edit', $quiz->id) }}" 
                                     class="btn btn-sm btn-warning" title="Sửa Quiz">
                                     <i class="fas fa-edit"></i>
                                 </a>
                                 
-                                {{-- Nút Xóa (Destroy) --}}
+                                
                                 <button type="button" class="btn btn-sm btn-danger" 
                                     onclick="confirmDelete('{{ route('instructor.quizzes.destroy', $quiz->id) }}')" title="Xóa Quiz">
                                     <i class="fas fa-trash-alt"></i>
@@ -89,7 +89,7 @@
 
 </div>
 
-{{-- Modal Xác nhận Xóa (Dùng lại cấu trúc từ Lessons/Courses) --}}
+
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -114,7 +114,7 @@
 
 @push('scripts')
 <script>
-    // Hàm này được gọi khi nhấn nút xóa
+    
     function confirmDelete(url) {
         document.getElementById("deleteForm").action = url;
         var deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));

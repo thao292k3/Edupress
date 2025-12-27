@@ -11,7 +11,15 @@ use Illuminate\Support\Facades\Auth;
 class UserController extends Controller
 {
     public function dashboard(){
-        return view('backend.user.index');
+        $id = Auth::user()->id;
+    
+    // Lấy danh sách khóa học người dùng đã đăng ký/mua
+    $enrolledCourses = \App\Models\CourseEnrollment::where('user_id', $id)
+        ->with('course') // Eager load thông tin khóa học
+        ->latest()
+        ->take(5) // Lấy 5 khóa học mới nhất để hiện ở Dashboard
+        ->get();
+        return view('backend.user.index', compact('enrolledCourses'));
     }
 
     public function destroy(Request $request): RedirectResponse

@@ -136,6 +136,15 @@
     @endif
 </script>
 
+<script src="{{ asset('backend/assets/plugins/metismenu/js/metisMenu.min.js') }}"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#menu').metisMenu();
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
 
 

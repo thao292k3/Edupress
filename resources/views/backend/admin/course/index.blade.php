@@ -29,7 +29,7 @@
         </div>
         <!--end breadcrumb-->
         <div style="display: flex; align-items:center; justify-content:space-between">
-            <h6 class="mb-0 text-uppercase">All Course</h6>
+            <h6 class="mb-0 text-uppercase">Tất cả khóa học</h6>
 
         </div>
 
@@ -41,14 +41,14 @@
                     <table id="example" class="table table-striped table-bordered" style="width:100%">
                         <thead>
                             <tr>
-                                <th>SL</th>
-                                <th>Image</th>
-                                <th>Course Name</th>
-                                <th>Instructor</th>
-                                <th>Category</th>
-                                <th>Price</th>
-                                <th>Show</th>
-                                <th>Action</th>
+                                <th>STT</th>
+                                <th>Hình Ảnh</th>
+                                <th>Tên khóa học</th>
+                                <th>Nhà cung cáp</th>
+                                <th>Danh mục khóa học</th>
+                                <th>Giá</th>
+                                <th>Xem chi tiết</th>
+                                <th>Hành động</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -59,7 +59,7 @@
                                         @if ($item->course_image)
                                             <img src="{{ asset($item->course_image) }}" width="140" height="80" />
                                         @else
-                                            <span>No image found</span>
+                                            <span>Không tìm thấy hình ảnh</span>
                                         @endif
                                     </td>
                                     <td>{{ $item->course_name }}</td>
@@ -121,22 +121,22 @@
     <script>
         $(document).ready(function() {
             $('.form-check-input').on('change', function() {
-                const courseId = $(this).data('course-id'); // Get user ID
+                const courseId = $(this).data('course-id'); 
 
-                const status = $(this).is(':checked') ? 1 : 0; // Get status (1: Active, 0: Inactive)
-                const row = $(this).closest('tr'); // Find the parent row of the checkbox
+                const status = $(this).is(':checked') ? 1 : 0; 
+                const row = $(this).closest('tr'); 
 
                 $.ajax({
                     url: '{{ route('admin.course.status') }}',
                     type: 'POST',
                     data: {
-                        _token: '{{ csrf_token() }}', // CSRF token for security
+                        _token: '{{ csrf_token() }}', 
                         course_id: courseId,
                         status: status
                     },
                     success: function(response) {
                         if (response.success) {
-                            // Update the status badge dynamically
+                            
                             const statusBadge = row.find('td:nth-child(6) .badge');
                             if (status === 1) {
                                 statusBadge
@@ -150,7 +150,7 @@
                                     .text('Inactive');
                             }
 
-                            // Show SweetAlert Toast Notification
+                            
                             Swal.fire({
                                 toast: true,
                                 position: 'top-end',

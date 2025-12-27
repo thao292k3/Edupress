@@ -9,6 +9,7 @@ use App\Models\Coupon;
 use App\Services\ApplyCouponService;
 use App\Services\CouponService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class CouponController extends Controller
@@ -150,4 +151,14 @@ class CouponController extends Controller
         
         return redirect()->back()->with('success', 'Coupon applied successfully!');
     }
+
+
+    public function adminAllCoupon() {
+    $coupons = Coupon::with('instructor')->latest()->get();
+    foreach($coupons as $item) {
+        
+        $item->is_valid = $item->coupon_validity >= Carbon::now()->format('Y-m-d');
+    }
+    return view('admin.coupon.all', compact('coupons'));
+}
 }

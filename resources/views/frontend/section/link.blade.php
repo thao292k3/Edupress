@@ -22,3 +22,7 @@
 <link rel="stylesheet" href="{{ asset('frontend/css/tooltipster.bundle.css') }}">
 <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}">
 <!-- end inject -->
+
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+<link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />

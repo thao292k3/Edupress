@@ -4,13 +4,13 @@
     <div class="page-content">
         <!--breadcrumb-->
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-            <div class="breadcrumb-title pe-3">Order</div>
+            <div class="breadcrumb-title pe-3">Đơn hàng</div>
             <div class="ps-3">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0 p-0">
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                         </li>
-                        <li class="breadcrumb-item active" aria-current="page">All Order</li>
+                        <li class="breadcrumb-item active" aria-current="page">Tất cả đơn hàng</li>
                     </ol>
                 </nav>
             </div>
@@ -18,7 +18,7 @@
         </div>
         <!--end breadcrumb-->
         <div style="display: flex; align-items:center; justify-content:space-between">
-            <h6 class="mb-0 text-uppercase">All Orders</h6>
+            <h6 class="mb-0 text-uppercase">Tất cả đơn hàng</h6>
 
 
         </div>
@@ -30,13 +30,13 @@
                     <table id="example" class="table table-striped table-bordered" style="width:100%">
                         <thead>
                             <tr>
-                                <th>NO</th>
-                                <th>Date</th>
-                                <th>Transaction Id</th>
-                                <th>Amount</th>
-                                <th>Payment</th>
-                                <th>Status</th>
-                                <th>Action</th>
+                                <th>STT</th>
+                                <th>NGày</th>
+                                <th>Mã giao dịch</th>
+                                <th>Số lượng</th>
+                                <th>Phương thức thanh toán</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
                             </tr>
                         </thead>
                         <tbody>

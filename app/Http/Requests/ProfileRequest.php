@@ -34,6 +34,9 @@ class ProfileRequest extends FormRequest
             'country' => 'nullable|string|max:255',
             'experience' => 'nullable|string|max:255',
             'gender' => 'nullable|in:male,female',
+            'bank_name' => 'nullable|string|max:255',
+            'bank_account_number' => 'nullable|string|max:50',
+            'bank_account_name' => 'nullable|string|max:255',
             
         ];
     }

@@ -25,7 +25,8 @@ class CouponRequest extends FormRequest
         return [
             //'instructor_id' => 'required|integer',
             'coupon_name' => "required|string|max:255|unique:coupons,coupon_name,{$couponId}",
-            'coupon_discount' => 'required|numeric|min:0|max:10000',
+            'coupon_type' => 'required|in:percent,fixed',
+            'coupon_discount' => 'required|numeric|min:1|max:100',
             'coupon_validity' => 'required|date|after_or_equal:today',
             'status' => 'nullable|integer|in:0,1',
         ];

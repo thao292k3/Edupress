@@ -21,6 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('lesson_id'); 
             $table->foreign('lesson_id')->references('id')->on('lessons')->onDelete('cascade');
             
+            $table->integer('watched_time')->default(0);
             
             $table->boolean('is_completed')->default(0); 
             

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Models\CourseEnrollment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,7 +15,8 @@ class CourseController extends Controller
      */
     public function index()
     {
-        //
+        $courses = Course::where('status', 1)->latest()->paginate(12);
+        return view('frontend.pages.course.list', compact('courses'));
     }
 
     /**
@@ -45,7 +47,30 @@ class CourseController extends Controller
     $liveSessions = $course->liveSessions()->orderBy('start_at', 'asc')->get();
     
    
-    return view('frontend.course.course_details', compact('course', 'liveSessions', 'isEnrolled'));
+    return view('frontend.pages.course.course-details', compact('course', 'liveSessions', 'isEnrolled'));
+    }
+
+    
+    public function myCourses()
+    {
+        
+        $user = Auth::user(); 
+        
+        
+        $id = Auth::id();
+
+        $enrolledCourses = CourseEnrollment::where('user_id', $id)
+            ->with('course')
+            ->latest()
+            ->get();
+
+        $courses = \App\Models\CourseEnrollment::where('user_id', $id)
+        ->with('course')
+        ->latest()
+        ->get();
+
+    
+        return view('frontend.pages.course.my-courses', compact('user', 'enrolledCourses', 'courses'));
     }
 
     /**

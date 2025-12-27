@@ -8,6 +8,7 @@ use App\Http\Controllers\backend\AdminCourseController;
 use App\Http\Controllers\backend\AdminInsuctorController;
 use App\Http\Controllers\backend\BackendOrderController;
 use App\Http\Controllers\backend\BlogController;
+use App\Http\Controllers\backend\CommentModerationController;
 use App\Http\Controllers\backend\CategoryController;
 use App\Http\Controllers\backend\CouponController;
 use App\Http\Controllers\backend\CourseContentController;
@@ -17,11 +18,14 @@ use App\Http\Controllers\backend\CourseVideoController;
 use App\Http\Controllers\backend\InfoController;
 use App\Http\Controllers\backend\InstructorController;
 use App\Http\Controllers\backend\InstructorProfileController;
-
+use App\Http\Controllers\backend\InstructorAssessmentController;
+use App\Http\Controllers\backend\InstructorStatsController;
 use App\Http\Controllers\backend\LessonController;
+use App\Http\Controllers\backend\LessonProgressController;
 use App\Http\Controllers\backend\LiveSessionController;
 use App\Http\Controllers\backend\OrderController;
 use App\Http\Controllers\backend\PartnerController;
+use App\Http\Controllers\backend\PayrollController;
 use App\Http\Controllers\backend\QuestionController;
 use App\Http\Controllers\backend\QuizController;
 use App\Http\Controllers\backend\ReviewController;
@@ -32,13 +36,18 @@ use App\Http\Controllers\backend\SliderController;
 use App\Http\Controllers\backend\SubcategoryController;
 use App\Http\Controllers\backend\UserController;
 use App\Http\Controllers\backend\UserProfileController;
+use App\Http\Controllers\frontend\BlogCommentController;
 use App\Http\Controllers\frontend\CartController;
 use App\Http\Controllers\frontend\CheckoutController;
 use App\Http\Controllers\frontend\FrontenDashboardController;
 use App\Http\Controllers\frontend\LectureController;
 use App\Http\Controllers\frontend\SocialController;
 use App\Http\Controllers\frontend\WishlistController;
+use App\Http\Controllers\frontend\CourseController as FrontCourseController;
+use App\Http\Controllers\frontend\LessonController as FrontLessonController;
+use App\Http\Controllers\Frontend\QuizAttemptController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SkillAssessmentController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -55,6 +64,7 @@ Route::post('/auth/firebase/google', [SocialController::class, 'firebaseGoogleLo
 Route::get('/admin/login', [AdminController::class, 'login'])->name('admin.login');
 
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::post('/logout', [AdminController::class, 'destroy'])->name('logout');
 
@@ -116,14 +126,45 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
 
     Route::resource('blog', BlogController::class);
 
+    // Comment moderation
+    Route::get('/comments/pending', [CommentModerationController::class, 'index'])->name('comments.pending');
+    Route::post('/comments/{id}/approve', [CommentModerationController::class, 'approve'])->name('comments.approve');
+    Route::post('/comments/{id}/reject', [CommentModerationController::class, 'reject'])->name('comments.reject');
+
     Route::get('/review/pending', [ReviewController::class, 'pendingReview'])->name('review.pending');
     Route::get('/review/active', [ReviewController::class, 'activeReview'])->name('review.active');
     Route::post('/review/update-status', [ReviewController::class, 'updateReviewStatus'])->name('review.update.status');
     Route::get('/review/delete/{id}', [ReviewController::class, 'deleteReview'])->name('review.delete');
+
+
+    Route::get('/admin/report/earnings', [AdminController::class, 'adminAllEarnings'])->name('all.earnings');
+    Route::get('/admin/pay/instructor/{id}', [AdminController::class, 'updatePaymentStatus'])->name('pay.instructor');
+
+    Route::prefix('payroll')->name('payroll.')->group(function() {
+        Route::get('/index', [PayrollController::class, 'index'])->name('index');
+        Route::get('/create', [PayrollController::class, 'create'])->name('create');
+        Route::post('/store', [PayrollController::class, 'store'])->name('store');
+        Route::get('/show/{id}', [PayrollController::class, 'show'])->name('show');
+       
+        Route::get('/payroll/delete/{id}', [PayrollController::class, 'destroy'])->name('delete');
+       
+        Route::get('/admin/payroll/edit/{id}', [PayrollController::class, 'edit'])->name('edit');
+
+
+        Route::post('/admin/payroll/update/{id}', [PayrollController::class, 'update'])->name('update');
+        Route::get('/payroll/update-status/{id}', [PayrollController::class, 'updateStatus'])->name('updateStatus');
+        Route::post('/upload-receipt/{id}', [PayrollController::class, 'uploadReceipt'])->name('upload_receipt');
+        Route::post('/export', [PayrollController::class, 'export'])->name('export');
+
+        Route::get('/payroll/generate-receipt/{id}', [PayrollController::class, 'adminGenerateReceipt'])->name('generate_receipt');
+    });
+
+    
+});
     
 
 
-});
+
 
 
 
@@ -177,7 +218,7 @@ Route::middleware(['auth', 'verified', 'role:instructor'])
         Route::post('course/sections/store', [CourseSectionController::class, 'store'])
         ->name('sections.store');
 
-    Route::post('course/sections/sort', [CourseContentController::class, 'sortSections'])
+        Route::post('course/sections/sort', [CourseContentController::class, 'sortSections'])
         ->name('sections.sort');
 
 
@@ -213,11 +254,16 @@ Route::middleware(['auth', 'verified', 'role:instructor'])
             Route::put('/{lesson}', [LessonController::class, 'update'])->name('update');
             Route::delete('/{lesson}', [LessonController::class, 'destroy'])->name('destroy');
             Route::post('/sort', [LessonController::class, 'sort'])->name('sort');
+            Route::post('/mark-lesson-completed', [LessonController::class, 'markCompleted']);
+            
         });
 
         Route::resource('quizzes', QuizController::class, [
          'names' => 'quizzes'
         ]);
+
+        // Instructor-managed skill assessment questions
+        Route::resource('assessments', InstructorAssessmentController::class);
 
         Route::resource('quizzes.questions', QuestionController::class, [
             'names' => 'quizzes.questions',
@@ -237,6 +283,26 @@ Route::middleware(['auth', 'verified', 'role:instructor'])
        
 
     Route::resource('coupon', CouponController::class);
+
+    Route::get('/instructor/report/earnings', [InstructorStatsController::class, 'instructorEarnings'])->name('instructor.earnings');
+
+    Route::get('/instructor/withdrawal', [InstructorController::class, 'withdrawalIndex'])->name('instructor.withdrawal.index');
+    Route::post('/instructor/withdrawal/request', [InstructorController::class, 'withdrawalRequest'])->name('instructor.withdrawal.request');
+
+    Route::prefix('payroll')->name('payroll.')->group(function() {
+        Route::get('/index', [PayrollController::class, 'instructorIndex'])->name('index');
+        Route::get('/show/{id}', [PayrollController::class, 'instructorShow'])->name('show');
+        Route::post('/confirm/{id}', [PayrollController::class, 'confirmPayroll'])->name('confirm');
+        Route::get('/payroll/details/{id}', [PayrollController::class, 'instructorPayrollShow'])->name('show');
+    });
+
+    Route::get('/instructor/certificate/download/{courseId}/{userId}', [CourseController::class, 'downloadCertificate'])
+    ->name('certificate.download');
+
+
+    Route::post('/instructor/approve-certificate/{courseId}/{userId}', [CourseController::class, 'approveCertificate'])
+    ->name('certificate.approve');
+
 });
 
 
@@ -260,6 +326,9 @@ Route::middleware(['auth', 'verified', 'role:user'])->prefix('user')->name('user
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
     Route::get('/wishlist-data', [WishlistController::class, 'getWishlist']);
     Route::delete('/wishlist/{id}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
+
+    Route::post('/store/review', [ReviewController::class, 'storeReview'])->name('store.review');
+    
 });
 
      
@@ -267,8 +336,35 @@ Route::middleware(['auth', 'verified', 'role:user'])->prefix('user')->name('user
 //Frontend Routers
 
 Route::get('/', [FrontenDashboardController::class, 'home'])->name('frontend.home');
+Route::get('/category/{id}', [FrontenDashboardController::class, 'CategoryCourse'])
+    ->name('category.course');
+// Posts page (frontend)
+Route::get('/posts', [FrontenDashboardController::class, 'posts'])->name('frontend.posts');
+Route::get('/posts/{slug}', [FrontenDashboardController::class, 'blogShow'])->name('frontend.blog.show');
 
+// Blog comments
+Route::post('/posts/{slug}/comments', [BlogCommentController::class, 'store'])->name('frontend.blog.comment.store');
+Route::post('/comments/{id}/helpful', [BlogCommentController::class, 'helpful'])->name('frontend.blog.comment.helpful');
 Route::get('/course-details/{slug}', [FrontenDashboardController::class, 'view'])->name('course-details');
+
+
+// Frontend course list
+Route::get('/courses', [FrontCourseController::class, 'index'])->name('frontend.courses');
+
+// Lesson detail (player) route
+Route::get('/lesson/{id}', [FrontLessonController::class, 'show'])->name('frontend.lesson.show');
+// Mark lesson as watched (AJAX)
+Route::post('/lesson/{id}/watched', [FrontLessonController::class, 'markWatched'])->name('frontend.lesson.watched');
+
+
+Route::get('/assessment', [SkillAssessmentController::class, 'showAssessment'])->name('assessment.show');
+Route::post('/assessment/submit', [SkillAssessmentController::class, 'submitAssessment'])->name('assessment.submit');
+
+Route::get('/course/{id}/test', [SkillAssessmentController::class, 'showCourseTest'])->name('course.test');
+Route::post('/course/{id}/test/submit', [SkillAssessmentController::class, 'submitCourseTest'])->name('course.test.submit');
+
+// My courses (requires auth)
+Route::middleware('auth')->get('/my-courses', [FrontCourseController::class, 'myCourses'])->name('frontend.my.courses');
 
 /* wishlist controller  */
 
@@ -302,6 +398,23 @@ Route::middleware('auth')->group(function () {
     Route::get('/payment-success', [OrderController::class, 'success'])->name('success');
     Route::get('/payment-cancel', [OrderController::class, 'cancel'])->name('cancel');
     //Route::resource('rating', RatingController::class);
+    Route::post('/enroll-course/{id}', [OrderController::class, 'enrollCourse'])->name('enroll.course');
 });
+
+Route::post('/lesson/update-progress', [LessonProgressController::class, 'updateVideoProgress'])->name('update.video.progress');
+
+
+Route::get('/join-session/{id}', [LiveSessionController::class, 'joinSession'])->name('join.session');
+
+
+// 1. Trang vào làm bài
+Route::get('/quiz/take/{id}', [QuizAttemptController::class, 'takeQuiz'])->name('quiz.take');
+
+// 2. Trang xử lý nộp bài 
+Route::post('/quiz/submit/{id}', [QuizAttemptController::class, 'submitQuiz'])->name('quiz.submit');
+
+// 3. Trang hiển thị kết quả
+Route::get('/quiz/result/{result_id}', [QuizAttemptController::class, 'showResult'])->name('quiz.result');
+
 
 require __DIR__.'/auth.php';

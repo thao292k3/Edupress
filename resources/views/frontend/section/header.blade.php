@@ -148,7 +148,7 @@ $categories = getCategories();
 
                                     </li>
                                     <li>
-                                        <a href="#">All Courses </a>
+                                        <a href="{{ route('frontend.courses') }}">All Courses</a>
 
                                     </li>
 
@@ -164,23 +164,17 @@ $categories = getCategories();
                                             <li><a href="student-path.html">path details</a></li>
                                             <li><a href="student-path-assessment.html">Skill Assessment</a></li>
                                             <li><a href="student-path-assessment-result.html">Skill result</a></li>
+                                            <li><a href="{{ route('assessment.show') }}">Skill Assessment (Quick)</a></li>
                                         </ul>
                                     </li>
 
                                     <li>
                                         <a href="#">courses <i class="la la-angle-down fs-12"></i></a>
                                         <ul class="dropdown-menu-item">
-                                            <li><a href="course-grid.html">course grid</a></li>
-                                            <li><a href="course-list.html">course list</a></li>
-                                            <li><a href="course-grid-left-sidebar.html">grid left sidebar</a></li>
-                                            <li><a href="course-grid-right-sidebar.html">grid right sidebar</a></li>
-                                            <li><a href="course-list-left-sidebar.html">list left sidebar <span
-                                                        class="ribbon ribbon-blue-bg">New</span></a></li>
-                                            <li><a href="course-list-right-sidebar.html">list right sidebar <span
-                                                        class="ribbon ribbon-blue-bg">New</span></a></li>
-                                            <li><a href="course-details.html">course details</a></li>
-                                            <li><a href="lesson-details.html">lesson details</a></li>
-                                            <li><a href="my-courses.html">My courses</a></li>
+                                            
+                                            <li><a href="{{ route('frontend.courses') }}">course list</a></li>
+                                           
+                                            <li><a href="{{ route('frontend.my.courses') }}">My courses</a></li>
                                         </ul>
                                     </li>
 
@@ -238,13 +232,10 @@ $categories = getCategories();
                                         </div>
                                     </li>
                                     <li>
-                                        <a href="#">blog <i class="la la-angle-down fs-12"></i></a>
+                                        <a href="{{ route('frontend.posts') }}">blog <i class="la la-angle-down fs-12"></i></a>
                                         <ul class="dropdown-menu-item">
-                                            <li><a href="blog-full-width.html">blog full width </a></li>
-                                            <li><a href="blog-no-sidebar.html">blog no sidebar</a></li>
-                                            <li><a href="blog-left-sidebar.html">blog left sidebar</a></li>
-                                            <li><a href="blog-right-sidebar.html">blog right sidebar</a></li>
-                                            <li><a href="blog-single.html">blog detail</a></li>
+                                            <li><a href="{{ route('frontend.posts') }}">All Posts</a></li>
+                                            
                                         </ul>
                                     </li>
 
@@ -262,46 +253,42 @@ $categories = getCategories();
                                 <ul>
                                     <li>
                                         <p class="shop-cart-btn d-flex align-items-center">
-
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-                                                <path
-                                                    d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15" />
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                                                <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15" />
                                             </svg>
 
-                                            <?php
-                                            if (auth()->check()) {
-                                                $user_id = auth()->user()->id; 
-                                                $wishlist = getWishlist(); 
-                                                $wishlist_count = \App\Models\Wishlist::where('user_id', $user_id)->count(); 
-                                            } else {
-                                                
-                                                $wishlist = collect(); 
-                                                $wishlist_count = 0; 
-                                            }
-                                            ?>
-
-
-                                            <span class="product-count" id="wishlist-count"
-                                                style="margin-left: 5px">{{ $wishlist_count }}</span>
-
+                                            {{-- SỬA TẠI ĐÂY: Chỉ hiện thẻ span khi đã đăng nhập --}}
+                                            @auth
+                                                @php
+                                                    $user_id = auth()->user()->id; 
+                                                    $wishlist_count = \App\Models\Wishlist::where('user_id', $user_id)->count(); 
+                                                @endphp
+                                                <span class="product-count" id="wishlist-count" style="margin-left: 5px">
+                                                    {{ $wishlist_count }}
+                                                </span>
+                                            @endauth
                                         </p>
 
                                         <div id="wishlist-course">
-
-                                            <!---ajax loaded wishlist  frontend.pages.home.partial.wishlist  -->
-
+                                            {{-- Ajax load nội dung vào đây --}}
                                         </div>
-
                                     </li>
                                 </ul>
                             </div><!-- end wishlist -->
 
-                            <div class="shop-cart mr-4" id='cart'>
-
-                                <!--ajax loaded for cart frontend.pages.home.partial.cart  -->
-
-                            </div><!-- end shop-cart -->
+                            
+                            @auth
+                                <div class="shop-cart mr-4" id='cart'>
+                                    </div>
+                            @else
+                                <div class="shop-cart mr-4">
+                                    <p class="shop-cart-btn d-flex align-items-center">
+                                        <i class="la la-shopping-cart"></i>
+                                        {{-- Không có thẻ span số lượng ở đây --}}
+                                    </p>
+                                </div>
+                            @endauth<!-- end shop-cart -->
+                            <!--ajax loaded for cart frontend.pages.home.partial.cart  -->
 
                         </div><!-- end menu-wrapper -->
                     </div><!-- end col-lg-10 -->
@@ -311,41 +298,7 @@ $categories = getCategories();
     </div><!-- end header-menu-content -->
 
 
-    {{-- <div class="off-canvas-menu custom-scrollbar-styled main-off-canvas-menu">
-        <div class="off-canvas-menu-close main-menu-close icon-element icon-element-sm shadow-sm"
-            data-toggle="tooltip" data-placement="left" title="Close menu">
-            <i class="la la-times"></i>
-        </div><!-- end off-canvas-menu-close -->
-        <ul class="generic-list-item off-canvas-menu-list pt-90px">
-            <li>
-                <a href="#">Home</a>
-
-            </li>
-            <li>
-                <a href="{{ route('cart') }}">cart</a>
-
-            </li>
-            <li>
-                <a href="{{ route('login') }}">Login</a>
-
-            </li>
-            <li>
-                <a href="">All Courses</a>
-
-            </li>
-            <li>
-                <a href="">Blog</a>
-
-            </li>
-
-            <li>
-                <a href="">Contact Us</a>
-
-            </li>
-
-        </ul>
-    </div><!-- end off-canvas-menu --> --}}
-
+   
 
 
 

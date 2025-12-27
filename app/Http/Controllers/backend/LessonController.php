@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LessonRequest;
 use App\Models\Course;
 use App\Models\Lesson;
+use App\Models\LessonProgress;
+use App\Models\User_course_progress;
 use App\Services\LessonService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
@@ -68,7 +70,7 @@ class LessonController extends Controller
             'duration' => 'nullable|numeric|min:0',
         ]);
 
-        // Update video file
+        
         if ($request->hasFile('video_file')) {
 
             if ($lesson->video_file) {
@@ -79,11 +81,11 @@ class LessonController extends Controller
                 ->file('video_file')
                 ->store('lesson/videos', 'public');
 
-            // Reset video URL nếu có file
+            
             $lesson->video_url = null;
         }
 
-        // Update tài liệu
+        
         if ($request->hasFile('lesson_file')) {
 
             if ($lesson->lesson_file) {
@@ -123,7 +125,7 @@ class LessonController extends Controller
             Storage::disk('public')->delete($lesson->lesson_file);
         }
 
-        // Xóa attachments
+        
         foreach ($lesson->attachments as $a) {
             if ($a->type === 'file') {
                 Storage::disk('public')->delete($a->file_path);
@@ -148,4 +150,18 @@ class LessonController extends Controller
 
         return response()->json(['status' => 'success']);
     }
+
+    public function markCompleted(Request $request) {
+    $user_id = auth()->id();
+    
+    
+    LessonProgress::updateOrCreate(
+        ['user_id' => $user_id, 'lesson_id' => $request->lesson_id],
+        ['course_id' => $request->course_id, 'is_completed' => 1]
+    );
+
+    return response()->json(['status' => 'success']);
+    }
+
+    
 }

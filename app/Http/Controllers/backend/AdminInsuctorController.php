@@ -12,7 +12,7 @@ class AdminInsuctorController extends Controller
     public function index()
     {
         $all_instructors = User::where('role', 'instructor')
-                            ->where('status', '0')
+                            
                             ->orderBy('id', 'desc')
                             ->get();
         return view('backend.admin.instructor.index', compact('all_instructors'));
@@ -47,8 +47,22 @@ class AdminInsuctorController extends Controller
         
         
         $user->status = $request->status;
+
+        
+        if($request->has('fixed_salary')) {
+            $user->fixed_salary = $request->fixed_salary;
+        }
+        
         $user->save();
 
-        return response()->json(['success' => 'Cập nhật trạng thái NCC thành công!']);
+        
+        if (!$request->ajax()) {
+            return redirect()->back()->with('success', 'Cập nhật thông tin giảng viên thành công!');
+        }
+
+        
+        return response()->json(['success' => 'Cập nhật trạng thái thành công!']);
     }
+
+    
 }

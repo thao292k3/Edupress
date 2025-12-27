@@ -15,7 +15,7 @@
                     <div class="card-body p-4">
 
                         <div style="display: flex; align-items:center; justify-content:space-between">
-                            <h5 class="mb-4">Update Category</h5>
+                            <h5 class="mb-4">Cập nhật danh mục</h5>
                             <a href="{{ route('admin.category.index') }}" class="btn btn-primary">Back</a>
 
                         </div>
@@ -36,7 +36,7 @@
                             @endif
 
                             <div class="col-md-6">
-                                <label for="name" class="form-label">Name</label>
+                                <label for="name" class="form-label">Tên danh mục</label>
                                 <input type="text" class="form-control" name="name" id="name"
                                     placeholder="Category Name" value="{{ $category->name }}">
                             </div>
@@ -47,7 +47,7 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label for="image" class="form-label">Image</label>
+                                <label for="image" class="form-label">Hình ảnh</label>
                                 <input type="file" class="form-control" name='image' id="Photo">
                             </div>
 
@@ -60,7 +60,7 @@
 
                             <div class="col-md-12">
                                 <div class="d-md-flex d-grid align-items-center gap-3">
-                                    <button type="submit" class="btn btn-primary px-4">Update</button>
+                                    <button type="submit" class="btn btn-primary px-4">Cập nhật danh mục</button>
 
                                 </div>
                             </div>

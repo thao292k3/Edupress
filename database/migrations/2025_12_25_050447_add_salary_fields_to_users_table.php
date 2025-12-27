@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_course_progresses', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::table('users', function (Blueprint $table) {
+            
+            $table->decimal('fixed_salary', 15, 2)->default(0)->after('bank_account_name');
+            
+            $table->decimal('hourly_rate', 15, 2)->default(0)->after('fixed_salary');
         });
     }
 
@@ -22,6 +24,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_course_progresses');
+        Schema::table('users', function (Blueprint $table) {
+            //
+        });
     }
 };

@@ -25,7 +25,12 @@ class Lesson extends Model
     }
 
     public function attachments()
-{
-    return $this->hasMany(LessonAttachment::class);
-}
+    {
+        return $this->hasMany(LessonAttachment::class);
+    }
+
+    public function userProgress() {
+            return $this->hasOne(LessonProgress::class, 'lesson_id')
+                        ->where('user_id', auth()->id());
+    }
 }

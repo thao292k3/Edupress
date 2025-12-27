@@ -36,7 +36,7 @@ class LessonService
 
         
        
-        $data['title'] = Arr::pull($data, 'lecture_title');
+        $data['lecture_title'] = Arr::pull($data, 'lecture_title');
 
         $attachments = Arr::pull($data, 'attachments', []);
         $links = Arr::pull($data, 'links', []);

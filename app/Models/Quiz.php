@@ -19,4 +19,9 @@ class Quiz extends Model
     {
         return $this->hasMany(Question::class)->orderBy('order'); 
     }
+
+    public function section()
+    {
+        return $this->belongsTo(Section::class, 'section_id');
+    }
 }

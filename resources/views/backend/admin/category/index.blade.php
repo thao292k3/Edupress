@@ -7,8 +7,8 @@
 
 
         <div style="display: flex; align-items:center; justify-content:space-between">
-            <h6 class="mb-0 text-uppercase">All Categories</h6>
-            <a href="{{route('admin.category.create')}}" class="btn btn-primary">Add Category</a>
+            <h6 class="mb-0 text-uppercase">Tất cả danh mục</h6>
+            <a href="{{route('admin.category.create')}}" class="btn btn-primary">Thêm mới danh mục</a>
 
         </div>
 
@@ -19,11 +19,11 @@
                     <table id="example" class="table table-striped table-bordered" style="width:100%">
                         <thead>
                             <tr>
-                                <th>NO</th>
-                                <th>Name</th>
+                                <th>STT</th>
+                                <th>Tên danh mục</th>
                                 <th>Slug</th>
-                                <th>Image</th>
-                                <th>Action</th>
+                                <th>Hình ảnh</th>
+                                <th>Thao tác</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -36,7 +36,7 @@
                                     @if($item->image)
                                     <img src="{{asset($item->image)}}" width="60" height="60" />
                                     @else
-                                    <span>No image found</span>
+                                    <span>Không có hình ảnh hiển thị</span>
                                     @endif
                                 </td>
                                 <td>

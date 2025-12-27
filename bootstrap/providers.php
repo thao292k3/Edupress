@@ -5,4 +5,6 @@ return [
     App\Providers\GoogleServiceProvider::class,
     App\Providers\MailConfigServiceProvider::class,
     App\Providers\StripServiceProvider::class,
+
+    // Maatwebsite\Excel\ExcelServiceProvider::class,
 ];

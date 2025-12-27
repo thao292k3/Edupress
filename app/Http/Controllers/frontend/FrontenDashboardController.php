@@ -11,6 +11,8 @@ use App\Models\Section;
 use App\Models\Slider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Blog;
+use App\Models\Quiz;
 
 class FrontenDashboardController extends Controller
 {
@@ -40,9 +42,13 @@ class FrontenDashboardController extends Controller
     public function view($slug)
     {
 
-        $course = Course::where('course_name_slug', $slug)->with('category', 'subcategory', 'user', 'course_goal')->first();
+        $course = Course::where('course_name_slug', $slug)->with('category', 'subcategory', 'user', 'course_goal')->firstOrFail();
+        
         $total_lecture = Lesson::where('course_id', $course->id)->count();
-        $course_content = Section::where('course_id', $course->id)->with('lesson')->get();
+       $course_content = Section::where('course_id', $course->id)
+        ->with(['lesson', 'quizzes']) 
+        ->orderBy('position', 'asc')
+        ->get();
 
         
         $userId = Auth::id();
@@ -55,7 +61,13 @@ class FrontenDashboardController extends Controller
 
         
 
-        $more_course_instructor = Course::where('instructor_id', $course->instructor_id)->where('id', '!=', $course->id)->with('user')->get();
+        $more_course_instructor = Course::where('instructor_id', $course->instructor_id)
+        ->where('id', '!=', $course->id)
+        ->where('status', 1) 
+        ->with('user')
+        ->get();
+
+        
 
         $preview_lesson = Lesson::where('course_id', $course->id)
                             ->where('is_preview', true) 
@@ -80,5 +92,57 @@ class FrontenDashboardController extends Controller
         return view('frontend.pages.course-details.index', compact('course', 'total_lecture', 'course_content', 'similarCourses', 'all_category', 
         'more_course_instructor', 'total_minutes', 'total_lecture_duration', 'preview_lesson', 'preview_video_url'));
     }
+
+   
+    public function posts()
+    {
+        $blogs = Blog::latest()->paginate(10);
+        return view('frontend.pages.blog.index', compact('blogs'));
+    }
+
+    public function blogShow($slug)
+    {
+        $blog = Blog::where('slug', $slug)->firstOrFail();
+
+        
+        $comments = $blog->comments()->where('approved', true)->whereNull('parent_id')->with(['user', 'replies.user'])->get();
+
+        $recent = Blog::latest()->limit(5)->get();
+        $categories = \App\Models\Category::orderBy('name')->get();
+        
+        $archives = Blog::selectRaw("DATE_FORMAT(created_at, '%Y-%m') as ym, COUNT(*) as count")
+            ->groupBy('ym')
+            ->orderBy('ym', 'desc')
+            ->get();
+
+        return view('frontend.pages.blog.show', compact('blog', 'comments', 'recent', 'categories', 'archives'));
+    }
+
+    public function takeQuiz($id)
+{
+    
+    $quiz = Quiz::with(['questions.answers'])->findOrFail($id);
+   
+
+    return view('frontend.pages.quiz.take_quiz', compact('quiz'));
+}
+
+    public function CategoryCourse($id)
+    {
+        
+        $category = Category::findOrFail($id);
+        
+        
+        $courses = Course::where('category_id', $id)
+                        ->where('status', 1)
+                        ->latest()
+                        ->paginate(9); 
+
+        
+        $categories = Category::all();
+
+        return view('frontend.pages.course.category_view', compact('courses', 'category', 'categories'));
+    }
+    
     
 }

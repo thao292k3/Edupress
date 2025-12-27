@@ -24,7 +24,7 @@ class QuizRequest extends FormRequest
     {
         return [
            'course_id' => 'required|exists:courses,id', 
-            
+            'section_id' => 'required|integer|exists:sections,id',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             
@@ -37,4 +37,12 @@ class QuizRequest extends FormRequest
             'status' => 'required|in:0,1', // 0=Draft, 1=Active
         ];
     }
+
+    public function messages(): array
+{
+    return [
+        'section_id.required' => 'Không tìm thấy thông tin chương học (Section ID).',
+        'section_id.exists'   => 'Chương học không tồn tại trong hệ thống.',
+    ];
+}
 }

@@ -25,7 +25,7 @@
 <body>
 
     <!-- start cssload-loader -->
-    @include('frontend.section.preloader')
+   
 
     <!--START HEADER AREA-->
     @include('frontend.section.header')

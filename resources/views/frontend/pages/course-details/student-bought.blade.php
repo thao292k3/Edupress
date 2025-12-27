@@ -21,9 +21,18 @@
                             @endif
                         </div>
 
-                        <div class="course-badge blue">
-                            -{{ round((($course->selling_price - $course->discount_price) / $course->selling_price) * 100) }}%
-                        </div>
+                        @if (
+                            !empty($course->selling_price) &&
+                                $course->selling_price > 0 &&
+                                !empty($course->discount_price) &&
+                                $course->selling_price > $course->discount_price)
+                            <div class="course-badge blue">
+                                -{{ round((($course->selling_price - $course->discount_price) / $course->selling_price) * 100) }}%
+                            </div>
+                        @elseif(empty($course->selling_price) || $course->selling_price == 0)
+                           
+                            <div class="course-badge green">Hot</div>
+                        @endif
 
 
                     </div>

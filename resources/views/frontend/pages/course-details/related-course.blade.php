@@ -18,20 +18,21 @@
                             </a>
 
                             <div class="course-badge-labels">
-                                <div class="course-badge">
+                                @if ($course->bestseller == 'yes')
+                                    <div class="course-badge">Bán chạy nhất</div>
+                                @elseif($course->featured == 'yes')
+                                    <div class="course-badge">Nổi bật</div>
+                                @elseif($course->highestrated == 'yes')
+                                    
+                                    <div class="course-badge">Xếp hạng cao nhất</div>
+                                @endif
 
-                                    @if ($course->bestseller == 'yes')
-                                        Bán chạy nhất
-                                    @elseif($course->featured == 'yes')
-                                        Nổi bật
-                                    @else
-                                        Xếp hạng cao nhất
-                                    @endif
-
-                                </div>
-                                {{-- <div class="course-badge blue">
-                                    -{{ round((($course->selling_price - $course->discount_price) / $course->selling_price) * 100) }}%
-                                </div> --}}
+                              
+                                @if ($course->discount_price > 0)
+                                    <div class="course-badge blue">
+                                        -{{ round((($course->selling_price - $course->discount_price) / $course->selling_price) * 100) }}%
+                                    </div>
+                                @endif
                             </div>
                         </div><!-- end card-image -->
                         <div class="card-body">
@@ -65,14 +66,22 @@
                                 <span class="rating-total pl-1">(20,230)</span>
                             </div><!-- end rating-wrap -->
                             <div class="d-flex justify-content-between align-items-center">
-
                                 <p class="card-price text-black font-weight-bold">
-                                    ${{ $course->discount_price }} <span
-                                        class="before-price font-weight-medium">{{ $course->selling_price }}</span>
+                                    
+                                    {{ number_format($course->discount_price ?? $course->selling_price, 0, ',', '.') }}đ
+
+                                    @if ($course->discount_price)
+                                        <span class="before-price font-weight-medium"
+                                            style="text-decoration: line-through; color: #95a5a6; font-size: 14px; margin-left: 5px;">
+                                            {{ number_format($course->selling_price, 0, ',', '.') }}đ
+                                        </span>
+                                    @endif
                                 </p>
 
                                 <div class="icon-element icon-element-sm shadow-sm cursor-pointer"
-                                    title="Add to Wishlist"><i class="la la-heart-o"></i></div>
+                                    title="Add to Wishlist">
+                                    <i class="la la-heart-o"></i>
+                                </div>
                             </div>
                         </div><!-- end card-body -->
                     </div><!-- end card -->

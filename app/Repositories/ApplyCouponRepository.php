@@ -4,6 +4,7 @@
 namespace App\Repositories;
 
 use App\Models\Coupon;
+use Illuminate\Support\Carbon;
 
 class ApplyCouponRepository
 {
@@ -12,39 +13,39 @@ class ApplyCouponRepository
     public function applyCoupon($couponName, $courseIds, $instructorIds)
     {
         try {
+            $discounts = [];
+            $now = Carbon::now()->format('Y-m-d');
 
-             
-        $discounts = [];
+            foreach ($courseIds as $key => $courseId) {
+                $instructorId = $instructorIds[$key];
 
-        foreach ($courseIds as $key => $courseId) {
-            $instructorId = $instructorIds[$key];
+                
+                $coupon = Coupon::where('coupon_name', $couponName)
+                    ->where('instructor_id', $instructorId)
+                    ->where('status', 1)
+                    ->where('coupon_validity', '>=', $now)
+                    ->first();
 
-            
-            $coupon = Coupon::where('coupon_name', $couponName)
-                ->where('instructor_id', $instructorId)
-                ->where('status', 1) 
-                ->first();
-
-            if ($coupon) {
-                $discounts[] = [
-                    'course_id' => $courseId,
-                    'instructor_id' => $instructorId,
-                    'discount' => $coupon->coupon_discount,
-                    'validity' => $coupon->coupon_validity,
-                ];
+                if ($coupon) {
+                   
+                    $discounts[] = [
+                        'course_id'     => $courseId,
+                        'instructor_id' => $instructorId,
+                        'coupon_name'   => $coupon->coupon_name,
+                        'coupon_type'   => $coupon->coupon_type, 
+                        'discount_value'=> $coupon->coupon_discount, 
+                        'validity'      => $coupon->coupon_validity,
+                    ];
+                }
             }
-        }
 
-        return $discounts;
-
-
-
+            return $discounts;
 
         } catch (\Exception $error) {
-            return response()->json([
+            return [
                 'status' => 'error',
-                'message' => 'Something went wrong! ' . $error->getMessage(),
-            ], 500);
+                'message' => 'Có lỗi xảy ra: ' . $error->getMessage(),
+            ];
         }
     }
 

@@ -6,10 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CourseRequest;
 use App\Models\Category;
 use App\Models\Course;
+use App\Models\CourseEnrollment;
 use App\Models\CourseGoal;
 use App\Models\SubCategory;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Services\CourseService;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class CourseController extends Controller
 {
@@ -133,6 +138,10 @@ class CourseController extends Controller
             return [
                 'user_id' => $user->id,
                 'user_name' => $user->name, 
+                'user_email' => $user->email,
+                'progress_percentage' => $progress,
+                'issued_certificate' => $enrollment->issued_certificate,
+                'certificate_date' => $enrollment->certificate_date,
                 'enrolled_at' => $enrollment->enrolled_at,
                 'progress_percentage' => $progress,
             ];
@@ -165,6 +174,72 @@ class CourseController extends Controller
         }
 
         return true; 
+    }
+
+
+    public function downloadCertificate($courseId, $userId)
+    {
+        
+        $course = Course::findOrFail($courseId);
+        $user = User::findOrFail($userId);
+
+        
+        $enrollment = CourseEnrollment::where('course_id', $courseId)
+            ->where('user_id', $userId)
+            ->first();
+
+        if (!$enrollment || !$enrollment->issued_certificate) {
+            return back()->with('error', 'Học viên này chưa đủ điều kiện nhận chứng chỉ.');
+        }
+
+        
+        $data = [
+            'user'   => $user,
+            'course' => $course,
+            'date'   => $enrollment->certificate_date ? \Carbon\Carbon::parse($enrollment->certificate_date)->format('d/m/Y') : now()->format('d/m/Y'),
+        ];
+
+        
+        $pdf = Pdf::loadView('emails.certificate_pdf', $data)
+                ->setPaper('a4', 'landscape')
+                ->setOptions([
+                    'defaultFont' => 'DejaVu Sans', 
+                    'isRemoteEnabled' => true       
+                ]);
+
+        
+        return $pdf->download('Chung-chi-' . Str::slug($user->name) . '.pdf');
+    }
+
+
+    public function approveCertificate($courseId, $userId)
+    {
+        $course = Course::findOrFail($courseId);
+        $user = User::findOrFail($userId);
+        $enrollment = CourseEnrollment::where('course_id', $courseId)->where('user_id', $userId)->firstOrFail();
+
+        
+        $enrollment->update(['issued_certificate' => 1, 'certificate_date' => now()]);
+
+    
+        $data = [
+            'user'   => $user,
+            'course' => $course,
+            'date'   => now()->format('d/m/Y'),
+        ];
+
+        Mail::send('pages.emails.course_completed', $data, function($message) use ($user, $course, $data) {
+            $message->to($user->email)->subject('Chứng chỉ khóa học ' . $course->course_name);
+
+            if ($course->certificate_template && file_exists(public_path($course->certificate_template))) {
+                $pdf = Pdf::loadView('emails.certificate_pdf', $data)
+                        ->setPaper('a4', 'landscape');
+                
+                $message->attachData($pdf->output(), 'Chung-chi-online.pdf');
+            }
+        });
+
+        return back()->with('success', 'Đã phê duyệt và gửi chứng chỉ ảnh đính kèm thành công!');
     }
 
 }
