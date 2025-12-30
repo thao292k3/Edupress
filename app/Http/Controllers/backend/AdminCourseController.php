@@ -5,6 +5,7 @@ namespace App\Http\Controllers\backend;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class AdminCourseController extends Controller
 {
@@ -17,7 +18,9 @@ class AdminCourseController extends Controller
         return view('backend.admin.course.index', compact('all_courses'));
     }
 
-     public function courseStatus(Request $request)
+
+
+    public function courseStatus(Request $request)
     {
         $course = Course::find($request->course_id);
 
@@ -25,7 +28,18 @@ class AdminCourseController extends Controller
             $course->status = $request->status;
             $course->save();
 
-            return response()->json(['success' => true, 'message' => 'Course status updated successfully!']);
+            
+            if ($request->status == 1) {
+                try {
+                    
+                    Http::timeout(60)->post('http://127.0.0.1:5000/webhook/update-courses');
+                } catch (\Exception $e) {
+                    
+                    \Log::error("Lỗi cập nhật AI: " . $e->getMessage());
+                }
+            }
+
+            return response()->json(['success' => true, 'message' => 'Cập nhật trạng thái và dữ liệu AI thành công!']);
         }
 
         return response()->json(['success' => false, 'message' => 'Course not found!']);
@@ -80,4 +94,6 @@ class AdminCourseController extends Controller
     {
        
     }
+
+    
 }

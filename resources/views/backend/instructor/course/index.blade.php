@@ -140,7 +140,7 @@
         let id = $(this).data('id');
 
         Swal.fire({
-            // SỬA LẠI NỘI DUNG TIẾNG VIỆT
+            
             title: 'Bạn chắc chắn muốn xóa?',
             text: "Khóa học này sẽ bị xóa vĩnh viễn và không thể phục hồi!",
             icon: 'warning',

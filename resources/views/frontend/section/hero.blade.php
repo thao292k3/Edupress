@@ -13,8 +13,8 @@
                         </p>
                     </div><!-- end section-heading -->
                     <div class="hero-btn-box d-flex flex-wrap align-items-center pt-1">
-                        {{-- <a href="{{route('instructor.register')}}" class="btn theme-btn mr-4 mb-4">Join with Us <i
-                                class="la la-arrow-right icon ml-1"></i></a> --}}
+                        <a href="{{route('register')}}" class="btn theme-btn mr-4 mb-4">Join with Us <i
+                                class="la la-arrow-right icon ml-1"></i></a>
                         <a href="" class="btn-text video-play-btn mb-4" data-fancybox
                             data-src="{{$item->video_url}}?autoplay=0">
                             Watch Preview<i class="la la-play icon-btn ml-2"></i>

@@ -46,10 +46,12 @@
             </a>
             <ul>
                 <li class="{{ setSidebar(['admin.instructor.index']) }}">
-                    <a href="{{ route('admin.instructor.index') }}"><i class='bx bx-radio-circle'></i>Danh sách giảng viên</a>
+                    <a href="{{ route('admin.instructor.index') }}"><i class='bx bx-radio-circle'></i>Danh sách giảng
+                        viên</a>
                 </li>
                 <li class="{{ setSidebar(['admin.instructor.active']) }}">
-                    <a href="{{ route('admin.instructor.active') }}"><i class='bx bx-radio-circle'></i>Giảng viên đang hoạt động</a>
+                    <a href="{{ route('admin.instructor.active') }}"><i class='bx bx-radio-circle'></i>Giảng viên đang
+                        hoạt động</a>
                 </li>
 
             </ul>
@@ -96,11 +98,13 @@
             <ul>
 
                 <li class="{{ setSidebar(['admin.slider*']) }}">
-                    <a href="{{ route('admin.slider.index') }}"><i class='bx bx-radio-circle'></i>Quản lý hình ảnh trượt</a>
+                    <a href="{{ route('admin.slider.index') }}"><i class='bx bx-radio-circle'></i>Quản lý hình ảnh
+                        trượt</a>
                 </li>
 
                 <li class="{{ setSidebar(['admin.info*']) }}">
-                    <a href="{{ route('admin.info.index') }}"><i class='bx bx-radio-circle'></i>Quản lý thông tin cá nhân </a>
+                    <a href="{{ route('admin.info.index') }}"><i class='bx bx-radio-circle'></i>Quản lý thông tin cá
+                        nhân </a>
                 </li>
 
                 <li class="{{ setSidebar(['admin.partner*']) }}">
@@ -108,13 +112,14 @@
                 </li>
 
                 <li class="{{ setSidebar(['admin.site-setting*']) }}">
-                    <a href="{{ route('admin.site-setting.index') }}"><i class='bx bx-radio-circle'></i>Cấu hình hệ thống</a>
+                    <a href="{{ route('admin.site-setting.index') }}"><i class='bx bx-radio-circle'></i>Cấu hình hệ
+                        thống</a>
                 </li>
 
             </ul>
         </li>
 
-        
+
 
         <li>
             <a href="javascript:;" class="has-arrow">
@@ -138,7 +143,8 @@
             </a>
             <ul>
                 <li>
-                    <a href="{{ route('admin.comments.pending') }}"><i class='bx bx-radio-circle'></i>Bình luận đang chờ xử lý</a>
+                    <a href="{{ route('admin.comments.pending') }}"><i class='bx bx-radio-circle'></i>Bình luận đang
+                        chờ xử lý</a>
                 </li>
             </ul>
         </li>
@@ -149,8 +155,10 @@
                 <div class="menu-title">Quản lý đánh giá</div>
             </a>
             <ul>
-                <li> <a href="{{ route('admin.review.pending') }}"><i class='bx bx-radio-circle'></i>Phê duyệt đánh giá</a></li>
-                <li> <a href="{{ route('admin.review.active') }}"><i class='bx bx-radio-circle'></i>Đánh giá đã được phê duyệt</a>
+                <li> <a href="{{ route('admin.review.pending') }}"><i class='bx bx-radio-circle'></i>Phê duyệt đánh
+                        giá</a></li>
+                <li> <a href="{{ route('admin.review.active') }}"><i class='bx bx-radio-circle'></i>Đánh giá đã được
+                        phê duyệt</a>
                 </li>
             </ul>
         </li>
@@ -161,25 +169,34 @@
                 <div class="menu-title">Quản lý tài chính</div>
             </a>
             <ul class="{{ Request::is('admin/payroll*') ? 'mm-show' : '' }}">
-              
+
                 <li class="{{ Route::is('admin.payroll.index') ? 'mm-active' : '' }}">
                     <a href="{{ route('admin.payroll.index') }}">
                         <i class='bx bx-radio-circle'></i>Danh sách quyết toán
                     </a>
                 </li>
 
-                
+
                 <li class="{{ Route::is('admin.payroll.create') ? 'mm-active' : '' }}">
                     <a href="{{ route('admin.payroll.create') }}">
                         <i class='bx bx-radio-circle'></i>Tạo bảng lương tháng
                     </a>
                 </li>
 
-                
+                <li class="{{ Route::is('admin.revenue.index') ? 'mm-active' : '' }}">
+                    <a href="{{ route('admin.revenue.index') }}">
+                        <i class='bx bx-radio-circle'></i>Báo cáo doanh thu
+                    </a>
+                </li>
+
+
             </ul>
         </li>
 
-     
+
+
+
+
 
     </ul>
     <!--end navigation-->

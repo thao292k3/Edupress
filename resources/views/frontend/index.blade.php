@@ -10,7 +10,13 @@
 
 @include('frontend.section.course-area-first')
 
-@include('frontend.section.course-area')
+{{-- @include('frontend.section.course-area') --}}
+
+ @include('frontend.section.funfact')
+
+ @include('frontend.section.client-logo-area')
+
+@include('frontend.section.blog')
 
 {{-- @include('frontend.section.funfact')
 

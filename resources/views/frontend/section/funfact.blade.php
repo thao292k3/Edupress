@@ -12,16 +12,15 @@
                             </g>
                         </svg>
                     </div>
-                    <h4 class="counter__title counter text-color-2">7520</h4>
+                    <h4 class="counter__title counter text-color-2">{{ number_format($total_instructors) }}</h4>
                     <p class="counter__meta">expert instructors</p>
                 </div><!-- end counter-item -->
             </div><!-- end col-lg-3 -->
             <div class="col-lg-3 responsive-column-half">
                 <div class="counter-item">
                     <div class="counter__icon icon-element mb-3 shadow-sm">
-                        <svg class="svg-icon-color-2" width="42" version="1.1"
-                            xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 480.1 480.1"
-                            xml:space="preserve">
+                        <svg class="svg-icon-color-2" width="42" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                            x="0px" y="0px" viewBox="0 0 480.1 480.1" xml:space="preserve">
                             <g>
                                 <g>
                                     <path
@@ -60,16 +59,15 @@
                             </g>
                         </svg>
                     </div>
-                    <h4 class="counter__title counter text-color-3">54,252</h4>
+                    <h4 class="counter__title counter text-color-3">{{ number_format($total_followers) }}</h4>
                     <p class="counter__meta">foreign followers</p>
                 </div><!-- end counter-item -->
             </div><!-- end col-lg-3 -->
             <div class="col-lg-3 responsive-column-half">
                 <div class="counter-item">
                     <div class="counter__icon icon-element mb-3 shadow-sm">
-                        <svg class="svg-icon-color-3" width="42" version="1.1"
-                            xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 490.667 490.667"
-                            xml:space="preserve">
+                        <svg class="svg-icon-color-3" width="42" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                            x="0px" y="0px" viewBox="0 0 490.667 490.667" xml:space="preserve">
                             <g>
                                 <g>
                                     <path
@@ -95,8 +93,7 @@
                             </g>
                             <g>
                                 <g>
-                                    <path
-                                        d="M245.333,256c-76.459,0-138.667,62.208-138.667,138.667c0,5.888,4.779,10.667,10.667,10.667S128,400.555,128,394.667
+                                    <path d="M245.333,256c-76.459,0-138.667,62.208-138.667,138.667c0,5.888,4.779,10.667,10.667,10.667S128,400.555,128,394.667
                                             c0-64.704,52.629-117.333,117.333-117.333s117.333,52.629,117.333,117.333c0,5.888,4.779,10.667,10.667,10.667
                                             c5.888,0,10.667-4.779,10.667-10.667C384,318.208,321.792,256,245.333,256z">
                                     </path>
@@ -122,7 +119,7 @@
                             </g>
                         </svg>
                     </div>
-                    <h4 class="counter__title counter text-color-4">97,220</h4>
+                    <h4 class="counter__title counter text-color-4">{{ number_format($total_students) }}</h4>
                     <p class="counter__meta">students enrolled</p>
                 </div><!-- end counter-item -->
             </div><!-- end col-lg-3 -->
@@ -165,8 +162,8 @@
                             </g>
                         </svg>
                     </div>
-                    <h4 class="counter__title counter text-color-5">20</h4>
-                    <p class="counter__meta">years of experience</p>
+                    <h4 class="counter__title counter text-color-5">{{ number_format($total_certificates) }}</h4>
+                    <p class="counter__meta">certified students</p>
                 </div><!-- end counter-item -->
             </div><!-- end col-lg-3 -->
         </div><!-- end row -->

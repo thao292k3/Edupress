@@ -9,6 +9,11 @@ class Payment extends Model
      protected $guarded = [];
 
       public function order(){
-        return $this->hasMany(Order::class, 'payment_id', 'id');
+        return $this->belongsTo(Order::class, 'payment_id', 'id');
+      }
+
+      public function user()
+      {
+          return $this->belongsTo(User::class, 'user_id', 'id');
       }
 }

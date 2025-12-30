@@ -25,9 +25,11 @@ use App\Http\Controllers\backend\LessonProgressController;
 use App\Http\Controllers\backend\LiveSessionController;
 use App\Http\Controllers\backend\OrderController;
 use App\Http\Controllers\backend\PartnerController;
+use App\Http\Controllers\backend\PayController;
 use App\Http\Controllers\backend\PayrollController;
 use App\Http\Controllers\backend\QuestionController;
 use App\Http\Controllers\backend\QuizController;
+use App\Http\Controllers\Backend\RevenueController;
 use App\Http\Controllers\backend\ReviewController;
 use App\Http\Controllers\backend\SettingController;
 use App\Http\Controllers\backend\SiteSetingController;
@@ -67,6 +69,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::post('/logout', [AdminController::class, 'destroy'])->name('logout');
+    Route::post('/export', [AdminController::class, 'export'])->name('export');
 
     //Profile Routes
     Route::get('/profile', [AdminProfileController::class, 'index'])->name('profile');
@@ -114,8 +117,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
 
 
     
-
-     /* Manage Partner  */
+   /* Manage Partner  */
 
     Route::resource('partner', PartnerController::class);
 
@@ -159,15 +161,19 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
         Route::get('/payroll/generate-receipt/{id}', [PayrollController::class, 'adminGenerateReceipt'])->name('generate_receipt');
     });
 
+
+       Route::prefix('revenue')->name('revenue.')->group(function() {
+        Route::get('/index', [RevenueController::class, 'index'])->name('index');
+        Route::get('/export', [RevenueController::class, 'exportExcel'])->name('export');
+        });
+        
+   
     
 });
+
+
+
     
-
-
-
-
-
-
 
 // Instructor Login
 Route::get('/instructor/login', [InstructorController::class, 'login'])
@@ -208,10 +214,7 @@ Route::middleware(['auth', 'verified', 'role:instructor'])
         
         Route::get('/course/{course}/sections', [CourseSectionController::class, 'index'])
         ->name('course.sections.index');
-
-        
-
-        
+       
         Route::get('course/{course}/content', [CourseContentController::class, 'index'])
             ->name('course.content');
 
@@ -224,18 +227,14 @@ Route::middleware(['auth', 'verified', 'role:instructor'])
 
         // QUẢN LÝ VIDEO 
         
-        
         Route::post('/course/{course}/sections/{section}/videos', 
             [CourseVideoController::class, 'storeSectionVideo'] 
         )->name('course.sections.videos.store'); 
 
-        
         Route::post('/course/{course}/videos', 
             [CourseVideoController::class, 'storeOld']
         )->name('course.videos.store');
 
-
-           
         Route::prefix('videos')->name('videos.')->group(function () {
             Route::get('/', [CourseVideoController::class, 'index'])->name('index');
             Route::get('/create', [CourseVideoController::class, 'create'])->name('create');
@@ -278,9 +277,7 @@ Route::middleware(['auth', 'verified', 'role:instructor'])
 
     Route::get('/live-join/{live_session}', [AttendanceController::class, 'joinSession'])
      ->name('live.join')
-     ->middleware('auth');
-
-       
+     ->middleware('auth');  
 
     Route::resource('coupon', CouponController::class);
 
@@ -405,6 +402,7 @@ Route::post('/lesson/update-progress', [LessonProgressController::class, 'update
 
 
 Route::get('/join-session/{id}', [LiveSessionController::class, 'joinSession'])->name('join.session');
+
 
 
 // 1. Trang vào làm bài

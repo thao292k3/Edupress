@@ -20,6 +20,18 @@
 
     <!-- end inject -->
 
+    <style> 
+.hero-slider:not(.owl-loaded) .hero-slider-item:not(:first-child) {
+    display: none; /* Chỉ hiện ảnh đầu tiên, ẩn các ảnh còn lại khi Owl chưa load xong */
+}
+
+.hero-slider:not(.owl-loaded) {
+    height: 500px; /* Khóa chiều cao cố định để tránh layout bị nhảy */
+    overflow: hidden;
+}
+
+</style>
+
 </head>
 
 <body>

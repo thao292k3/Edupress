@@ -21,12 +21,12 @@
 
 
 <script src="{{ asset('frontend/js/main.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     var player = new Plyr('#player');
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     @if (session('success'))

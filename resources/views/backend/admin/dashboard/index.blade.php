@@ -113,6 +113,8 @@
                 <div class="d-flex align-items-center">
                     <div>
                         <h6 class="mb-0">Biểu đồ doanh thu năm {{ date('Y') }}</h6>
+                        
+                        
                     </div>
                 </div>
             </div>
@@ -171,5 +173,10 @@
             }
         });
     });
+
+
+    
 </script>
+
+
 @endpush

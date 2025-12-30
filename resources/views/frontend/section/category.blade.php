@@ -35,7 +35,7 @@
                                    
                                     <p class="cat__meta">{{ $item->course->count() }} khóa học</p>
 
-                                    <a href="{{ route('category.course', $item->id) }}"
+                                    <a href="{{ route('frontend.courses') }}"
                                         class="btn theme-btn theme-btn-sm theme-btn-white">
                                         Khám phá <i class="la la-arrow-right icon ml-1"></i>
                                     </a>

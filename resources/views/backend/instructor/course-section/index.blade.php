@@ -4,13 +4,13 @@
     <div class="page-content">
         <!--breadcrumb-->
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-            <div class="breadcrumb-title pe-3">Course</div>
+            <div class="breadcrumb-title pe-3">Khóa học</div>
             <div class="ps-3">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0 p-0">
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                         </li>
-                        <li class="breadcrumb-item active" aria-current="page">Sections</li>
+                        <li class="breadcrumb-item active" aria-current="page">Chương học</li>
                     </ol>
                 </nav>
             </div>
@@ -20,8 +20,8 @@
         <div class="row">
             <div class="col-12 col-lg-12">
                 <div style="display: flex; align-items:center; justify-content:space-between">
-                    <h6 class="mb-0 text-uppercase">All content sections</h6>
-                    <a href="{{ route('instructor.course.index') }}" class="btn btn-danger px-5">Back</a>
+                    <h6 class="mb-0 text-uppercase">Tất cả các phần nội dung</h6>
+                    <a href="{{ route('instructor.course.index') }}" class="btn btn-danger px-5">Quay lại</a>
 
                 </div>
 
@@ -37,8 +37,7 @@
                                 </p>
                             </div>
                             <div>
-                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">Add
-                                    Section</button>
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">Thêm chương học</button>
                             </div>
                         </div>
                     </div>
@@ -127,7 +126,7 @@
                                         </div>
                                         <div>
                                             @if ($lesson->lesson_type == 1)
-                                                {{-- Edit cho Quiz: Chuyển hướng đến trang chỉnh sửa Quiz --}}
+                                               
                                                 <a href="{{ route('instructor.quizzes.edit', $lesson->quiz_id) }}"
                                                     class="btn btn-sm btn-dark" title="Edit Quiz">
                                                     <i class="bx bx-pencil"></i>
@@ -204,11 +203,11 @@
             e.preventDefault();
 
             let lessonId = $(this).data('id');
-            // Sử dụng form riêng cho từng lesson để đảm bảo tính chính xác
+            
             let deleteForm = document.getElementById('delete-form-' + lessonId);
 
             if (!deleteForm) {
-                // Fallback: nếu không tìm thấy form riêng, sử dụng form chung và đặt action
+                
                 let deleteUrl = "{{ route('instructor.lessons.destroy', ':id') }}".replace(':id', lessonId);
                 deleteForm = $('#delete-form');
                 deleteForm.attr('action', deleteUrl);
@@ -224,9 +223,9 @@
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    if (deleteForm.nodeName) { // Kiểm tra nếu là phần tử DOM
+                    if (deleteForm.nodeName) { 
                         deleteForm.submit();
-                    } else { // Nếu là jQuery object (cho form chung)
+                    } else { 
                         deleteForm.get(0).submit();
                     }
                 }

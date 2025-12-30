@@ -60,10 +60,20 @@ class CategoryController extends Controller
 
     public function destroy($id)
     {
-         $category = Category::findOrFail($id);
+      
+        $category = Category::withCount(['subcategories', 'courses'])->findOrFail($id);
 
-        // Delete associated image if exists
-        // Delete the image file if it exists
+        
+        if ($category->subcategories_count > 0) {
+            return redirect()->back()->with('error', 'Không thể xóa! Danh mục này đang có ' . $category->subcategories_count . ' danh mục con.');
+        }
+
+        
+        if ($category->courses_count > 0) {
+            return redirect()->back()->with('error', 'Không thể xóa! Danh mục này đang có ' . $category->courses_count . ' khóa học trực thuộc.');
+        }
+
+        
         if ($category->image) {
             $imagePath = public_path(parse_url($category->image, PHP_URL_PATH));
             if (file_exists($imagePath)) {

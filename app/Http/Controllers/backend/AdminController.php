@@ -61,69 +61,71 @@ class AdminController extends Controller
             'recent_orders',
             'monthly_revenue'            
     ));
-}
-
-
-    public function destroy(Request $request):RedirectResponse
-    {
-         Auth::guard('web')->logout();
-
-        $request->session()->invalidate();
-
-        $request->session()->regenerateToken();
-
-        return redirect('/admin/login');
     }
 
- 
 
-    public function adminAllEarnings(Request $request) 
-    {
-        
-        $query = InstructorEarning::with(['instructor', 'course', 'order']);
+        public function destroy(Request $request):RedirectResponse
+        {
+            Auth::guard('web')->logout();
 
-        
-        if ($request->has('status') && $request->status == 'pending') {
-            $query->where('payment_status', 'pending');
+            $request->session()->invalidate();
+
+            $request->session()->regenerateToken();
+
+            return redirect('/admin/login');
         }
 
-        $earnings = $query->latest()->get();
-        
-        return view('backend.admin.report.admin_all_earnings', compact('earnings'));
-    }
-
-    public function updatePaymentStatus($id) 
-    {
-        $earning = InstructorEarning::findOrFail($id);
-        
-        
-        $earning->update(['payment_status' => 'paid']); 
-
-        return redirect()->back()->with('success', 'Đã xác nhận thanh toán lương thành công!');
-    }
-
-    public function createPayroll(Request $request) {
-    $instructorId = $request->instructor_id;
-    $month = $request->month; 
-
     
-    $courseData = InstructorEarning::where('instructor_id', $instructorId)
-                    ->where('payment_status', 'pending')
-                    ->selectRaw('SUM(instructor_amount) as total_earn, COUNT(DISTINCT order_id) as students')
-                    ->first();
 
-    
-    $payroll = Payroll::create([
-        'instructor_id' => $instructorId,
-        'payroll_month' => $month,
-        'course_revenue' => $courseData->total_earn ?? 0,
-        'student_count' => $courseData->students ?? 0,
-        'fixed_salary' => $request->fixed_salary, 
-        'support_fee' => $request->support_fee,   
-        'total_amount' => ($courseData->total_earn ?? 0) + $request->fixed_salary + $request->support_fee,
-        'status' => 'draft'
-    ]);
+        public function adminAllEarnings(Request $request) 
+        {
+            
+            $query = InstructorEarning::with(['instructor', 'course', 'order']);
 
-    return redirect()->back()->with('success', 'Đã tạo bảng lương tạm tính.');
+            
+            if ($request->has('status') && $request->status == 'pending') {
+                $query->where('payment_status', 'pending');
+            }
+
+            $earnings = $query->latest()->get();
+            
+            return view('backend.admin.report.admin_all_earnings', compact('earnings'));
+        }
+
+        public function updatePaymentStatus($id) 
+        {
+            $earning = InstructorEarning::findOrFail($id);
+            
+            
+            $earning->update(['payment_status' => 'paid']); 
+
+            return redirect()->back()->with('success', 'Đã xác nhận thanh toán lương thành công!');
+        }
+
+        public function createPayroll(Request $request) {
+        $instructorId = $request->instructor_id;
+        $month = $request->month; 
+
+        
+        $courseData = InstructorEarning::where('instructor_id', $instructorId)
+                        ->where('payment_status', 'pending')
+                        ->selectRaw('SUM(instructor_amount) as total_earn, COUNT(DISTINCT order_id) as students')
+                        ->first();
+
+        
+        $payroll = Payroll::create([
+            'instructor_id' => $instructorId,
+            'payroll_month' => $month,
+            'course_revenue' => $courseData->total_earn ?? 0,
+            'student_count' => $courseData->students ?? 0,
+            'fixed_salary' => $request->fixed_salary, 
+            'support_fee' => $request->support_fee,   
+            'total_amount' => ($courseData->total_earn ?? 0) + $request->fixed_salary + $request->support_fee,
+            'status' => 'draft'
+        ]);
+
+        return redirect()->back()->with('success', 'Đã tạo bảng lương tạm tính.');
 }
+
+   
 }

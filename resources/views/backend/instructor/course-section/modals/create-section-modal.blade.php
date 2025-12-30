@@ -5,7 +5,7 @@
 
              <!-- Modal Header -->
              <div class="modal-header">
-                 <h4 class="modal-title">Add Section</h4>
+                 <h4 class="modal-title">Thêm chương học</h4>
                  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
              </div>
 
@@ -15,12 +15,12 @@
                      @csrf
                      <input type="hidden" name="course_id" value="{{ $course->id }}" />
                      <div class="">
-                         <label for="section" class="form-label">Section Title</label>
+                         <label for="section" class="form-label">Tên chương học</label>
                          <input type="text" class="form-control" name="title" id="section-title"
                              placeholder="Enter the section">
                      </div>
                      <div class="mt-3">
-                         <button type="submit" class="btn btn-primary w-100">Submit</button>
+                         <button type="submit" class="btn btn-primary w-100">Tạo chương</button>
                      </div>
                  </form>
              </div>

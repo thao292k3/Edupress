@@ -12,7 +12,9 @@ use App\Models\Slider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Blog;
+use App\Models\Partner;
 use App\Models\Quiz;
+use App\Models\User;
 
 class FrontenDashboardController extends Controller
 {
@@ -33,9 +35,26 @@ class FrontenDashboardController extends Controller
             ->take(6) 
             ->get();
 
+            
+
+            $blogs = Blog::with('user')->latest()->limit(3)->get();
+
+            $total_instructors = User::where('role', 'instructor')->count();
+
+    
+            $total_students = User::where('role', 'user')->count(); 
+
+            
+            $total_followers =1000; 
+
+            
+            $total_certificates = 1500; 
+
+            $partners = Partner::latest()->get();
+
         
 
-        return view('frontend.index', compact('all_slider', 'all_info', 'all_categories', 'categories', 'course_category', 'featured_courses'));
+        return view('frontend.index', compact('all_slider', 'all_info', 'all_categories', 'categories', 'course_category', 'featured_courses', 'blogs','total_instructors', 'total_students', 'total_certificates' , 'total_followers', 'partners'));
     }
 
 
@@ -94,11 +113,21 @@ class FrontenDashboardController extends Controller
     }
 
    
-    public function posts()
+    
+        public function posts()
     {
-        $blogs = Blog::latest()->paginate(10);
-        return view('frontend.pages.blog.index', compact('blogs'));
+        $blogs = Blog::latest()->paginate(6); 
+        
+        $categories = \App\Models\Category::withCount('course')->orderBy('name')->get();
+        
+        $archives = Blog::selectRaw("DATE_FORMAT(created_at, '%Y-%m') as ym, COUNT(*) as count")
+            ->groupBy('ym')
+            ->orderBy('ym', 'desc')
+            ->get();
+
+        return view('frontend.pages.blog.index', compact('blogs', 'categories', 'archives'));
     }
+        
 
     public function blogShow($slug)
     {

@@ -58,7 +58,17 @@ class SubcategoryController extends Controller
     
     public function destroy(string $id)
     {
-        SubCategory::findOrFail($id)->delete();
+      
+        $subCategory = SubCategory::withCount('courses')->findOrFail($id);
+
+        
+        if ($subCategory->courses_count > 0) {
+            return redirect()->back()->with('error', 'Không thể xóa! Danh mục con này đang chứa ' . $subCategory->courses_count . ' khóa học.');
+        }
+
+        
+        $subCategory->delete();
+
         return redirect()->route('admin.subcategory.index')->with('success', 'Danh mục con đã được xóa thành công.');
     }
 

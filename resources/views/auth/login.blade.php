@@ -7,7 +7,7 @@
     <div class="container">
         <div class="breadcrumb-content d-flex flex-wrap align-items-center justify-content-between">
             <div class="section-heading">
-                <h2 class="section__title text-white">Login</h2>
+                <h2 class="section__title text-white">Đăng nhập</h2>
             </div>
             <ul class="generic-list-item generic-list-item-white generic-list-item-arrow d-flex flex-wrap align-items-center">
                 <li><a href="index.html">Home</a></li>
@@ -32,7 +32,7 @@
             <div class="col-lg-7 mx-auto">
                 <div class="card card-item">
                     <div class="card-body">
-                        <h3 class="card-title text-center fs-24 lh-35 pb-4">Login to Your Account!</h3>
+                        <h3 class="card-title text-center fs-24 lh-35 pb-4">Đăng nhập tài khoan của bạn!</h3>
                         <div class="section-block"></div>
 
                         <form method="post" class="pt-4" action="{{route('login')}}">
@@ -47,7 +47,7 @@
                                 <div class="icon-element icon-element-md fs-25 shadow-sm">Or</div>
                             </div>
                             <div class="input-box">
-                                <label class="label-text">Email or Username</label>
+                                <label class="label-text">Email</label>
                                 <div class="form-group">
                                     <input class="form-control form--control" type="email"  value="{{ old('email') }}"  name="email" placeholder="Email or Username">
                                     <span class="la la-user input-icon"></span>
@@ -55,7 +55,7 @@
                                 </div>
                             </div><!-- end input-box -->
                             <div class="input-box">
-                                <label class="label-text">Password</label>
+                                <label class="label-text">Mật khẩu</label>
                                 <div class="input-group mb-3">
                                     <span class="la la-lock input-icon"></span>
                                     <input class="form-control form--control password-field" type="password" name="password" placeholder="Password">
@@ -72,13 +72,13 @@
                                 <div class="d-flex align-items-center justify-content-between pb-4">
                                     <div class="custom-control custom-checkbox fs-15">
                                         <input type="checkbox" class="custom-control-input" id="rememberMeCheckbox" required>
-                                        <label class="custom-control-label custom--control-label" for="rememberMeCheckbox">Remember Me</label>
+                                        <label class="custom-control-label custom--control-label" for="rememberMeCheckbox">Nhớ mật khẩu</label>
                                     </div><!-- end custom-control -->
                                     {{-- <a href="/forgot-password" class="btn-text">Forgot my password?</a> --}}
-                                    <a href="{{ route('password.request') }}" class="btn-text">Forgot my password?</a>
+                                    <a href="{{ route('password.request') }}" class="btn-text">Quên mật khẩu?</a>
                                 </div>
-                                <button class="btn theme-btn" type="submit">Login Account <i class="la la-arrow-right icon ml-1"></i></button>
-                                <p class="fs-14 pt-2">Don't have an account? <a href="{{route('register')}}" class="text-color hover-underline">Register</a></p>
+                                <button class="btn theme-btn" type="submit">Đăng nhập <i class="la la-arrow-right icon ml-1"></i></button>
+                                <p class="fs-14 pt-2">Bạn chwua có tài khoản? <a href="{{route('register')}}" class="text-color hover-underline">Đăng kí tài khoản</a></p>
                             </div><!-- end btn-box -->
                         </form>
                     </div><!-- end card-body -->
@@ -92,14 +92,10 @@
 
 @push('scripts')
 <script type="module">
-    // Import the functions you need from the SDKs you need
+   
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyDKd2YwAIp7tPvy1VqxyaJRmjipNZDUugM",
   authDomain: "edupress-fcd98.firebaseapp.com",
@@ -118,7 +114,7 @@ document.getElementById('google-login-btn').addEventListener('click', () => {
     signInWithPopup(auth, provider)
       .then((result) => {
         const user = result.user;
-        // Gửi thông tin user về Laravel Backend qua Ajax
+        
         fetch('/auth/firebase/google', {
           method: 'POST',
           headers: {
@@ -149,11 +145,11 @@ document.getElementById('google-login-btn').addEventListener('click', () => {
             timer: 3000,
             timerProgressBar: true,
             customClass: {
-                popup: 'colored-toast' // Add a custom class for styling
+                popup: 'colored-toast' 
             },
-            background: 'red', // Green background for success
-            color: '#ffffff', // White text color
-            iconColor: '#ffffff', // White icon color
+            background: 'red', 
+            color: '#ffffff', 
+            iconColor: '#ffffff', 
         });
     @endif
 </script>

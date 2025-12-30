@@ -1,6 +1,13 @@
 @extends('backend.admin.master')
 
 @section('content')
+
+@if(session('error'))
+    <div class="alert alert-danger border-0 bg-danger alert-dismissible fade show">
+        <div class="text-white">{{ session('error') }}</div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
     <div class="page-content">
 
         @include('backend.section.breadcrumb', ['title' => 'Category', 'sub_title'=> 'All-Categories']);

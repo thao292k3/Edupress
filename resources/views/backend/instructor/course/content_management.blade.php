@@ -39,8 +39,8 @@
 </div>
 
 <!-- Include Modals -->
-@include('backend.instructor.course.modals.create_section_modal')
-@include('backend.instructor.course.modals.create_lesson_modal')
+@include('backend.instructor.course-section.modals.create-section-modal')
+@include('backend.instructor.course-section.modals.create-lesson-modal')
 
 <script>
     function setSectionId(id) {

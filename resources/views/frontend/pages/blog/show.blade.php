@@ -21,7 +21,7 @@
         <div class="row">
             <div class="col-lg-8">
                 <div class="card card-item mb-5">
-                    <img src="{{ asset($blog->image ?? 'frontend/images/default-post.jpg') }}" class="card-img-top" alt="{{ $blog->title }}" style="max-height: 450px; object-fit: cover;">
+                    <img src="{{ asset($blog->image ?? 'frontend/images/default-post.jpg') }}" class="card-img-top" alt="{{ $blog->title }}" style="max-height: 450px; object-fit: cover; object-position: center;;">
                     <div class="card-body p-4 p-lg-5">
                         <div class="mb-3">
                             <span class="badge badge-primary px-3 py-2 mb-2">Blog Post</span>

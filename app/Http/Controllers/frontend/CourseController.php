@@ -13,12 +13,43 @@ class CourseController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $courses = Course::where('status', 1)->latest()->paginate(12);
-        return view('frontend.pages.course.list', compact('courses'));
-    }
+    
 
+public function index(Request $request)
+    {
+        
+        $query = Course::where('status', 1);
+
+        
+        if ($request->has('category')) {
+            $query->whereIn('category_id', $request->category);
+        }
+
+        
+        if ($request->has('instructor')) {
+            $query->whereIn('instructor_id', $request->instructor);
+        }
+
+        
+        if ($request->has('price')) {
+            if ($request->price == 'free') {
+                $query->where(function($q) {
+                    $q->whereNull('selling_price')->orWhere('selling_price', 0);
+                });
+            } elseif ($request->price == 'paid') {
+                $query->where('selling_price', '>', 0);
+            }
+        }
+
+        
+        $courses = $query->latest()->paginate(9)->withQueryString();
+
+        
+        $categories = \App\Models\Category::withCount('course')->get();
+        $instructors = \App\Models\User::where('role', 'instructor')->withCount('courses')->get();
+
+        return view('frontend.pages.course.list', compact('courses', 'categories', 'instructors'));
+    }
     /**
      * Show the form for creating a new resource.
      */
