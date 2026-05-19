@@ -137,51 +137,76 @@
     
     <!-- end row --> --}}
 
-     <div class="card card-item">
-            <div class="card-body">
-                <h3 class="fs-18 font-weight-semi-bold pb-2">Khóa học đang học</h3>
-                <div class="divider"><span></span></div>
-                <div class="table-responsive">
-                    <table class="table generic-table">
-                        <thead>
+    <div class="card card-item">
+        <div class="card-body">
+            <h3 class="fs-18 font-weight-semi-bold pb-2">Khóa học đang học</h3>
+            <div class="divider"><span></span></div>
+            <div class="table-responsive">
+                <table class="table generic-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Khóa học</th>
+                            <th scope="col">Tiến độ</th>
+                            <th scope="col">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($enrolledCourses as $item)
                             <tr>
-                                <th scope="col">Khóa học</th>
-                                <th scope="col">Tiến độ</th>
-                                <th scope="col">Hành động</th>
+                                <td>
+                                    <div class="media media-card align-items-center">
+                                        <a href="#" class="media-img">
+                                            <img src="{{ asset($item->course->course_image) }}" alt="img">
+                                        </a>
+                                        <div class="media-body">
+                                            <h5 class="fs-15"><a href="#">{{ $item->course->course_name }}</a>
+                                            </h5>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    @php
+                                        $course = $item->course;
+
+                                        // 1. Lấy tổng số bài học của khóa học này
+                                        $totalLessons = $course->lessons ? $course->lessons->count() : 0;
+
+                                        // 2. Lấy số bài học mà User hiện tại đã hoàn thành (is_completed = 1)
+                                        // Lưu ý: Đảm bảo Model Course đã có relationship 'lessonProgress'
+                                        $completedCount = 0;
+                                        if ($course->lessons) {
+                                            $lessonIds = $course->lessons->pluck('id');
+                                            $completedCount = \App\Models\LessonProgress::where('user_id', Auth::id())
+                                                ->whereIn('lesson_id', $lessonIds)
+                                                ->where('is_completed', 1)
+                                                ->count();
+                                        }
+
+                                        // 3. Tính phần trăm tiến độ
+                                        $percentage =
+                                            $totalLessons > 0 ? round(($completedCount / $totalLessons) * 100) : 0;
+                                    @endphp
+
+                                    <div class="progress" style="height: 10px;">
+                                        <div class="progress-bar {{ $percentage == 100 ? 'bg-success' : 'bg-primary' }}"
+                                            role="progressbar" style="width: {{ $percentage }}%;"
+                                            aria-valuenow="{{ $percentage }}" aria-valuemin="0" aria-valuemax="100">
+                                        </div>
+                                    </div>
+                                    <p class="fs-13">{{ $percentage }}% Hoàn thành
+                                        ({{ $completedCount }}/{{ $totalLessons }} bài)</p>
+                                </td>
+                                <td>
+                                    <a href="{{ route('frontend.lesson.show', $item->course->id) }}"
+                                        class="btn theme-btn theme-btn-sm">Học tiếp</a>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($enrolledCourses as $item)
-                                <tr>
-                                    <td>
-                                        <div class="media media-card align-items-center">
-                                            <a href="#" class="media-img">
-                                                <img src="{{ asset($item->course->course_image) }}" alt="img">
-                                            </a>
-                                            <div class="media-body">
-                                                <h5 class="fs-15"><a href="#">{{ $item->course->course_name }}</a>
-                                                </h5>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="progress" style="height: 10px;">
-                                            <div class="progress-bar bg-success" role="progressbar" style="width: 75%;">
-                                            </div>
-                                        </div>
-                                        <p class="fs-13">75% Hoàn thành</p>
-                                    </td>
-                                    <td>
-                                        <a href="{{ route('frontend.lesson.show', $item->course->id) }}"
-                                            class="btn theme-btn theme-btn-sm">Học tiếp</a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
+    </div>
 @endsection
 
 @push('scripts')

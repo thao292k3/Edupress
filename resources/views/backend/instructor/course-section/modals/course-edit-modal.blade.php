@@ -19,7 +19,7 @@
 
                     {{-- Title --}}
                     <div class="col-md-12 mb-3">
-                        <label for="lecture_title_{{ $lecture->id }}" class="form-label">Teeb bài học</label>
+                        <label for="lecture_title_{{ $lecture->id }}" class="form-label">Tên bài học</label>
                         <input type="text" name="lecture_title" value="{{ $lecture->lecture_title }}"
                             class="form-control" id="lecture_title_{{ $lecture->id }}" placeholder="Enter lesson title"
                             required>

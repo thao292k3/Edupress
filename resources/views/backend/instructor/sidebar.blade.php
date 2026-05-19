@@ -40,7 +40,8 @@
             </li>
 
             {{-- Quản lý kiểm tra --}}
-            <li class="{{ Request::is('instructor/quizzes*') || Request::is('instructor/assessments*') ? 'mm-active' : '' }}">
+            <li
+                class="{{ Request::is('instructor/quizzes*') || Request::is('instructor/assessments*') ? 'mm-active' : '' }}">
                 <a href="#" class="has-arrow">
                     <div class="parent-icon"><i class='bx bx-edit'></i></div>
                     <div class="menu-title">Quản lý kiểm tra</div>
@@ -102,6 +103,16 @@
                             Lịch sử nhận lương
                         </a>
                     </li>
+
+                    
+                    @if (Request::is('instructor/payroll/show*'))
+                        <li class="mm-active">
+                            <a href="javascript:;">
+                                <i class='bx bx-radio-circle'></i>
+                                Chi tiết bảng lương
+                            </a>
+                        </li>
+                    @endif
                 </ul>
             </li>
 

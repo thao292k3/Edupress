@@ -1,7 +1,7 @@
   <!-- Modal -->
   <div class="modal fade modal-container" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="previewModalTitle"
       aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
           <div class="modal-content">
               <div class="modal-header border-bottom-gray">
                   <div class="pr-2">
@@ -17,11 +17,11 @@
 
                   <div class="col-md-12 mt-3">
                       <input type="hidden" class="form-control video_url" name="url"
-                          placeholder="Enter the YouTube video URL" value="{{ old('url', $preview_video_url) }}"
+                          placeholder="Enter the YouTube video URL" value="{{ old('url', $preview_video_url ?? '') }}"
                           required>
 
-                      <iframe class="videoPreview" style="margin-top: 15px; width: 100%; height: 400px;" frameborder="0"
-                          allowfullscreen></iframe>
+                      <iframe class="videoPreview" style="margin-top: 15px; width: 100%; height: 500px; border-radius: 8px;" frameborder="0"
+                          allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
 
                   </div>
 
@@ -31,8 +31,48 @@
       </div><!-- end modal-dialog -->
   </div><!-- end modal -->
 
+  <style>
+      /* Modal Fix */
+      .modal-content {
+          background-color: #ffffff;
+          border: 1px solid #e0e0e0;
+          border-radius: 8px;
+      }
 
+      .modal-header {
+          background-color: #f8f9fa;
+          border-bottom: 1px solid #e0e0e0 !important;
+      }
 
+      .modal-body {
+          background-color: #ffffff;
+          padding: 20px;
+      }
+
+      /* Backdrop fix for dark background */
+      .modal.show .modal-backdrop {
+          background-color: rgba(0, 0, 0, 0.5);
+      }
+
+      .modal-lg {
+          max-width: 900px;
+      }
+
+      .videoPreview {
+          background-color: #ffffff;
+          border-radius: 8px;
+      }
+
+      @media (max-width: 768px) {
+          .modal-dialog {
+              margin: 10px;
+          }
+
+          .videoPreview {
+              height: 300px !important;
+          }
+      }
+  </style>
 
   @push('scripts')
       <script>
@@ -72,6 +112,15 @@
                   if (videoInput.value.trim() !== "") {
                       updateVideoPreview();
                   }
+              });
+
+              // Fix backdrop color
+              $('#previewModal').on('show.bs.modal', function () {
+                  $('body').css('overflow', 'hidden');
+              });
+
+              $('#previewModal').on('hide.bs.modal', function () {
+                  $('body').css('overflow', 'auto');
               });
           });
       </script>

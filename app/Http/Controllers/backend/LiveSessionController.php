@@ -82,39 +82,61 @@ class LiveSessionController extends Controller
     
     
     public function show(LiveSessions $live_session) 
-{
+    {
+        
+        if ($live_session->course->instructor_id !== Auth::id()) {
+            abort(403);
+        }
+
+        
+        $live_session->load(['attendees.user']); 
+        
+        
+        $teacherAttendance = $live_session->attendees->where('role', 'teacher')->first();
+        
     
-    if ($live_session->course->instructor_id !== Auth::id()) {
-        abort(403);
+        $studentAttendances = $live_session->attendees->where('role', 'student'); 
+        
+    
+        return view('backend.instructor.live_session.show', compact('live_session', 'teacherAttendance', 'studentAttendances'));
     }
 
-    
-    $live_session->load(['attendees.user']); 
-    
-    
-    $teacherAttendance = $live_session->attendees->where('role', 'teacher')->first();
-    
-   
-    $studentAttendances = $live_session->attendees->where('role', 'student'); 
-    
-   
-    return view('backend.instructor.live_session.show', compact('live_session', 'teacherAttendance', 'studentAttendances'));
-}
+    public function joinSession($id)
+    {
+        $session = LiveSessions::findOrFail($id);
+        $user = Auth::user();
 
-public function joinSession($id)
-{
-    // 1. Tìm buổi học trực tuyến
-    // Giả sử model của bạn tên là LiveSession hoặc Session
-    $session = LiveSessions::findOrFail($id);
+        
+        if ($user->id === $session->course->instructor_id) {
+            return redirect()->away($session->meeting_link);
+        }
 
-    // 2. Logic kiểm tra thời gian (tùy chọn)
-    // Ví dụ: chỉ cho vào nếu hiện tại nằm trong khoảng thời gian học
+        
+        $currentParticipants = $session->attendees()->where('role', 'student')->count();
 
-    // 3. Chuyển hướng đến link Zoom/Google Meet hoặc trang học trực tuyến
-    if ($session->meeting_link) {
-        return redirect()->away($session->meeting_link);
+        
+        if ($currentParticipants >= 20) { 
+            return back()->with('error', 'Phòng học đã đủ giới hạn 20 người. Vui lòng chọn buổi giải đáp khác!');
+        }
+
+      
+        if ($currentParticipants < 15) {
+            
+        }
+
+        
+        $session->attendees()->updateOrCreate(
+            ['user_id' => $user->id],
+            [
+                'role' => 'student',
+                'joined_at' => now()
+            ]
+        );
+
+        if ($session->meeting_link) {
+            return redirect()->away($session->meeting_link);
+        }
+
+        return back()->with('error', 'Liên kết buổi học chưa được thiết lập.');
     }
-
-    return back()->with('error', 'Liên kết buổi học chưa được cập nhật.');
-}
 }

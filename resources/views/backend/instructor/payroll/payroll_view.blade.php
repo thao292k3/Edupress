@@ -46,7 +46,7 @@
                                         <td>{{ number_format($payroll->support_fee) }}đ</td>
                                     </tr>
                                     <tr class="bg-light">
-                                        <td colspan="2" class="text-center"><strong>TỔNG NHẬN (Tạm tính)</strong></td>
+                                        <td colspan="2" class="text-center"><strong>TỔNG NHẬN</strong></td>
                                         <td class="text-danger">
                                             <strong>{{ number_format($payroll->total_amount) }}đ</strong></td>
                                     </tr>
@@ -54,63 +54,70 @@
                             </table>
                         </div>
 
+                        {{-- PHẦN 1: Nút bấm xử lý (Hiện khi chưa xác nhận và chưa trả lương) --}}
+                        {{-- PHẦN 1: Nút bấm hành động --}}
+                        @if ($payroll->status != 'paid')
+                            <div class="d-flex justify-content-center gap-3 mt-4">
 
-                        @if ($payroll->status == 'sent_to_instructor')
-                            <div class="alert alert-info mt-4">
-                                <i class='bx bx-info-circle'></i> Vui lòng kiểm tra kỹ các thông số trên. Nếu có sai sót,
-                                hãy nhấn <strong>"Khiếu nại"</strong> ngay. Nếu đã chính xác, nhấn <strong>"Xác nhận
-                                    OK"</strong> để hệ thống tiến hành chuyển khoản.
-                            </div>
-                            <div class="d-flex justify-content-center gap-3">
-                                <form action="{{ route('instructor.payroll.confirm', $payroll->id) }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="btn btn-success px-5"
-                                        onclick="return confirm('Tôi xác nhận thông tin lương này là chính xác')">
-                                        <i class='bx bx-check-double'></i> Xác nhận thông tin lương OK
+                                {{-- Nút Xác nhận: Hiện khi chưa khiếu nại HOẶC khi Admin đã giải quyết xong --}}
+                                @if ($payroll->complaint_status == 'none' || $payroll->complaint_status == 'resolved')
+                                    <form action="{{ route('instructor.payroll.confirm', $payroll->id) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="btn btn-success px-5"
+                                            onclick="return confirm('Xác nhận thông tin lương đã chính xác sau khi đối soát?')">
+                                            <i class='bx bx-check-double'></i> Xác nhận thông tin lương OK
+                                        </button>
+                                    </form>
+                                @endif
+
+                                {{-- Nút Khiếu nại: Chỉ hiện khi chưa có khiếu nại nào (none) --}}
+                                @if ($payroll->complaint_status == 'none')
+                                    <button class="btn btn-outline-danger px-4" data-bs-toggle="modal"
+                                        data-bs-target="#complaintModal">
+                                        <i class='bx bx-message-error'></i> Gửi khiếu nại
                                     </button>
-                                </form>
-                                <button class="btn btn-outline-danger px-4" data-bs-toggle="modal"
-                                    data-bs-target="#complaintModal">
-                                    <i class='bx bx-message-error'></i> Gửi khiếu nại
-                                </button>
+                                @endif
+
                             </div>
+
+                            {{-- Thông báo nhắc nhở khi mới gửi --}}
+                            @if ($payroll->complaint_status == 'none')
+                                <div class="alert alert-info mt-3 text-center">
+                                    <i class='bx bx-info-circle'></i> Vui lòng kiểm tra kỹ. Nếu sai sót hãy nhấn
+                                    <strong>"Khiếu nại"</strong>. Nếu đúng nhấn <strong>"Xác nhận OK"</strong>.
+                                </div>
+                            @endif
                         @endif
                     </div>
                 </div>
             </div>
 
             <div class="col-12 col-lg-4">
-
+                {{-- Tài khoản ngân hàng --}}
                 <div class="card radius-10">
                     <div class="card-body">
-                        <h6 class="mb-3">Tài khoản nhận tiền của bạn</h6>
+                        <h6 class="mb-3">Tài khoản nhận tiền</h6>
                         <div class="p-3 bg-light radius-10 border border-primary">
                             <small class="text-muted">Ngân hàng:</small>
                             <p class="fw-bold mb-2">{{ auth()->user()->bank_name }}</p>
                             <small class="text-muted">Số tài khoản:</small>
                             <p class="fw-bold mb-2 text-primary">{{ auth()->user()->bank_account_number }}</p>
-                            <small class="text-muted">Chủ tài khoản:</small>
-                            <p class="fw-bold mb-0 text-uppercase">{{ auth()->user()->bank_account_name }}</p>
                         </div>
-                        <p class="small text-muted mt-2 text-center">*Nếu sai thông tin, hãy cập nhật lại ở phần Hồ sơ.</p>
                     </div>
                 </div>
 
-
+                {{-- Chứng từ --}}
                 @if ($payroll->status == 'paid')
                     <div class="card radius-10 border-success border-top border-3">
                         <div class="card-body">
                             <h6 class="mb-3 text-success"><i class='bx bx-check-circle'></i> Chứng từ thanh toán</h6>
                             @if ($payroll->bank_receipt)
-                                <div class="alert alert-success">
-                                    Hệ thống đã xác nhận thanh toán thành công.
-                                    <a href="{{ asset('upload/receipts/' . $payroll->bank_receipt) }}" target="_blank"
-                                        class="btn btn-sm btn-dark ms-2">
-                                        <i class='bx bx-download'></i> Tải về Biên lai PDF
-                                    </a>
-                                </div>
+                                <a href="{{ asset('upload/receipts/' . $payroll->bank_receipt) }}" target="_blank"
+                                    class="btn btn-sm btn-dark w-100">
+                                    <i class='bx bx-download'></i> Xem Biên lai chuyển tiền
+                                </a>
                             @else
-                                <p class="text-muted">Đang chờ kế toán chuyển khoản...</p>
+                                <p class="text-muted">Đang chờ chuyển khoản...</p>
                             @endif
                         </div>
                     </div>
@@ -119,20 +126,24 @@
         </div>
     </div>
 
-    <div class="modal fade" id="complaintModal text-start" tabindex="-1" aria-hidden="true">
+    {{-- Modal Khiếu nại (Sửa ID chuẩn) --}}
+    <div class="modal fade" id="complaintModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content text-start">
-                <div class="modal-header">
-                    <h5 class="modal-title">Gửi phản hồi về bảng lương</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <textarea class="form-control" rows="4" placeholder="Nhập nội dung bạn thấy chưa đúng..."></textarea>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-primary">Gửi cho Admin</button>
-                </div>
+            <div class="modal-content">
+                <form action="{{ route('instructor.payroll.complaint', $payroll->id) }}" method="POST">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title">Gửi phản hồi về bảng lương</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <textarea name="message" class="form-control" rows="4" placeholder="Nhập nội dung sai sót..." required></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-primary">Gửi cho Admin</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

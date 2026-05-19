@@ -20,19 +20,25 @@ class LessonService
     public function createLesson( array $data)
     {
         $manualOrder = Arr::pull($data, 'order');
-        
-        if (empty($manualOrder)|| (int) $manualOrder <= 0) {
-        
-        $maxOrder = Lesson::where('section_id', $data['section_id'])
-                             ->max('order');
-                             
-        
-        $data['order'] = ($maxOrder ?? 0) + 1; 
-        } else {
-            
-            $data['order'] = (int) $manualOrder;
-        }
+    
+    if (empty($manualOrder) || (int) $manualOrder <= 0) {
+        // Lấy thông tin chương để biết vị trí chương đó
+        $section = \App\Models\Section::find($data['section_id']);
+        $sectionOrder = $section ? $section->order : 1;
 
+        // Tìm bài có order lớn nhất TRONG CHƯƠNG hiện tại
+        $maxOrderInSection = Lesson::where('section_id', $data['section_id'])->max('order');
+                             
+        if (!$maxOrderInSection) {
+            // Nếu chương chưa có bài nào, bắt đầu dải số mới (ví dụ Chương 2 là 2001)
+            $data['order'] = ($sectionOrder * 1000) + 1;
+        } else {
+            // Nếu đã có bài, tăng dần lên
+            $data['order'] = $maxOrderInSection + 1;
+        }
+    } else {
+        $data['order'] = (int) $manualOrder;
+    }
 
         
        

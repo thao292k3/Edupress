@@ -1,6 +1,6 @@
-<section class="breadcrumb-area pt-50px pb-50px bg-white pattern-bg">
-    <div class="container">
-        <div class="col-lg-8 mr-auto">
+<section class="breadcrumb-area pt-15px pb-15px pt-md-25px pb-md-25px bg-white pattern-bg">
+    <div class="container-fluid px-2 px-md-0">
+        <div class="col-12 col-lg-8 mr-auto">
             <div class="breadcrumb-content">
                 <ul class="generic-list-item generic-list-item-arrow d-flex flex-wrap align-items-center">
                     <li><a href="index.html">Home</a></li>
@@ -18,17 +18,26 @@
                     <h6 class="ribbon ribbon-lg mr-2 bg-3 text-white" style="text-transform: capitalize">
                         {{ $course['course_level'] }}</h6>
 
+                    @php
+                        $reviews = \App\Models\Review::where('course_id', $course->id)->get();
+                        $avgRating = $reviews->avg('rating') ?? 0;
+                        $reviewCount = $reviews->count();
+                        $studentCount = $course->totalStudents() ?? 0;
+                        $fullStars = floor($avgRating);
+                    @endphp
                     <div class="rating-wrap d-flex flex-wrap align-items-center">
                         <div class="review-stars">
-                            <span class="rating-number">4.4</span>
-                            <span class="la la-star"></span>
-                            <span class="la la-star"></span>
-                            <span class="la la-star"></span>
-                            <span class="la la-star"></span>
-                            <span class="la la-star-o"></span>
+                            <span class="rating-number">{{ number_format($avgRating, 1) }}</span>
+                            @for($i = 1; $i <= 5; $i++)
+                                @if($i <= $fullStars)
+                                    <span class="la la-star text-warning"></span>
+                                @else
+                                    <span class="la la-star-o text-warning"></span>
+                                @endif
+                            @endfor
                         </div>
-                        <span class="rating-total pl-1">(20,230 ratings)</span>
-                        <span class="student-total pl-2">540,815 students</span>
+                        <span class="rating-total pl-1">({{ number_format($reviewCount) }} ratings)</span>
+                        <span class="student-total pl-2">{{ number_format($studentCount) }} {{ $studentCount == 1 ? 'student' : 'students' }}</span>
                     </div>
                 </div><!-- end d-flex -->
 
@@ -54,7 +63,9 @@
                     </p>
                 </div><!-- end d-flex -->
                 <div class="bread-btn-box pt-3">
-                    <button class="btn theme-btn theme-btn-sm theme-btn-transparent lh-28 mr-2 mb-2">
+                    <button class="btn theme-btn theme-btn-sm theme-btn-transparent lh-28 mr-2 mb-2 wishlist-btn" 
+                        data-course-id="{{ $course->id }}"
+                        type="button">
                         <i class="la la-heart-o mr-1"></i>
                         <span class="swapping-btn" data-text-swap="Wishlisted"
                             data-text-original="Wishlist">Wishlist</span>
@@ -70,5 +81,5 @@
                 </div>
             </div><!-- end breadcrumb-content -->
         </div><!-- end col-lg-8 -->
-    </div><!-- end container -->
+    </div><!-- end container-fluid -->
 </section><!-- end breadcrumb-area -->

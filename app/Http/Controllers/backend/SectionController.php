@@ -21,7 +21,14 @@ class SectionController extends Controller
 
     public function update(Request $request, $id)
     {
-        return $this->service->updateSection($id, $request->all());
+       
+        $this->service->updateSection($id, $request->all());
+
+        
+        return back()->with([
+            'message' => 'Cập nhật chương học thành công!',
+            'alert-type' => 'success'
+        ]);
     }
 
     public function destroy($id)

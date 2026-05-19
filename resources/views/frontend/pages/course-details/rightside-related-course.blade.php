@@ -10,8 +10,9 @@
         @foreach($related_course as $course)
         <div class="media media-card border-bottom border-bottom-gray pb-4 mb-4">
             <a href="course-details.html" class="media-img">
-                <img class="card-img-top lazy" src="{{ asset($course->course_image) }}"
-                data-src="{{ asset($course->course_image) }}" alt="Card image cap">
+                <img class="card-img-top lazy" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 150 150'%3E%3Crect fill='%23f0f0f0' width='150' height='150'/%3E%3C/svg%3E" 
+                    data-src="{{ asset($course->course_image) }}" 
+                    alt="Card image cap" loading="lazy">
             </a>
             <div class="media-body">
                 <h5 class="fs-15">

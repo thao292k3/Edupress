@@ -15,6 +15,14 @@ class CartRepository
     {
         try {
 
+            // Chỉ cho phép người đã đăng nhập thêm khóa học vào giỏ.
+            if (!Auth::check()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'You must be logged in to add courses to your cart.',
+                ], 401);
+            }
+
             $guestToken = $request->cookie('guest_token') ?? Str::uuid();
 
              if (!$request->cookie('guest_token')) {

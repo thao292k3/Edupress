@@ -13,10 +13,10 @@ class Section extends Model
         return $this->belongsTo(Course::class);
     }
 
-    // public function lessons()
-    // {
-    //     return $this->hasMany(Lesson::class)->orderBy('position');
-    // }
+    public function lessons()
+    {
+        return $this->hasMany(Lesson::class)->orderBy('order');
+    }
 
      public function lesson(){
         return $this->hasMany(Lesson::class, 'section_id', 'id');

@@ -2,7 +2,7 @@
     <h3 class="fs-24 font-weight-semi-bold pb-4">Students also bought</h3>
     <div class="view-more-carousel owl-action-styled">
 
-        @forelse($similarCourses as $course)
+        @forelse($similarCourses ?? collect() as $course)
             <div class="card card-item card-item-list-layout border border-gray shadow-none">
                 <div class="card-image">
                     <a href="course-details.html" class="d-block">
@@ -79,7 +79,16 @@
 
                         <div class="icon-element icon-element-sm shadow-sm cursor-pointer wishlist-icon"
                             title="Add to Wishlist" data-course-id="{{ $course->id }}">
-
+                            @auth
+                                @php
+                                    $isWishlisted = \App\Models\Wishlist::where('user_id', auth()->id())
+                                        ->where('course_id', $course->id)
+                                        ->exists();
+                                @endphp
+                                <i class="la {{ $isWishlisted ? 'la-heart' : 'la-heart-o' }}"></i>
+                            @else
+                                <i class="la la-heart-o"></i>
+                            @endauth
                         </div>
 
                     </div>

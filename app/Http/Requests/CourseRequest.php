@@ -30,9 +30,6 @@ class CourseRequest extends FormRequest
 
             'course_title' => 'required|string|max:255',
 
-            // 'instructor_id' => 'required|exists:users,id',
-
-
             'course_name_slug' => [
                 'required',
                 Rule::unique('courses', 'course_name_slug')
@@ -91,6 +88,12 @@ class CourseRequest extends FormRequest
 
             'course_goals.*'=> 'nullable',
             'course_goals.*' => 'nullable|string|max:255',
+
+            'live_sessions' => 'nullable|array',
+            'live_sessions.*.topic' => 'nullable|string|max:255',
+            'live_sessions.*.start_at' => 'nullable|date',
+            'live_sessions.*.meeting_link' => 'nullable|url',
+
         ];
     }
 }

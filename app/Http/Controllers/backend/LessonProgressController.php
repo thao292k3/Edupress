@@ -39,7 +39,7 @@ class LessonProgressController extends Controller
      */
     public function show(string $id)
     {
-        //
+        //  
     }
 
     /**

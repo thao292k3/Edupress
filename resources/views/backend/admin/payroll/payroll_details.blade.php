@@ -69,12 +69,13 @@
 
                         @if ($payroll->status == 'draft')
                             <div class="mt-4 d-flex justify-content-end gap-2">
-                                <form action="{{ route('admin.payroll.updateStatus', $payroll->id) }}" method="POST">
+                                <form action="{{ route('admin.payroll.update_status', $payroll->id) }}" method="POST">
                                     @csrf
+
                                     <input type="hidden" name="status" value="sent_to_instructor">
-                                    <button type="submit" class="btn btn-warning px-4"
-                                        onclick="return confirm('Gửi bảng lương này cho Giảng viên đối soát?')">
-                                        <i class='bx bx-paper-plane'></i> Gửi NCC đối soát (3 ngày)
+
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class='bx bx-send'></i> Gửi cho giảng viên đối soát
                                     </button>
                                 </form>
                             </div>
@@ -90,7 +91,8 @@
                         <div class="d-flex align-items-center mb-3">
                             {{-- <img src="{{ !empty($payroll->instructor->photo) ? url('upload/instructor_images/' . $payroll->instructor->photo) : url('upload/no_image.jpg') }}"
                                 class="rounded-circle p-1 bg-primary" width="120" height="120"> --}}
-                                <img id="photoPreview" src="{{  auth()->user()->photo ? asset(auth()->user()->photo) :  asset('backend/assets/images/avatars/avatar-2.png')}}" 
+                            <img id="photoPreview"
+                                src="{{ auth()->user()->photo ? asset(auth()->user()->photo) : asset('backend/assets/images/avatars/avatar-2.png') }}"
                                 alt="Instructor" class="rounded-circle p-1 bg-primary" width="110" height="110">
                             <div class="flex-grow-1 ms-3">
                                 <h6 class="mb-0">{{ $payroll->instructor->name }}</h6>
@@ -115,12 +117,29 @@
                     <div class="card-body">
                         <h6 class="mb-3">Minh chứng thanh toán</h6>
                         @if ($payroll->bank_receipt)
-                            <img src="{{ asset('upload/receipts/' . $payroll->bank_receipt) }}"
-                                class="img-fluid radius-10 border" alt="Receipt">
+                            @php
+                                $extension = pathinfo($payroll->bank_receipt, PATHINFO_EXTENSION);
+                            @endphp
+
+                            @if (strtolower($extension) == 'pdf')
+                                {{-- Nếu là file PDF: Hiển thị khung xem trước hoặc nút bấm --}}
+                                <div class="text-center p-4 border radius-10 bg-light">
+                                    <i class='bx bxs-file-pdf text-danger' style="font-size: 50px;"></i>
+                                    <p class="mt-2">Biên lai thanh toán (PDF)</p>
+                                    <a href="{{ asset($payroll->bank_receipt) }}" target="_blank"
+                                        class="btn btn-primary btn-sm">
+                                        <i class='bx bx-show'></i> Xem chi tiết Biên lai
+                                    </a>
+                                </div>
+                            @else
+                                {{-- Nếu là file ảnh (jpg, png...): Hiển thị thẻ img như cũ --}}
+                                <img src="{{ asset($payroll->bank_receipt) }}" class="img-fluid radius-10 border"
+                                    alt="Receipt">
+                            @endif
                         @else
                             <div class="text-center p-4 border border-dashed radius-10">
                                 <i class='bx bx-cloud-upload fs-1 text-secondary'></i>
-                                <p class="mt-2 text-secondary">Chưa có ảnh xác nhận chuyển khoản</p>
+                                <p class="mt-2 text-secondary">Chưa có minh chứng thanh toán</p>
                             </div>
                         @endif
 
@@ -140,6 +159,56 @@
                                 @endif
                                 <button type="submit" class="btn btn-primary w-100">Xác nhận ĐÃ CHUYỂN TIỀN</button>
                             </form>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="card radius-10">
+                    <div class="card-body">
+                        <h6 class="mb-3">Hành động Admin</h6>
+
+
+                        @if ($payroll->status == 'draft')
+                            <form action="{{ route('admin.payroll.update_status', $payroll->id) }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="status" value="sent_to_instructor">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class='bx bx-send'></i> Gửi cho giảng viên đối soát
+                                </button>
+                            </form>
+                        @elseif ($payroll->status == 'approved')
+                            <div class="alert alert-success">
+                                <i class='bx bx-check-circle'></i> Giảng viên đã xác nhận bảng lương này OK.
+                            </div>
+
+
+                            <a href="{{ route('admin.payroll.generate_receipt', $payroll->id) }}"
+                                class="btn btn-success w-100 mb-2">
+                                <i class='bx bx-file'></i> TỰ ĐỘNG TẠO BIÊN LAI & CHỐT LƯƠNG
+                            </a>
+
+
+                            <form action="{{ route('admin.payroll.update_status', $payroll->id) }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="status" value="paid">
+                                <button type="submit" class="btn btn-outline-primary w-100">
+                                    <i class='bx bx-money'></i> Xác nhận ĐÃ CHUYỂN TIỀN (Thủ công)
+                                </button>
+                            </form>
+                        @elseif ($payroll->status == 'sent_to_instructor')
+                            <div class="alert alert-warning text-dark text-center">
+                                <i class='bx bx-time-five'></i> Đang chờ giảng viên phản hồi hoặc xác nhận...
+                            </div>
+                        @elseif ($payroll->status == 'paid')
+                            <div class="alert alert-secondary text-center">
+                                <i class='bx bx-check-double'></i> Bảng lương này đã hoàn tất thanh toán.
+                            </div>
+                            @if ($payroll->bank_receipt)
+                                <a href="{{ asset($payroll->bank_receipt) }}" target="_blank"
+                                    class="btn btn-info w-100">
+                                    <i class='bx bx-show'></i> Xem biên lai
+                                </a>
+                            @endif
                         @endif
                     </div>
                 </div>

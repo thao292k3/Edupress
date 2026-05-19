@@ -42,10 +42,17 @@
 </head>
 <body>
     <div class="certificate-container">
+    @if($course->certificate_template)
+       
         <img src="{{ public_path($course->certificate_template) }}" class="bg-image">
+    @else
         
-        <div class="student-name">{{ $user->name }}</div>
-        <div class="date">Ngày cấp: {{ $date }}</div>
-    </div>
+        <img src="{{ public_path('uploads/certificates/default.jpg') }}" class="bg-image">
+    @endif
+
+    <div class="student-name">{{ $user->name }}</div>
+    <div class="course-title">{{ $course->course_name }}</div>
+    <div class="date">{{ date('d/m/Y') }}</div>
+</div>
 </body>
 </html>

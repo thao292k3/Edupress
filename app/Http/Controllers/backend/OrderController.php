@@ -221,19 +221,21 @@ class OrderController extends Controller
         return redirect()->route('admin.payroll.index')->with('success', 'Đã tạo bảng lương nháp!');
     }
 
-    private function handleEnrollment($courseId, $originalPrice) {
-    $exists = CourseEnrollment::where('user_id', auth()->id())
-                ->where('course_id', $courseId)
-                ->exists();
+    private function handleEnrollment($courseId, $originalPrice) 
+    {
+        
+        $exists = CourseEnrollment::where('user_id', auth()->id())
+                    ->where('course_id', $courseId)
+                    ->exists();
 
-    if (!$exists) {
-        CourseEnrollment::create([
-            'user_id' => auth()->id(),
-            'course_id' => $courseId,
-            'price' => $originalPrice,
-            'payment_status' => 'paid',
-            'enrolled_at' => now(),
-        ]);
+        if (!$exists) {
+            CourseEnrollment::create([
+                'user_id' => auth()->id(),
+                'course_id' => $courseId,
+                'price' => $originalPrice,
+                'payment_status' => 'paid',
+                'enrolled_at' => now(),
+            ]);
+        }
     }
-}
 }

@@ -38,9 +38,10 @@ class LessonRepository
 
         return $lesson->delete();
     }
-public function syncAttachments(Lesson $lesson, array $files = [], array $links = [])
+
+    public function syncAttachments(Lesson $lesson, array $files = [], array $links = [])
     {
-        // 1. File uploads
+        
        foreach ($files as $file) {
         if ($file && $file->isValid()) {
             $path = $file->store('lesson/attachments', 'public');
@@ -54,7 +55,7 @@ public function syncAttachments(Lesson $lesson, array $files = [], array $links 
         }
     }
 
-    // 2. Link attachments (links[])
+    
     foreach ($links as $link) {
         if ($link) {
             LessonAttachment::create([

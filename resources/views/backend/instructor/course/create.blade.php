@@ -58,8 +58,15 @@
                                 <label class="form-label">Danh mục con</label>
                                 <select name="subcategory_id" class="form-select">
                                     <option value="">-- Select --</option>
-                                    @foreach ($subcategories as $sub)
-                                        <option value="{{ $sub->id }}">{{ $sub->name }}</option>
+                                    @foreach ($all_categories as $category)
+                                        <optgroup label="{{ $category->name }}"> 
+                                            @foreach ($subcategories->where('category_id', $category->id) as $sub)
+                                                <option value="{{ $sub->id }}"
+                                                    {{ isset($course) && $course->subcategory_id == $sub->id ? 'selected' : '' }}>
+                                                    {{ $sub->name }}
+                                                </option>
+                                            @endforeach
+                                        </optgroup>
                                     @endforeach
                                 </select>
                             </div>
@@ -141,17 +148,15 @@
                             </div>
 
                             <div class="col-md-12">
-                            <label for="course_goal" class="form-label">Mục tiêu khóa học </label>
-                            <div id="goalContainer">
-                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                                    <input type="text" class="form-control" name="course_goals[]"
-                                        placeholder="Enter Course Goal" />
-                                    <button type="button" id="addGoalInput" class="btn btn-primary">+</button>
+                                <label for="course_goal" class="form-label">Mục tiêu khóa học </label>
+                                <div id="goalContainer">
+                                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                                        <input type="text" class="form-control" name="course_goals[]"
+                                            placeholder="Enter Course Goal" />
+                                        <button type="button" id="addGoalInput" class="btn btn-primary">+</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-
-
 
                             <!-- Selling Price -->
                             <div id="paid_course_options">
@@ -232,8 +237,56 @@
                                 </div>
 
 
+                                <hr>
+
+                                <div class="row mb-3">
+                                    <div class="col-12">
+                                        <h5 class="text-primary mt-4">Lịch giải đáp thắc mắc (Giới hạn sĩ số)</h5>
+                                        <div id="live-session-container">
+                                            <div class="row g-2 mb-3 session-row border p-2">
+                                                <div class="col-md-3">
+                                                    <label class="form-label">Chủ đề</label>
+                                                    <input type="text" name="live_sessions[0][topic]"
+                                                        class="form-control" placeholder="Chủ đề">
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label class="form-label">Thời gian</label>
+                                                    <input type="datetime-local" name="live_sessions[0][start_at]"
+                                                        class="form-control">
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label class="form-label">Tối thiểu</label>
+                                                    <input type="number" name="live_sessions[0][min_participants]"
+                                                        class="form-control" value="15">
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label class="form-label">Tối đa</label>
+                                                    <input type="number" name="live_sessions[0][max_participants]"
+                                                        class="form-control" value="20">
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label class="form-label">Link</label>
+                                                    <input type="url" name="live_sessions[0][meeting_link]"
+                                                        class="form-control" placeholder="Link Zoom">
+                                                </div>
+                                                <div class="col-12 text-end mt-1">
+                                                    <button type="button" class="btn btn-danger btn-sm remove-row">Xóa
+                                                        buổi này</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="button" class="btn btn-outline-dark btn-sm" id="add-session-btn">+
+                                            Thêm buổi học</button>
+                                    </div>
+                                </div>
+
+
+
+
+
+
                                 <!-- Flags -->
-                                <div class="col-md-6">
+                                <div class="col-md-6 mt-3">
                                     <label class="form-lable">Gắn nhãn</label>
 
                                     <div class="d-flex align-items-center gap-4 mt-3">
@@ -327,9 +380,9 @@
             const isFreeCheckbox = document.getElementById('is_free');
             const paidOptionsContainer = document.getElementById('paid_course_options');
 
-            if (!isFreeCheckbox || !paidOptionsContainer) return; // Thoát nếu không tìm thấy phần tử
+            if (!isFreeCheckbox || !paidOptionsContainer) return;
 
-            // Các input cần reset giá trị khi ẩn
+
             const inputsToReset = [
                 document.querySelector('input[name="selling_price"]'),
                 document.querySelector('input[name="discount_price"]'),
@@ -341,93 +394,89 @@
 
             function togglePaidOptions() {
                 if (isFreeCheckbox.checked) {
-                    // Ẩn các trường
+
                     paidOptionsContainer.style.display = 'none';
 
-                    // Dọn dẹp giá trị để không gửi dữ liệu không mong muốn (chủ yếu là giá tiền)
+
                     inputsToReset.forEach(input => {
                         if (input) {
                             if (input.type === 'checkbox') {
-                                // Bỏ chọn checkbox
+
                                 input.checked = false;
-                                // Đảm bảo giá trị của checkbox không được gửi đi khi ẩn
-                                input.value = ''; // Thao tác này giúp Service xử lý dễ hơn
+
+                                input.value = '';
                             } else {
-                                // Reset giá trị số/tháng về rỗng
+
                                 input.value = '';
                             }
                         }
                     });
 
                 } else {
-                    // Hiện các trường
+
                     paidOptionsContainer.style.display = 'block';
                 }
             }
 
-            // Gán sự kiện và chạy lần đầu khi tải trang
+
             isFreeCheckbox.addEventListener('change', togglePaidOptions);
             togglePaidOptions();
         });
 
         document.addEventListener('DOMContentLoaded', function() {
-        const goalContainer = document.getElementById('goalContainer');
-        const addGoalButton = document.getElementById('addGoalInput');
+            const goalContainer = document.getElementById('goalContainer');
+            const addGoalButton = document.getElementById('addGoalInput');
 
-        // Hàm thêm một input Mục tiêu mới
-        function addGoalInput() {
-            // 1. Tạo container cho input và nút xóa
-            const newGoalRow = document.createElement('div');
-            newGoalRow.style.display = 'flex';
-            newGoalRow.style.alignItems = 'center';
-            newGoalRow.style.gap = '10px';
-            newGoalRow.style.marginBottom = '10px';
-            newGoalRow.className = 'goal-input-row'; // Thêm class để dễ quản lý
 
-            // 2. Tạo input
-            newGoalRow.innerHTML = `
-                <input type="text" class="form-control" name="course_goals[]" 
-                    placeholder="Enter Course Goal" required />
-                <button type="button" class="btn btn-danger removeGoalInput">X</button>
-            `;
-            
-            // 3. Thêm row mới vào container chính
-            goalContainer.appendChild(newGoalRow);
-            
-            // Focus vào input mới để tiện nhập liệu
-            newGoalRow.querySelector('input').focus();
-        }
+            function addGoalInput() {
 
-        // Gán sự kiện cho nút Thêm (+)
-        addGoalButton.addEventListener('click', addGoalInput);
+                const newGoalRow = document.createElement('div');
+                newGoalRow.style.display = 'flex';
+                newGoalRow.style.alignItems = 'center';
+                newGoalRow.style.gap = '10px';
+                newGoalRow.style.marginBottom = '10px';
+                newGoalRow.className = 'goal-input-row';
 
-        // Gán sự kiện cho nút Xóa (X) bằng Event Delegation
-        // Giúp xử lý các nút Xóa được tạo động
-        goalContainer.addEventListener('click', function(e) {
-            if (e.target && e.target.classList.contains('removeGoalInput')) {
-                const rows = goalContainer.querySelectorAll('.goal-input-row');
-                
-                // Đảm bảo phải luôn còn ít nhất 1 input
-                if (rows.length > 1) { 
-                    e.target.closest('.goal-input-row').remove();
-                } else {
-                    alert('Bạn phải giữ lại ít nhất một Mục tiêu khóa học.');
+
+                newGoalRow.innerHTML = `
+                    <input type="text" class="form-control" name="course_goals[]"
+                        placeholder="Enter Course Goal" required />
+                    <button type="button" class="btn btn-danger removeGoalInput">X</button>
+                `;
+
+
+                goalContainer.appendChild(newGoalRow);
+
+
+                newGoalRow.querySelector('input').focus();
+            }
+
+
+            addGoalButton.addEventListener('click', addGoalInput);
+
+
+            goalContainer.addEventListener('click', function(e) {
+                if (e.target && e.target.classList.contains('removeGoalInput')) {
+                    const rows = goalContainer.querySelectorAll('.goal-input-row');
+
+
+                    if (rows.length > 1) {
+                        e.target.closest('.goal-input-row').remove();
+                    } else {
+                        alert('Bạn phải giữ lại ít nhất một Mục tiêu khóa học.');
+                    }
+                }
+            });
+
+
+            if (goalContainer.querySelectorAll('.goal-input-row').length === 0) {
+
+                const firstGoal = goalContainer.querySelector('input[name="course_goals[]"]').closest('div');
+                if (firstGoal) {
+                    firstGoal.classList.add('goal-input-row');
                 }
             }
         });
-
-        // Khởi tạo: Đảm bảo có ít nhất 1 input khi tải trang
-        // Nếu không có input nào (dùng cho create.blade.php):
-        if (goalContainer.querySelectorAll('.goal-input-row').length === 0) {
-             // Giả sử input đầu tiên đã có sẵn trong HTML (như code bạn cung cấp)
-             // Nếu muốn quản lý hoàn toàn bằng JS, bạn có thể gọi addGoalInput() ở đây.
-             // Nhưng theo HTML của bạn, ta chỉ cần gán class cho input đầu tiên
-             const firstGoal = goalContainer.querySelector('input[name="course_goals[]"]').closest('div');
-             if (firstGoal) {
-                 firstGoal.classList.add('goal-input-row');
-             }
-        }
-    });
 
 
 
@@ -437,6 +486,20 @@
                 height: 360
             });
         }
+
+        let sIdx = 1;
+        document.getElementById('add-session-btn').addEventListener('click', function() {
+            let html = `
+                <div class="row g-2 mb-3 session-row border p-2">
+                    <div class="col-md-3"><input type="text" name="live_sessions[${sIdx}][topic]" class="form-control" placeholder="Chủ đề"></div>
+                    <div class="col-md-3"><input type="datetime-local" name="live_sessions[${sIdx}][start_at]" class="form-control"></div>
+                    <div class="col-md-2"><input type="number" name="live_sessions[${sIdx}][min_participants]" class="form-control" value="15"></div>
+                    <div class="col-md-2"><input type="number" name="live_sessions[${sIdx}][max_participants]" class="form-control" value="20"></div>
+                    <div class="col-md-2"><input type="url" name="live_sessions[${sIdx}][meeting_link]" class="form-control" placeholder="Link"></div>
+                    <div class="col-12 text-end mt-1"><button type="button" class="btn btn-danger btn-sm remove-row">Xóa buổi này</button></div>
+                </div>`;
+            document.getElementById('live-session-container').insertAdjacentHTML('beforeend', html);
+            sIdx++;
+        });
     </script>
-    
 @endpush

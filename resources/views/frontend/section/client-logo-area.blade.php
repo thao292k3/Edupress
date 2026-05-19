@@ -7,20 +7,24 @@
     <span class="stroke-shape stroke-shape-6"></span>
     <div class="container">
         <div class="section-heading">
-            <h5 class="ribbon ribbon-lg mb-2">Our partners</h5>
-            <h2 class="section__title">Top companies choose <a href="for-business.html"
-                    class="text-color hover-underline">Aduca for Business</a> to build
-                <br> in-demand career skills
+            <h5 class="ribbon ribbon-lg mb-2">Đối tác của chúng tôi</h5>
+            <h2 class="section__title">
+                Các doanh nghiệp hàng đầu lựa chọn
+                <a href="for-business.html" class="text-color hover-underline">
+                    Edupress
+                </a>
+                <br>
+                để phát triển những kỹ năng nghề nghiệp đang được săn đón
             </h2>
             <span class="section-divider"></span>
-        </div><!-- end section-heading -->
+        </div>
         <div class="client-logo-carousel pt-4">
             @foreach ($partners as $item)
                 <a href="#" class="client-logo-item">
-                    {{-- Helper asset sẽ trỏ vào thư mục public --}}
-                    <img src="{{ asset($item->image) }}" alt="brand image">
+                   
+                    <img src="{{ asset($item->image) }}" alt="logo đối tác">
                 </a>
             @endforeach
-        </div><!-- end client-logo-carousel -->
-    </div><!-- end container -->
+        </div>
+    </div>
 </section>

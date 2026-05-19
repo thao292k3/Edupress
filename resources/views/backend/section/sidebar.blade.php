@@ -189,6 +189,21 @@
                     </a>
                 </li>
 
+                <li>
+                    <a href="{{ route('admin.payroll.complaints') }}">
+                        <div class="parent-icon"><i class='bx bx-message-error'></i></div>
+                        <div class="menu-title">Khiếu nại lương 
+                           
+                            @php
+                                $count = App\Models\Payroll::where('complaint_status', 'pending')->count();
+                            @endphp
+                            @if($count > 0)
+                                <span class="badge bg-danger rounded-pill ms-2">{{ $count }}</span>
+                            @endif
+                        </div>
+                    </a>
+                </li>
+
 
             </ul>
         </li>

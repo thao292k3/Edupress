@@ -50,6 +50,8 @@ use App\Http\Controllers\frontend\LessonController as FrontLessonController;
 use App\Http\Controllers\Frontend\QuizAttemptController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SkillAssessmentController;
+use App\Models\Lesson;
+use App\Models\Section;
 use Illuminate\Support\Facades\Route;
 
 
@@ -153,12 +155,16 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
         Route::get('/admin/payroll/edit/{id}', [PayrollController::class, 'edit'])->name('edit');
 
 
+        Route::post('admin/payroll/payroll/update-status/{id}', [PayrollController::class, 'updateStatus'])->name('update_status');
         Route::post('/admin/payroll/update/{id}', [PayrollController::class, 'update'])->name('update');
-        Route::get('/payroll/update-status/{id}', [PayrollController::class, 'updateStatus'])->name('updateStatus');
+        // Route::get('/payroll/update-status/{id}', [PayrollController::class, 'updateStatus'])->name('updateStatus');
         Route::post('/upload-receipt/{id}', [PayrollController::class, 'uploadReceipt'])->name('upload_receipt');
         Route::post('/export', [PayrollController::class, 'export'])->name('export');
 
         Route::get('/payroll/generate-receipt/{id}', [PayrollController::class, 'adminGenerateReceipt'])->name('generate_receipt');
+
+        Route::get('/admin/payroll/complaints', [PayrollController::class, 'adminComplaints'])->name('complaints');
+        Route::post('/admin/payroll/resolve/{id}', [PayrollController::class, 'adminResolveComplaint'])->name('resolve');
     });
 
 
@@ -291,6 +297,10 @@ Route::middleware(['auth', 'verified', 'role:instructor'])
         Route::get('/show/{id}', [PayrollController::class, 'instructorShow'])->name('show');
         Route::post('/confirm/{id}', [PayrollController::class, 'confirmPayroll'])->name('confirm');
         Route::get('/payroll/details/{id}', [PayrollController::class, 'instructorPayrollShow'])->name('show');
+        Route::post('/payroll/complaint/{id}', [PayrollController::class, 'sendComplaint'])->name('complaint');
+
+        
+        Route::post('/payroll/confirm/{id}', [PayrollController::class, 'confirmPayroll'])->name('confirm');
     });
 
     Route::get('/instructor/certificate/download/{courseId}/{userId}', [CourseController::class, 'downloadCertificate'])
@@ -377,6 +387,10 @@ Route::post('/remove/cart', [CartController::class, 'removeCart']);
 
 /*  Checkout */
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+
+Route::post('/vnpay_payment', [CheckoutController::class, 'vnpay_payment'] );
+
+Route::post('/momo_payment', [CheckoutController::class, 'momo_payment']);
 // Coupon Apply
 
 Route::post('/apply-coupon', [CouponController::class, 'applyCoupon'])->name('apply.coupon');
@@ -414,5 +428,26 @@ Route::post('/quiz/submit/{id}', [QuizAttemptController::class, 'submitQuiz'])->
 // 3. Trang hiển thị kết quả
 Route::get('/quiz/result/{result_id}', [QuizAttemptController::class, 'showResult'])->name('quiz.result');
 
+Route::post('/mark-as-watched/{id}', [App\Http\Controllers\frontend\LessonController::class, 'markWatched'])
+    ->name('mark.watched');
+
+
+
+
+// Route::get('/fix-lesson-final', function () {
+//     $sections = \App\Models\Section::all();
+//     foreach ($sections as $section) {
+//         $lessons = \App\Models\Lesson::where('section_id', $section->id)
+//             ->orderBy('id', 'asc')
+//             ->get();
+
+//         foreach ($lessons as $index => $lesson) {
+//             // Bây giờ $section->order đã là 1, 2, 3 nên kết quả sẽ là 1001, 2001, 3001...
+//             $newOrder = ($section->order * 1000) + ($index + 1);
+//             $lesson->update(['order' => $newOrder]);
+//         }
+//     }
+//     return "Xong! Bây giờ Chương 1 sẽ là 100x, Chương 2 là 200x. Không bao giờ trùng nữa!";
+// });
 
 require __DIR__.'/auth.php';

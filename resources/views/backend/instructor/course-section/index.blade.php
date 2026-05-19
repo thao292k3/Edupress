@@ -14,7 +14,6 @@
                     </ol>
                 </nav>
             </div>
-
         </div>
         <!--end breadcrumb-->
         <div class="row">
@@ -37,7 +36,8 @@
                                 </p>
                             </div>
                             <div>
-                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">Thêm chương học</button>
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">Thêm chương
+                                    học</button>
                             </div>
                         </div>
                     </div>
@@ -65,115 +65,79 @@
                                     </div>
                                 </div>
                                 <!-- Button -->
-                                <div style="display: flex; alin-items: center; gap: 10">
-                                    <button class="btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#course-{{ $section->id }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                            fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16">
-                                            <path
-                                                d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
-                                            <path
-                                                d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
-                                        </svg>
-
+                                <div class="d-flex align-items-center gap-2">
+                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+                                        data-bs-target="#course-{{ $section->id }}" title="Thêm bài học">
+                                        <i class="bx bx-plus-circle fs-5"></i>
                                     </button>
 
-                                    <div>
+                                    <button class="btn btn-sm btn-outline-info" data-bs-toggle="modal"
+                                        data-bs-target="#editSectionModal{{ $section->id }}" title="Sửa chương">
+                                        <i class="bx bx-edit fs-5"></i>
+                                    </button>
 
-                                        <a href="javascript:void(0)" class="btn btn-danger delete-section"
-                                            data-id="{{ $section->id }}" style="margin-left: 10px">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
-                                                <path
-                                                    d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
-                                            </svg>
-                                        </a>
+                                    <a href="javascript:void(0)" class="btn btn-sm btn-outline-danger delete-section"
+                                        data-id="{{ $section->id }}" title="Xóa chương">
+                                        <i class="bx bx-trash fs-5"></i>
+                                    </a>
 
-                                        <form id="delete-form" method="POST" style="display: none;">
-                                            @csrf
-                                            @method('DELETE')
-                                        </form>
-
-                                    </div>
-
-
+                                    <form id="delete-form-{{ $section->id }}" method="POST" style="display: none;">
+                                        @csrf
+                                        @method('DELETE')
+                                    </form>
                                 </div>
+
+
                             </div>
+                        </div>
 
-                            <hr>
+                        <hr>
 
-                            <div class="mt-3 collapse show" id="demo{{ $section->id }}">
-                                @foreach ($section->lesson as $lesson)
-                                    <div style="display: flex; align-items:center; justify-content:space-between;">
-                                        <div style="display: flex; gap: 10px">
-
+                        
+                        <div class="collapse show mt-3" id="demo{{ $section->id }}">
+                            <div class="list-group list-group-flush border rounded">
+                                @foreach ($section->lessons as $lesson)
+                                    <div
+                                        class="list-group-item d-flex align-items-center justify-content-between py-2 px-3">
+                                        <div class="d-flex align-items-center">
                                             @if ($lesson->lesson_type == 1)
-                                                {{-- Quiz Type --}}
-                                                <i class="fas fa-question-circle text-warning me-2"
-                                                    style="font-size: 16px;"></i>
-                                                <p class="mb-0">{{ $lesson->lecture_title }} <span
-                                                        class="badge bg-warning text-dark ms-2">Quiz</span></p>
+                                                <i class="bx bx-help-circle text-warning fs-5 me-2"></i>
+                                                <span class="fw-medium">{{ $lesson->lecture_title }}</span>
+                                                <span class="badge bg-light-warning text-warning ms-2">Quiz</span>
                                             @else
-                                                <span>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                        fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16">
-                                                        <path
-                                                            d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393" />
-                                                    </svg>
-                                                </span>
-                                                <p>{{ $lesson->lecture_title }}</p>
+                                                <i class="bx bx-play-circle text-primary fs-5 me-2"></i>
+                                                <span>{{ $lesson->lecture_title }}</span>
                                             @endif
                                         </div>
-                                        <div>
-                                            @if ($lesson->lesson_type == 1)
-                                               
-                                                <a href="{{ route('instructor.quizzes.edit', $lesson->quiz_id) }}"
-                                                    class="btn btn-sm btn-dark" title="Edit Quiz">
-                                                    <i class="bx bx-pencil"></i>
-                                                </a>
-                                            @else
-                                                <a class="btn btn-dark" data-bs-toggle="modal"
-                                                    data-bs-target="#course-edit-{{ $lesson->id }}">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                        fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                                                        <path
-                                                            d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                                                        <path fill-rule="evenodd"
-                                                            d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
-                                                    </svg>
-                                                </a>
-                                            @endif
 
-                                            <a href="javascript:void(0)" class="btn btn-danger delete-lesson"
-                                                data-id="{{ $lesson->id }}" style="margin-left: 10px">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                    fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
-                                                    <path
-                                                        d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5" />
-                                                </svg>
+                                        <div class="d-flex gap-2">
+                                            <button class="btn btn-sm btn-outline-dark" data-bs-toggle="modal"
+                                                data-bs-target="#course-edit-{{ $lesson->id }}">
+                                                <i class="bx bx-pencil"></i>
+                                            </button>
+                                            <a href="javascript:void(0)" class="btn btn-sm btn-outline-danger delete-lesson"
+                                                data-id="{{ $lesson->id }}">
+                                                <i class="bx bx-trash"></i>
                                             </a>
-
-                                            <form id="delete-form" method="POST" style="display: none;">
-                                                @csrf
-                                                @method('DELETE')
-                                            </form>
-
-
                                         </div>
-
                                     </div>
-                                    <div style="margin-top: 10px"></div>
 
-                                    <!-- Edit Course Modal -->
+                                    
                                     @include('backend.instructor.course-section.modals.course-edit-modal', [
                                         'lecture' => $lesson,
                                         'data' => $section,
                                     ])
                                 @endforeach
-                            </div>
 
+                                
+                            </div>
                         </div>
+
+
                     </div>
+
+                    @include('backend.instructor.course-section.modals.edit-section-modal', ['section' => $section])
+
 
                     <!-- Add Course Modal -->
                     @include('backend.instructor.course-section.modals.create-lesson-modal')
@@ -203,11 +167,11 @@
             e.preventDefault();
 
             let lessonId = $(this).data('id');
-            
+
             let deleteForm = document.getElementById('delete-form-' + lessonId);
 
             if (!deleteForm) {
-                
+
                 let deleteUrl = "{{ route('instructor.lessons.destroy', ':id') }}".replace(':id', lessonId);
                 deleteForm = $('#delete-form');
                 deleteForm.attr('action', deleteUrl);
@@ -223,36 +187,17 @@
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    if (deleteForm.nodeName) { 
+                    if (deleteForm.nodeName) {
                         deleteForm.submit();
-                    } else { 
+                    } else {
                         deleteForm.get(0).submit();
                     }
                 }
             });
         });
+
+        
     </script>
 
-    <script>
-        $(document).on('click', '.delete-section', function(e) {
-            e.preventDefault();
-
-            let Id = $(this).data('id');
-            let deleteUrl = "{{ route('instructor.course-section.destroy', ':id') }}".replace(':id', Id);
-
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $('#delete-form').attr('action', deleteUrl).submit();
-                }
-            });
-        });
-    </script>
+    
 @endpush

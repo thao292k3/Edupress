@@ -13,13 +13,13 @@ class ReviewController extends Controller
 {
     // Danh sách đánh giá chờ duyệt
     public function pendingReview() {
-        $reviews = Review::where('status', 0)->latest()->get();
+        $reviews = Review::where('status', 0)->latest()->paginate(15);
         return view('backend.admin.review.pending_review', compact('reviews'));
     }
 
     // Danh sách đánh giá đã duyệt
     public function activeReview() {
-        $reviews = Review::where('status', 1)->latest()->get();
+        $reviews = Review::where('status', 1)->latest()->paginate(15);
         return view('backend.admin.review.active_review', compact('reviews'));
     }
 

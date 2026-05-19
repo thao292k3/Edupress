@@ -32,15 +32,14 @@
                 <div class="col-lg-7 mx-auto">
                     <div class="card card-item">
                         <div class="card-body">
-                            <h3 class="card-title text-center fs-24 lh-35 pb-4">Create an Account and <br> Start
-                                Learning!</h3>
+                            <h3 class="card-title text-center fs-24 lh-35 pb-4">Tạo tài khoản và <br> bắt đầu học</h3>
                             <div class="section-block"></div>
                             <form method="post" class="pt-4" action="{{ route('register') }}">
 
                                 @csrf
 
                                 <div class="input-box">
-                                    <label class="label-text">Full Name</label>
+                                    <label class="label-text">Tên đầy đủ</label>
                                     <div class="form-group">
                                         <input class="form-control form--control" type="text" name="name"
                                             placeholder="First name" value="{{ old('name') }}">
@@ -62,7 +61,7 @@
 
 
                                 <div class="input-box">
-                                    <label class="label-text">Password</label>
+                                    <label class="label-text">Mật khẩu</label>
                                     <div class="input-group mb-3">
                                         <span class="la la-lock input-icon"></span>
                                         <input class="form-control form--control password-field" type="password"
@@ -89,6 +88,18 @@
                                     </div>
                                 </div><!-- end input-box -->
 
+                                <div class="input-box">
+                                    <label class="label-text">Nhập lại mật khẩu </label>
+                                    <div class="input-group mb-3">
+                                        <span class="la la-lock input-icon"></span>
+                                        <input class="form-control form--control" type="password"
+                                            name="password_confirmation" placeholder="Password">
+
+
+                                        <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+                                    </div>
+                                </div><!-- end input-box -->
+
                                 <div class="col-lg-12">
                                     <div class="input-box">
                                         <label class="label-text">Đăng ký với tư cách <span
@@ -102,7 +113,8 @@
                                             <div class="custom-control custom-radio">
                                                 <input type="radio" name="role" value="instructor" id="roleInstructor"
                                                     class="custom-control-input">
-                                                <label class="custom-control-label" for="roleInstructor">Nhà cung cấp (Giảng
+                                                <label class="custom-control-label" for="roleInstructor">Nhà cung cấp
+                                                    (Giảng
                                                     viên)</label>
                                             </div>
                                         </div>
@@ -112,39 +124,24 @@
                                     </div>
                                 </div>
 
-
-                                <div class="input-box">
-                                    <label class="label-text">Confirm Password</label>
-                                    <div class="input-group mb-3">
-                                        <span class="la la-lock input-icon"></span>
-                                        <input class="form-control form--control" type="password"
-                                            name="password_confirmation" placeholder="Password">
-
-
-                                        <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-                                    </div>
-                                </div><!-- end input-box -->
-
-
-
-
-
                                 <div class="btn-box">
 
                                     <div class="custom-control custom-checkbox mb-4 fs-15">
                                         <input type="checkbox" class="custom-control-input" id="agreeCheckbox" required>
-                                        <label class="custom-control-label custom--control-label" for="agreeCheckbox">by
-                                            signing i agree to the
-                                            <a href="terms-and-conditions.html" class="text-color hover-underline">terms
-                                                and conditions</a> and
-                                            <a href="privacy-policy.html" class="text-color hover-underline">privacy
-                                                policy</a>
+                                        <label class="custom-control-label custom--control-label" for="agreeCheckbox">
+                                            Bằng việc đăng ký, tôi đồng ý với
+                                            <a href="terms-and-conditions.html" class="text-color hover-underline">điều
+                                                khoản và điều kiện</a>
+                                            và
+                                            <a href="privacy-policy.html" class="text-color hover-underline">chính sách
+                                                bảo mật</a>
                                         </label>
-                                    </div><!-- end custom-control -->
-                                    <button class="btn theme-btn" type="submit">Register Account <i
+                                    </div>
+                                    <!-- end custom-control -->
+                                    <button class="btn theme-btn" type="submit">Đăng ký tài khoản <i
                                             class="la la-arrow-right icon ml-1"></i></button>
-                                    <p class="fs-14 pt-2">Already have an account? <a href="login.html"
-                                            class="text-color hover-underline">Log in</a></p>
+                                    <p class="fs-14 pt-2">Bạn đã có tài khoản chưa? <a href="login.html"
+                                            class="text-color hover-underline">Đăng nhập</a></p>
                                 </div><!-- end btn-box -->
                             </form>
                         </div><!-- end card-body -->

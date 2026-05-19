@@ -65,23 +65,27 @@
                             </div>
 
                             <div class="btn-box mt-5 d-flex justify-content-center">
-                                @if ($nextLesson)
-                                    <a href="{{ route('frontend.lesson.show', $nextLesson->id) }}"
-                                        class="btn theme-btn mr-3">
-                                        Tiếp tục bài học <i class="la la-arrow-right ml-1"></i>
+                                @if ($isPassed && $nextLesson)
+                                    @php
+                                        
+                                        if ($nextLesson->quiz_id) {
+                                            $nextUrl = route('quiz.take', $nextLesson->quiz_id);
+                                        } else {
+                                            $nextUrl = route('frontend.lesson.show', $nextLesson->id);
+                                        }
+                                    @endphp
+
+                                    <a href="{{ $nextUrl }}" class="btn btn-primary px-5 py-2">
+                                        Tiếp tục bài tiếp theo <i class="la la-arrow-right ml-1"></i>
+                                    </a>
+                                @elseif (!$isPassed)
+                                    <a href="{{ route('quiz.take', $quiz->id) }}" class="btn btn-danger px-5 py-2">
+                                        <i class="la la-refresh mr-1"></i> Thi lại để mở khóa
                                     </a>
                                 @else
-                                    <a href="{{ route('course-details', $quiz->course->course_name_slug) }}"
-                                        class="btn theme-btn mr-3">
+                                    <a href="{{ route('course-details', $course->course_name_slug) }}"
+                                        class="btn btn-secondary px-5 py-2">
                                         Quay lại khóa học
-                                    </a>
-                                @endif
-
-                                
-                                @if (!$isPassed)
-                                    <a href="{{ route('quiz.take', $quiz->id) }}"
-                                        class="btn theme-btn theme-btn-transparent">
-                                        <i class="la la-refresh mr-1"></i> Thi lại ngay
                                     </a>
                                 @endif
                             </div>

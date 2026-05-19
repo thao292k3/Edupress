@@ -62,8 +62,7 @@
                             culpa dicta facere maiores quam quas, quis sapiente voluptatem? Nulla, voluptatem.</p>
                     </div><!-- end section-heading -->
                     <div class="btn-box pt-35px">
-                        <a href="sign-up.html" class="btn theme-btn"><i class="la la-user mr-1"></i>Get
-                            Started</a>
+                        <a href="{{ route('register') }}" class="btn theme-btn"><i class="la la-user mr-1"></i>Bắt đầu ngay</a>
                     </div>
                 </div><!-- end register-content -->
             </div><!-- end col-lg-6 -->

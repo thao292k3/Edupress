@@ -93,14 +93,27 @@
 
                                             <img class="payment-logo" src="{{ asset('frontend/images/stripe.png') }}"
                                                 alt="">
-
-
                                         </div>
                                         <div class="payment-tab-content">
                                             <p class="fs-15 lh-24">In order to complete your transaction, we will transfer
                                                 you over to Stripe's secure servers.</p>
                                         </div>
                                     </div><!-- end payment-tab -->
+
+                                    <div class="payment-tab">
+
+                                        <div class="payment-tab-toggle">
+                                            <input id="stripe" name="payment_type" type="radio" value="stripe">
+                                            <label for="stripe">VNPAY</label>
+
+                                            <img class="payment-logo" src="{{ asset('frontend/images/stripe.png') }}"
+                                                alt="">
+                                        </div>
+                                        <div class="payment-tab-content">
+                                            <p class="fs-15 lh-24">In order to complete your transaction, we will transfer
+                                                you over to Stripe's secure servers.</p>
+                                        </div>
+                                    </div>
 
                                     <div class="payment-tab">
 
@@ -115,6 +128,14 @@
                                                 you over to PayPal's secure servers.</p>
                                         </div>
                                     </div><!-- end payment-tab -->
+                                    {{-- {{ url('/vnpay_payment')    {{ $total_after }}}} --}}
+                                    {{-- <form action="" method="post">
+                                            @csrf
+                                            <input type="hidden" name="total_vnpay" value="">
+                                            <button type="submit" class="btn btn-success check_out"
+                                                name="redirect">Thanh toán VNPAY</button>
+                                        </form> --}}
+
 
                                     <div class="payment-tab">
                                         <div class="payment-tab-toggle">

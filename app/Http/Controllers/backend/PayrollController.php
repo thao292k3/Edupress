@@ -116,24 +116,31 @@ class PayrollController extends Controller
     public function updateStatus(Request $request, $id) 
     {
         $payroll = Payroll::findOrFail($id);
-        
-       
-        $payroll->update([
-            'status' => 'paid'
-        ]);
+        $newStatus = $request->status; 
 
         
-        InstructorEarning::where('instructor_id', $payroll->instructor_id)
-                        ->where('payment_status', 'pending')
-                        ->update(['payment_status' => 'paid']);
-
+        if ($newStatus == 'sent_to_instructor') {
+            $payroll->update(['status' => 'sent_to_instructor']);
+            $message = 'Đã gửi bảng lương cho giảng viên đối soát!';
+        } 
         
+        
+        elseif ($newStatus == 'paid') {
+            $payroll->update(['status' => 'paid']);
+            
+            
+            InstructorEarning::where('instructor_id', $payroll->instructor_id)
+                            ->where('payment_status', 'pending')
+                            ->update(['payment_status' => 'paid']);
+                            
+            $message = 'Bảng lương đã được xác nhận thanh toán thành công.';
+        }
+
         $notification = [
-            'message' => 'Bảng lương tháng ' . $payroll->payroll_month . ' đã được phê duyệt.',
+            'message' => $message ?? 'Cập nhật trạng thái thành công',
             'alert-type' => 'success'
         ];
 
-        
         return redirect()->back()->with($notification);
     }
 
@@ -186,7 +193,7 @@ class PayrollController extends Controller
         if ($request->hasFile('bank_receipt')) {
             $file = $request->file('bank_receipt');
             $filename = date('YmdHi') . $file->getClientOriginalName();
-            $file->move(public_path('upload/receipts'), $filename);
+            $file->move(public_path('uploads/receipts'), $filename);
             $payroll->bank_receipt = $filename;
             $payroll->status = 'paid'; 
             $payroll->save();
@@ -215,29 +222,98 @@ class PayrollController extends Controller
     {
         $payroll = Payroll::with('instructor')->findOrFail($id);
 
-        
         $pdf = Pdf::loadView('backend.admin.payroll.receipt_pdf', compact('payroll'))
                 ->setPaper('a5', 'portrait')
                 ->setOptions([
-                    'defaultFont' => 'sans-serif',
+                    'defaultFont' => 'DejaVu Sans', 
                     'isHtml5ParserEnabled' => true,
                     'isRemoteEnabled' => true
                 ]);
 
         $filename = 'receipt_' . $id . '_' . time() . '.pdf';
+        $folder = 'uploads/receipts';
+        $destinationPath = public_path($folder);
+
         
-        $path = public_path('upload/receipts');
-        if (!file_exists($path)) {
-            mkdir($path, 0777, true);
+        if (!file_exists($destinationPath)) {
+            mkdir($destinationPath, 0777, true);
         }
 
-        $pdf->save($path . '/' . $filename);
+        
+        file_put_contents($destinationPath . '/' . $filename, $pdf->output());
 
+        
         $payroll->update([
-            'bank_receipt' => $filename,
+            'bank_receipt' => $folder . '/' . $filename, 
             'status' => 'paid'
         ]);
 
+        InstructorEarning::where('instructor_id', $payroll->instructor_id)
+            ->where('payment_status', 'pending')
+            ->update(['payment_status' => 'paid']);
+
         return redirect()->back()->with('success', 'Hệ thống đã tự động xuất biên lai PDF!');
     }
+
+    public function sendComplaint(Request $request, $id) 
+    {
+        $request->validate(['message' => 'required|string|max:500']);
+        
+        $payroll = Payroll::where('instructor_id', auth()->id())->findOrFail($id);
+        $payroll->update([
+            'complaint_message' => $request->message,
+            'complaint_status' => 'pending'
+        ]);
+
+        return redirect()->back()->with('success', 'Đã gửi khiếu nại thành công. Admin sẽ kiểm tra lại!');
+    }
+
+    // Xem danh sách khiếu nại
+    public function adminComplaints() {
+        $complaints = Payroll::with('instructor')
+                        ->where('complaint_status', '!=', 'none')
+                        ->latest()
+                        ->get();
+        return view('backend.admin.payroll.complaints', compact('complaints'));
+    }
+
+    
+    public function adminResolveComplaint(Request $request, $id) 
+    {
+        $request->validate(['admin_response' => 'required|string']);
+
+            $payroll = Payroll::findOrFail($id);
+            
+            $payroll->update([
+                'complaint_status' => 'resolved',
+                'admin_note' => $request->admin_response // Lưu phản hồi vào đây
+            ]);
+
+            return redirect()->back()->with([
+                'message' => 'Đã phản hồi khiếu nại thành công!',
+                'alert-type' => 'success'
+            ]);
+    }
+
+
+    public function confirmPayroll(Request $request, $id) 
+    {
+       
+        $payroll = Payroll::where('instructor_id', auth()->id())->findOrFail($id);
+
+       
+        $payroll->update([
+            'status' => 'approved',
+            'complaint_status' => 'none'
+        ]);
+
+        $notification = [
+            'message' => 'Bạn đã xác nhận bảng lương thành công. Vui lòng chờ Admin thanh toán.',
+            'alert-type' => 'success'
+        ];
+
+        return redirect()->back()->with($notification);
+    }
+
+    
 }

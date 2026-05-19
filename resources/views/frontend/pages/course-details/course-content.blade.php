@@ -9,6 +9,57 @@
 
 </div>
 
+@auth
+    @php
+        
+        $isEnrolled = \App\Models\CourseEnrollment::where('user_id', auth()->id())
+            ->where('course_id', $course->id)
+            ->exists();
+            
+        
+        if ($isEnrolled) {
+            $userId = auth()->id();
+            
+            $lessonIds = \App\Models\Lesson::where('course_id', $course->id)
+                ->whereNull('quiz_id')
+                ->pluck('id');
+
+            $total_video_count = $lessonIds->count();
+
+            $completed_video_count = \App\Models\LessonProgress::where('user_id', $userId)
+                ->whereIn('lesson_id', $lessonIds)
+                ->where('is_completed', 1)
+                ->count();
+
+            $display_percentage = ($total_video_count > 0) 
+                ? round(($completed_video_count / $total_video_count) * 100) 
+                : 0;
+        }
+    @endphp
+
+    @if ($isEnrolled)
+        <div class="progress-container mb-4 p-3 border rounded bg-white shadow-sm">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6 class="font-weight-bold mb-0">Tiến độ học tập của bạn</h6>
+                <span class="badge badge-primary">{{ $display_percentage }}%</span>
+            </div>
+            <div class="progress" style="height: 12px; border-radius: 10px;">
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" 
+                     role="progressbar"
+                     style="width: {{ $display_percentage }}%" 
+                     aria-valuenow="{{ $display_percentage }}" 
+                     aria-valuemin="0"
+                     aria-valuemax="100">
+                </div>
+            </div>
+            <small class="text-muted mt-2 d-block">
+                Đã hoàn thành <strong>{{ $completed_video_count }}</strong> trên tổng số
+                <strong>{{ $total_video_count }}</strong> bài học video.
+            </small>
+        </div>
+    @endif
+@endauth
+
 
 <div class="course-overview-card">
     <div class="curriculum-header d-flex align-items-center justify-content-between pb-4">
@@ -18,8 +69,19 @@
                 {{ $total_lecture }} lesson</span>
 
 
+            @php
+                $totalMinutes = 0;
+                foreach ($course_content as $section) {
+                    foreach ($section->lesson as $lesson) {
+                        $totalMinutes += $lesson->duration ?? 0;
+                    }
+                }
+                $hours = floor($totalMinutes / 60);
+                $minutes = $totalMinutes % 60;
+                $totalHoursFormatted = sprintf('%02d:%02d:00', $hours, $minutes);
+            @endphp
             <span class="curriculum-total__hours"><strong class="text-black font-weight-semi-bold">Total hours:</strong>
-                02:35:47</span>
+                {{ $totalHoursFormatted }}</span>
         </div>
     </div>
     <div class="curriculum-content">
@@ -48,12 +110,9 @@
                                     @php
                                         $isLocked = true;
 
-                                        
                                         if ($lecture->is_preview) {
                                             $isLocked = false;
-                                        }
-                                        
-                                        elseif (auth()->check()) {
+                                        } elseif (auth()->check()) {
                                             $userProgress = \App\Models\LessonProgress::where('user_id', auth()->id())
                                                 ->where('lesson_id', $lecture->id)
                                                 ->first();
@@ -62,7 +121,6 @@
                                                 $isLocked = false;
                                             }
 
-                                            
                                             if (auth()->id() == $course->instructor_id) {
                                                 $isLocked = false;
                                             }
@@ -72,7 +130,6 @@
                                         <div class="d-flex align-items-center justify-content-between py-2">
                                             <div>
                                                 @if (!$isLocked)
-                                                    
                                                     <a href="{{ route('frontend.lesson.show', $lecture->id) }}"
                                                         class="text-color">
                                                         <i class="la la-play-circle mr-1 text-primary"></i>
@@ -82,7 +139,6 @@
                                                         @endif
                                                     </a>
                                                 @else
-                                                  
                                                     <span class="text-muted"
                                                         title="Hãy mua khóa học hoặc hoàn thành bài trước đó">
                                                         <i class="la la-lock mr-1"></i> {{ $lecture->lecture_title }}
@@ -97,7 +153,7 @@
                                     </li>
                                 @endforeach
 
-                                
+
                                 @if ($item->quizzes && $item->quizzes->count() > 0)
                                     @foreach ($item->quizzes as $quiz)
                                         @php
@@ -146,7 +202,7 @@
         </div><!-- end generic-accordion -->
     </div><!-- end curriculum-content -->
 
-    
+
 </div><!-- end course-overview-card -->
 
 <div class="course-overview-card mt-4">

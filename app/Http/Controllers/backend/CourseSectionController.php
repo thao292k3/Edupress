@@ -77,7 +77,19 @@ class CourseSectionController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        
+        $request->validate([
+            'title' => 'required|string|max:255',
+        ]);
+
+       
+        $this->sectionService->updateSection($id, $request->all());
+
+        
+        return redirect()->back()->with([
+            'message' => 'Cập nhật chương học thành công!',
+            'alert-type' => 'success'
+        ]);
     }
 
     /**

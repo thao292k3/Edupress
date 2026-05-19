@@ -55,6 +55,10 @@ $(document).on('click', '.add-to-cart-btn', function () {
             }
         },
         error: function (xhr, status, error) {
+            if (xhr.status === 401) {
+                window.location.href = '/login';
+                return;
+            }
             Swal.fire({
                 icon: 'error',
                 title: 'Something went wrong!',

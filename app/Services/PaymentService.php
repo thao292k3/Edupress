@@ -4,6 +4,7 @@
 namespace App\Services;
 
 use App\Repositories\StripeRepository;
+use App\Repositories\ZaloPayRepository;
 
 
 class PaymentService
@@ -13,12 +14,16 @@ class PaymentService
     public function __construct(StripeRepository $stripeRepository)
     {
         $this->stripeRepository = $stripeRepository;
+        
 
     }
 
     public function processPayment(array $data)
     {
         switch ($data['payment_type']) {
+            // case 'zalopay':
+            // return $this->zaloPayRepository->handlePayment($data);
+
             case 'stripe':
                 return $this->stripeRepository->handlePayment($data);
 

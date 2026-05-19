@@ -13,7 +13,7 @@ class BlogController extends Controller
     use FileUploadTrait;
 
     public function index() {
-        $blogs = Blog::latest()->get();
+        $blogs = Blog::latest()->paginate(15);
         return view('backend.admin.blog.index', compact('blogs'));
     }
 

@@ -14,7 +14,7 @@ class BackendOrderController extends Controller
      */
     public function index()
     {
-        $all_payment = Payment::latest()->get();
+        $all_payment = Payment::latest()->paginate(15);
         return view('backend.admin.order.index', compact('all_payment'));
     }
 

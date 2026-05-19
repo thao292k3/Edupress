@@ -35,143 +35,125 @@ class FrontenDashboardController extends Controller
             ->take(6) 
             ->get();
 
-            
+        $blogs = Blog::with('user')->latest()->limit(3)->get();
 
-            $blogs = Blog::with('user')->latest()->limit(3)->get();
+        $total_instructors = User::where('role', 'instructor')->count();
+        $total_students = User::where('role', 'user')->count(); 
+        $total_followers = 1000; 
+        $total_certificates = 1500; 
 
-            $total_instructors = User::where('role', 'instructor')->count();
+        $partners = Partner::latest()->get();
 
-    
-            $total_students = User::where('role', 'user')->count(); 
+        $instructors = User::where('role', 'instructor')
+            ->where('status', 1)
+            ->withCount('courses')
+            ->latest()
+            ->take(8)
+            ->get();
 
-            
-            $total_followers =1000; 
-
-            
-            $total_certificates = 1500; 
-
-            $partners = Partner::latest()->get();
-
-        
-
-        return view('frontend.index', compact('all_slider', 'all_info', 'all_categories', 'categories', 'course_category', 'featured_courses', 'blogs','total_instructors', 'total_students', 'total_certificates' , 'total_followers', 'partners'));
+        return view('frontend.index', compact(
+            'all_slider', 
+            'all_info', 
+            'all_categories', 
+            'categories', 
+            'course_category', 
+            'featured_courses', 
+            'blogs',
+            'total_instructors', 
+            'total_students', 
+            'total_certificates',
+            'total_followers', 
+            'partners',
+            'instructors'
+        ));
     }
-
 
     public function view($slug)
     {
+        // Lấy course từ slug
+        $course = Course::where('course_name_slug', $slug)
+            ->with(['user', 'course_goal', 'sections.lessons', 'enrollments'])
+            ->firstOrFail();
 
-        $course = Course::where('course_name_slug', $slug)->with('category', 'subcategory', 'user', 'course_goal')->firstOrFail();
-        
-        $total_lecture = Lesson::where('course_id', $course->id)->count();
-       $course_content = Section::where('course_id', $course->id)
-        ->with(['lesson', 'quizzes']) 
-        ->orderBy('position', 'asc')
-        ->get();
+        // Lấy video preview từ lesson đầu tiên hoặc course_videos
+        $preview_video_url = '';
+        if ($course->sections->count() > 0) {
+            $firstSection = $course->sections->first();
+            if ($firstSection->lessons->count() > 0) {
+                $firstLesson = $firstSection->lessons->first();
+                $preview_video_url = $firstLesson->video_url ?? '';
+            }
+        }
 
-        
-        $userId = Auth::id();
+        // Nếu không có từ lessons, thử lấy từ course_videos
+        if (!$preview_video_url) {
+            $videoRecord = $course->videos()->first();
+            if ($videoRecord) {
+                $preview_video_url = $videoRecord->video_url;
+            }
+        }
 
-        
-        $similarCourses = Course::where('category_id', $course->category_id)
-            ->where('id', '!=', $course->id)->get();
+        // Lấy course content (sections với lessons)
+        $course_content = $course->sections()->with('lessons')->get();
 
-        $all_category = Category::orderBy('name', 'asc')->get();
+        // Tính tổng số lectures và duration
+        $total_lecture = $course->lessons()->count();
+        $total_lecture_duration = round($course->totalDuration() / 60, 2); // Convert seconds to minutes then to hours
 
-        
-
-        $more_course_instructor = Course::where('instructor_id', $course->instructor_id)
-        ->where('id', '!=', $course->id)
-        ->where('status', 1) 
-        ->with('user')
-        ->get();
-
-        
-
-        $preview_lesson = Lesson::where('course_id', $course->id)
-                            ->where('is_preview', true) 
-                            ->first();
-    
-    
-        $preview_video_url = $preview_lesson ? $preview_lesson->url : null;
-
-        $total_lecture = Lesson::where('course_id', $course->id)->count();
-
-
-
-        $total_minutes = Lesson::where('course_id', $course->id)->sum('duration');
-
-        $hours = floor($total_minutes / 60);
-        $minutes = floor($total_minutes % 60);
-        $seconds = round(($total_minutes - floor($total_minutes)) * 60);
-
-        $total_lecture_duration = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
-
-
-        return view('frontend.pages.course-details.index', compact('course', 'total_lecture', 'course_content', 'similarCourses', 'all_category', 
-        'more_course_instructor', 'total_minutes', 'total_lecture_duration', 'preview_lesson', 'preview_video_url'));
+        // Trả về view
+        return view('frontend.pages.course-details.index', compact(
+            'course',
+            'preview_video_url',
+            'course_content',
+            'total_lecture',
+            'total_lecture_duration'
+        ));
     }
 
-   
-    
-        public function posts()
+    public function CategoryCourse($id)
     {
-        $blogs = Blog::latest()->paginate(6); 
-        
-        $categories = \App\Models\Category::withCount('course')->orderBy('name')->get();
-        
-        $archives = Blog::selectRaw("DATE_FORMAT(created_at, '%Y-%m') as ym, COUNT(*) as count")
+        $category = Category::findOrFail($id);
+
+        $courses = Course::where('status', 1)
+            ->where('category_id', $id)
+            ->latest()
+            ->paginate(9);
+
+        $categories = Category::withCount('course')->get();
+        $instructors = User::where('role', 'instructor')->withCount('courses')->get();
+
+        return view('frontend.pages.course.list', compact('courses', 'categories', 'instructors'));
+    }
+
+    public function posts(Request $request)
+    {
+        $query = Blog::with('user');
+
+        if ($request->filled('q')) {
+            $search = $request->q;
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        $blogs = $query->latest()->paginate(9)->withQueryString();
+        $categories = Category::withCount('course')->get();
+        $archives = Blog::selectRaw("DATE_FORMAT(created_at, '%Y-%m') as ym")
             ->groupBy('ym')
             ->orderBy('ym', 'desc')
             ->get();
 
         return view('frontend.pages.blog.index', compact('blogs', 'categories', 'archives'));
     }
-        
 
     public function blogShow($slug)
     {
-        $blog = Blog::where('slug', $slug)->firstOrFail();
+        $blog = Blog::where('slug', $slug)->with('user')->firstOrFail();
+        $comments = $blog->comments()->with(['user', 'replies.user'])->get();
+        $categories = Category::with('course')->get();
+        $recent = Blog::latest()->take(5)->get();
 
-        
-        $comments = $blog->comments()->where('approved', true)->whereNull('parent_id')->with(['user', 'replies.user'])->get();
-
-        $recent = Blog::latest()->limit(5)->get();
-        $categories = \App\Models\Category::orderBy('name')->get();
-        
-        $archives = Blog::selectRaw("DATE_FORMAT(created_at, '%Y-%m') as ym, COUNT(*) as count")
-            ->groupBy('ym')
-            ->orderBy('ym', 'desc')
-            ->get();
-
-        return view('frontend.pages.blog.show', compact('blog', 'comments', 'recent', 'categories', 'archives'));
+        return view('frontend.pages.blog.show', compact('blog', 'comments', 'categories', 'recent'));
     }
-
-    public function takeQuiz($id)
-{
-    
-    $quiz = Quiz::with(['questions.answers'])->findOrFail($id);
-   
-
-    return view('frontend.pages.quiz.take_quiz', compact('quiz'));
-}
-
-    public function CategoryCourse($id)
-    {
-        
-        $category = Category::findOrFail($id);
-        
-        
-        $courses = Course::where('category_id', $id)
-                        ->where('status', 1)
-                        ->latest()
-                        ->paginate(9); 
-
-        
-        $categories = Category::all();
-
-        return view('frontend.pages.course.category_view', compact('courses', 'category', 'categories'));
-    }
-    
-    
 }

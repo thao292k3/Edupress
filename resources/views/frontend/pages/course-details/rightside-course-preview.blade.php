@@ -2,8 +2,9 @@
     <div class="card-body">
         <div class="preview-course-video">
             <a href="javascript:void(0)" data-toggle="modal" data-target="#previewModal">
-                <img src="{{ asset($course->course_image) }}" data-src="{{ asset($course->course_image) }}"
-                    alt="course-img" class="w-100 rounded lazy">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect fill='%23f0f0f0' width='400' height='300'/%3E%3C/svg%3E" 
+                    data-src="{{ asset($course->course_image) }}"
+                    alt="course-img" class="w-100 rounded lazy" loading="lazy">
 
                 <div class="preview-course-video-content">
                     <div class="overlay"></div>
@@ -62,46 +63,75 @@
             <div class="preview-course-action">
                 @auth
                     @php
-                        
                         $isEnrolled = \App\Models\CourseEnrollment::where('course_id', $course->id)
                             ->where('user_id', auth()->id())
                             ->exists();
                     @endphp
 
                     @if ($isEnrolled)
-                       
-                        <a href="{{ route('frontend.my.courses') }}" class="btn theme-btn w-100">
-                            <i class="la la-play-circle mr-1"></i> Tiếp tục học tập
+                        <a href="{{ route('frontend.my.courses') }}" class="btn theme-btn w-100 btn-lg shadow-sm">
+                            <i class="la la-play-circle mr-2"></i> 
+                            <span class="d-none d-sm-inline">Tiếp tục học tập</span>
+                            <span class="d-sm-none">Học ngay</span>
                         </a>
                     @else
                         @if ($course->selling_price <= 0)
-                            
-                            <form action="{{ route('enroll.course', $course->id) }}" method="POST">
+                            <form action="{{ route('enroll.course', $course->id) }}" method="POST" class="w-100">
                                 @csrf
-                                <button type="submit" class="btn theme-btn w-100">
-                                    <i class="la la-graduation-cap mr-1"></i> Đăng ký học ngay (Free)
+                                <button type="submit" class="btn theme-btn w-100 btn-lg shadow-sm">
+                                    <i class="la la-graduation-cap mr-2"></i> 
+                                    <span class="d-none d-sm-inline">Đăng ký học ngay</span>
+                                    <span class="d-sm-none">Đăng ký</span>
+                                    (Free)
                                 </button>
                             </form>
                         @else
-                          
                             <div class="buy-btns">
-                                <button type="button" class="btn theme-btn w-100 mb-2"
-                                    onclick="addToCart({{ $course->id }})">
-                                    <i class="la la-shopping-cart mr-1"></i> Thêm vào giỏ hàng
+                                <button type="button"
+                                    class="btn theme-btn w-100 mb-2 btn-lg shadow-sm add-to-cart-btn"
+                                    data-course-id="{{ $course->id }}">
+                                    <i class="la la-shopping-cart mr-2"></i> 
+                                    <span class="d-none d-sm-inline">Thêm vào giỏ hàng</span>
+                                    <span class="d-sm-none">Giỏ hàng</span>
                                 </button>
                                 <a href="{{ route('checkout.index', $course->id) }}"
-                                    class="btn theme-btn theme-btn-transparent w-100">
-                                    Mua ngay
+                                    class="btn theme-btn theme-btn-transparent w-100 btn-lg shadow-sm">
+                                    <i class="la la-credit-card mr-2"></i> Mua ngay
                                 </a>
+                            </div>
+                            
+                            <div class="mt-2 d-flex justify-content-end">
+                                @auth
+                                    @php
+                                        $isWishlisted = \App\Models\Wishlist::where('user_id', auth()->id())
+                                            ->where('course_id', $course->id)
+                                            ->exists();
+                                    @endphp
+                                    <div class="icon-element icon-element-sm shadow-sm cursor-pointer wishlist-icon"
+                                        title="Add to Wishlist" data-course-id="{{ $course->id }}">
+                                        <i class="la {{ $isWishlisted ? 'la-heart' : 'la-heart-o' }}"></i>
+                                    </div>
+                                @else
+                                    <a href="{{ route('login') }}"
+                                        class="icon-element icon-element-sm shadow-sm cursor-pointer"
+                                        title="Add to Wishlist">
+                                        <i class="la la-heart-o"></i>
+                                    </a>
+                                @endauth
                             </div>
                         @endif
                     @endif
                 @else
-                   
-                    <a href="{{ route('login') }}" class="btn theme-btn w-100">
-                        <i class="la la-lock mr-1"></i> Đăng nhập để học
+                    <div class="alert alert-info p-2 mb-3 text-center small">
+                        <i class="la la-info-circle mr-1"></i>
+                        <span class="d-none d-sm-inline">Vui lòng đăng nhập để bắt đầu học</span>
+                        <span class="d-sm-none">Đăng nhập để học</span>
+                    </div>
+                    <a href="{{ route('login') }}" class="btn theme-btn w-100 btn-lg shadow-sm">
+                        <i class="la la-lock mr-2"></i> 
+                        <span class="d-none d-sm-inline">Đăng nhập để học</span>
+                        <span class="d-sm-none">Đăng nhập</span>
                     </a>
-                    <p class="fs-13 text-center pt-2 text-muted">Bắt đầu học ngay sau khi đăng nhập</p>
                 @endauth
             </div>
 

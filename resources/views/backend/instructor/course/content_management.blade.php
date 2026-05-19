@@ -8,7 +8,7 @@
 
     <!-- Button: Add Section -->
     <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createSectionModal">
-        + Thêm Section
+        + Thêm Chương 
     </button>
 
     @foreach($sections as $section)
@@ -40,6 +40,7 @@
 
 <!-- Include Modals -->
 @include('backend.instructor.course-section.modals.create-section-modal')
+@include('backend.instructor.course-section.modals.edit-section-modal')
 @include('backend.instructor.course-section.modals.create-lesson-modal')
 
 <script>
@@ -48,4 +49,4 @@
     }
 </script>
 
-@endsection
+@endsection-

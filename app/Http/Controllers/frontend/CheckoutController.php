@@ -59,4 +59,7 @@ class CheckoutController extends Controller
         
         return redirect()->back()->with('success', 'Coupon applied successfully!');
     }
+
+
+    
 }

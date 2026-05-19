@@ -4,9 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Course extends Model
 {
+    use SoftDeletes;
+
     protected $guarded = [];
 
     protected function sellingPriceVn(): Attribute
@@ -42,7 +45,7 @@ class Course extends Model
     
     public function sections()
     {
-        return $this->hasMany(Section::class)->orderBy('position');
+        return $this->hasMany(Section::class)->orderBy('order');
     }
 
     public function category()
@@ -139,11 +142,20 @@ class Course extends Model
     }
 
     public function quizzes()
-{
-    return $this->hasMany(Quiz::class, 'course_id');
+    {
+        return $this->hasMany(Quiz::class, 'course_id');
+    }
+
+    public function liveSessions()
+    {
+        
+        return $this->hasMany(LiveSessions::class, 'course_id', 'id');
+    }
+
+    
 }
 
     
 
 
-}
+

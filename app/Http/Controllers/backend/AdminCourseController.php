@@ -14,7 +14,7 @@ class AdminCourseController extends Controller
      */
     public function index()
     {
-        $all_courses = Course::latest()->with('user', 'category')->get();
+        $all_courses = Course::latest()->with('user', 'category')->paginate(15);
         return view('backend.admin.course.index', compact('all_courses'));
     }
 

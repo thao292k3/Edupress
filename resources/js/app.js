@@ -1,7 +1,9 @@
-import './bootstrap';
+import './bootstrap'
 
-import Alpine from 'alpinejs';
+import './ajax-handler'
 
-window.Alpine = Alpine;
+import Alpine from 'alpinejs'
 
-Alpine.start();
+window.Alpine = Alpine
+
+Alpine.start()

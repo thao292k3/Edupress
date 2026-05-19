@@ -42,52 +42,31 @@
 
                     <li class="nav-item dropdown dropdown-large">
                         <a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#"
-                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            
-                            @php
-                                $pendingPayroll = \App\Models\Payroll::where('instructor_id', Auth::id())
-                                    ->where('status', 'sent_to_instructor')
-                                    ->count();
-                            @endphp
-
-                            @if ($pendingPayroll > 0)
-                                <span class="alert-count">{{ $pendingPayroll }}</span>
+                            data-bs-toggle="dropdown">
+                            @if ($unreadPayrolls->count() > 0)
+                                <span class="alert-count">{{ $unreadPayrolls->count() }}</span>
                             @endif
                             <i class='bx bx-bell'></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end">
-                            <a href="javascript:;">
-                                <div class="msg-header">
-                                    <p class="msg-header-title">Thông báo lương</p>
-                                    <p class="msg-header-clear ms-auto">Đánh dấu đã đọc</p>
-                                </div>
-                            </a>
+                            <div class="msg-header">
+                                <p class="msg-header-title">Thông báo lương</p>
+                            </div>
                             <div class="header-notifications-list">
-                                @php
-                                    $payrolls = \App\Models\Payroll::where('instructor_id', Auth::id())
-                                        ->where('status', 'sent_to_instructor')
-                                        ->latest()
-                                        ->take(5)
-                                        ->get();
-                                @endphp
-
-                                @foreach ($payrolls as $pay)
-                                    <a class="dropdown-item" href="{{ route('instructor.payroll.show', $pay->id) }}">
+                                @foreach ($unreadPayrolls as $p)
+                                    <a class="dropdown-item" href="{{ route('instructor.payroll.show', $p->id) }}">
                                         <div class="d-flex align-items-center">
-                                            <div class="notify bg-light-warning text-warning"><i
+                                            <div class="notify bg-light-success text-success"><i
                                                     class="bx bx-money"></i></div>
                                             <div class="flex-grow-1">
-                                                <h6 class="msg-name">Bảng lương tháng {{ $pay->payroll_month }} <span
-                                                        class="msg-time float-end">Mới</span></h6>
-                                                <p class="msg-info">Vui lòng đối soát và xác nhận lương</p>
+                                                <h6 class="msg-name">Lương tháng {{ $p->payroll_month }} <span
+                                                        class="msg-time float-end">Đã chi trả</span></h6>
+                                                <p class="msg-info">Số tiền: {{ number_format($p->total_amount) }}đ</p>
                                             </div>
                                         </div>
                                     </a>
                                 @endforeach
                             </div>
-                            <a href="{{ route('instructor.payroll.index') }}">
-                                <div class="text-center msg-footer">Xem tất cả bảng lương</div>
-                            </a>
                         </div>
                     </li>
 

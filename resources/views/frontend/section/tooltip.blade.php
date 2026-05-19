@@ -52,11 +52,21 @@ $course_category = getCourseCategories();
                         <div class="d-flex justify-content-between align-items-center">
                             
                             <button type="button" class="btn theme-btn w-100 mb-2 add-to-cart-btn" data-course-id="{{ $course->id }}">
-                                <i class="la la-shopping-cart fs-18 mr-1"></i> Add to cart
+                                <i class="la la-shopping-cart fs-18 mr-1"></i> Thêm vào giỏ hàng 
                             </button>
 
-                            <div class="icon-element icon-element-sm shadow-sm cursor-pointer" title="Add to Wishlist">
-                                <i class="la la-heart-o"></i>
+                            <div class="icon-element icon-element-sm shadow-sm cursor-pointer wishlist-icon"
+                                title="Add to Wishlist" data-course-id="{{ $course->id }}">
+                                @auth
+                                    @php
+                                        $isWishlisted = \App\Models\Wishlist::where('user_id', auth()->id())
+                                            ->where('course_id', $course->id)
+                                            ->exists();
+                                    @endphp
+                                    <i class="la {{ $isWishlisted ? 'la-heart' : 'la-heart-o' }}"></i>
+                                @else
+                                    <i class="la la-heart-o"></i>
+                                @endauth
                             </div>
                         </div>
                     </div>

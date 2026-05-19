@@ -1,4 +1,4 @@
-  <section class="cta-area pt-60px pb-60px position-relative overflow-hidden">
+  <section class="cta-area pt-30px pb-30px position-relative overflow-hidden">
         <span class="stroke-shape stroke-shape-1"></span>
         <span class="stroke-shape stroke-shape-2"></span>
         <span class="stroke-shape stroke-shape-3"></span>

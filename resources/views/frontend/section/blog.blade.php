@@ -1,11 +1,11 @@
 <style>
-    /* Tổng thể khu vực Blog */
+    
     .blog-area {
         background-color: #f9fbff;
         padding: 80px 0;
     }
 
-    /* Thiết kế thẻ bài viết (Card) */
+   
     .blog-card-modern {
         background: #fff;
         border-radius: 20px;
@@ -21,11 +21,10 @@
     .blog-card-modern:hover {
         transform: translateY(-10px);
         box-shadow: 0 20px 40px rgba(112, 121, 231, 0.12);
-        /* Đổ bóng màu tím nhẹ trùng tone với theme */
+        
     }
 
-    /* Hình ảnh bài viết */
-    .blog-img-box {
+        .blog-img-box {
         position: relative;
         height: 230px;
         overflow: hidden;
@@ -42,7 +41,7 @@
         transform: scale(1.1);
     }
 
-    /* Nhãn ngày tháng trôi trên ảnh */
+    
     .blog-date-badge {
         position: absolute;
         bottom: 15px;
@@ -57,7 +56,7 @@
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
-    /* Nội dung bài viết */
+    
     .blog-content {
         padding: 25px;
         flex-grow: 1;
@@ -80,7 +79,7 @@
         line-height: 1.5;
         margin-bottom: 15px;
         color: #1e293b;
-        /* Giới hạn 2 dòng tiêu đề */
+       
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
@@ -102,14 +101,14 @@
         color: #64748b;
         line-height: 1.6;
         margin-bottom: 20px;
-        /* Giới hạn 3 dòng mô tả */
+        
         display: -webkit-box;
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
 
-    /* Chân thẻ: Tác giả & Nút bấm */
+    
     .blog-footer {
         padding: 15px 25px 25px;
         border-top: 1px solid #f1f5f9;

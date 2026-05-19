@@ -3,7 +3,9 @@
 
 $(document).ready(function () {
     console.debug('wishlist/index.js loaded');
-    getWishlist();
+    if (window.__IS_AUTH__ === true) {
+        getWishlist();
+    }
 
 });
 
@@ -59,6 +61,12 @@ $(document).on('click', '.wishlist-icon', function () {
                 message = xhr.responseJSON.message;
             }
 
+            // If not authenticated, redirect to login.
+            if (xhr.status === 401) {
+                window.location.href = '/login';
+                return;
+            }
+
             Swal.fire({
                 icon: 'error',
                 title: message,
@@ -103,13 +111,8 @@ function getWishlist(){
         },
         error: function (xhr) {
             console.debug('getWishlist error:', xhr);
-
-            let message = 'Something went wrong!';
-            if (xhr.responseJSON && xhr.responseJSON.message) {
-                message = xhr.responseJSON.message;
-            }
-            console.error(message);
-
+            // Guests will receive 401; don't spam console/network handling.
+            if (xhr.status === 401) return;
 
         }
     });

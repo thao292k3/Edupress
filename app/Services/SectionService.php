@@ -26,10 +26,10 @@ class SectionService
         return $this->repo->create($data);
     }
 
-    public function updateSection($id, $data)
+      public function updateSection($id, $data)
     {
         $section = $this->repo->find($id);
-        return $this->repo->update($section, $data);
+        return $this->repo->update($section, $data); 
     }
 
     public function deleteSection($id)
@@ -37,4 +37,6 @@ class SectionService
         $section = $this->repo->find($id);
         return $this->repo->delete($section);
     }
+
+  
 }

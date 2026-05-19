@@ -45,7 +45,7 @@ def init_bot():
         llm=llm,
         chain_type="stuff",
         # Tăng k=6 để AI có thể đọc được toàn bộ 6 khóa học cùng lúc
-        retriever=vectorstore.as_retriever(search_kwargs={"k": 6}),
+        retriever=vectorstore.as_retriever(search_kwargs={"k": 20}),
         chain_type_kwargs={"prompt": QA_CHAIN_PROMPT}
     )
 

@@ -56,15 +56,20 @@
                                 </select>
                             </div>
 
+
                             <div class="col-md-6">
                                 <label class="form-label">Danh mục con</label>
                                 <select name="subcategory_id" class="form-select">
                                     <option value="">-- Select --</option>
-                                    @foreach ($subcategories as $sub)
-                                        <option value="{{ $sub->id }}"
-                                            {{ $course->subcategory_id == $sub->id ? 'selected' : '' }}>
-                                            {{ $sub->name }}
-                                        </option>
+                                    @foreach ($all_categories as $category)
+                                        <optgroup label="{{ $category->name }}">
+                                            @foreach ($subcategories->where('category_id', $category->id) as $sub)
+                                                <option value="{{ $sub->id }}"
+                                                    {{ isset($course) && $course->subcategory_id == $sub->id ? 'selected' : '' }}>
+                                                    {{ $sub->name }}
+                                                </option>
+                                            @endforeach
+                                        </optgroup>
                                     @endforeach
                                 </select>
                             </div>
@@ -279,6 +284,60 @@
                                         <img id="certificatePreview" class="img-fluid mt-2 d-none" width="200">
                                     </div>
 
+                                    <div id="live-session-container">
+
+                                        @php
+                                            $sessions = $course->live_sessions_list ?? [];
+                                            if (count($sessions) == 0) {
+                                                $sessions = [[]];
+                                            }
+                                        @endphp
+
+                                        @foreach ($sessions as $index => $session)
+                                            <div class="row g-2 mb-3 session-row border p-2">
+                                                <div class="col-md-3">
+                                                    <label class="form-label">Chủ đề</label>
+                                                    <input type="text"
+                                                        name="live_sessions[{{ $index }}][topic]"
+                                                        class="form-control" placeholder="Chủ đề"
+                                                        value="{{ $session->topic ?? '' }}">
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label class="form-label">Thời gian</label>
+                                                    <input type="datetime-local"
+                                                        name="live_sessions[{{ $index }}][start_at]"
+                                                        class="form-control"
+                                                        value="{{ isset($session->start_at) ? date('Y-m-d\TH:i', strtotime($session->start_at)) : '' }}">
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label class="form-label">Tối thiểu</label>
+                                                    <input type="number"
+                                                        name="live_sessions[{{ $index }}][min_participants]"
+                                                        class="form-control"
+                                                        value="{{ $session->min_participants ?? 15 }}">
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label class="form-label">Tối đa</label>
+                                                    <input type="number"
+                                                        name="live_sessions[{{ $index }}][max_participants]"
+                                                        class="form-control"
+                                                        value="{{ $session->max_participants ?? 20 }}">
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label class="form-label">Link</label>
+                                                    <input type="url"
+                                                        name="live_sessions[{{ $index }}][meeting_link]"
+                                                        class="form-control" placeholder="Link Zoom"
+                                                        value="{{ $session->meeting_link ?? '' }}">
+                                                </div>
+                                                <div class="col-12 text-end mt-1">
+                                                    <button type="button" class="btn btn-danger btn-sm remove-row">Xóa
+                                                        buổi này</button>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+
                                     <div class="d-flex align-items-center gap-5 mt-3">
 
                                         <div class="form-check">
@@ -484,5 +543,20 @@
                 height: 360
             });
         }
+
+        let sIdx = 1;
+        document.getElementById('add-session-btn').addEventListener('click', function() {
+            let html = `
+                <div class="row g-2 mb-3 session-row border p-2">
+                    <div class="col-md-3"><input type="text" name="live_sessions[${sIdx}][topic]" class="form-control" placeholder="Chủ đề"></div>
+                    <div class="col-md-3"><input type="datetime-local" name="live_sessions[${sIdx}][start_at]" class="form-control"></div>
+                    <div class="col-md-2"><input type="number" name="live_sessions[${sIdx}][min_participants]" class="form-control" value="15"></div>
+                    <div class="col-md-2"><input type="number" name="live_sessions[${sIdx}][max_participants]" class="form-control" value="20"></div>
+                    <div class="col-md-2"><input type="url" name="live_sessions[${sIdx}][meeting_link]" class="form-control" placeholder="Link"></div>
+                    <div class="col-12 text-end mt-1"><button type="button" class="btn btn-danger btn-sm remove-row">Xóa buổi này</button></div>
+                </div>`;
+            document.getElementById('live-session-container').insertAdjacentHTML('beforeend', html);
+            sIdx++;
+        });
     </script>
 @endpush

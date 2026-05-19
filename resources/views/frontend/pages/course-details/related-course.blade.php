@@ -1,4 +1,4 @@
-<section class="related-course-area bg-gray pt-60px pb-60px">
+<section class="related-course-area bg-gray pt-30px pb-30px">
     <div class="container">
         <div class="related-course-wrap">
 
@@ -7,14 +7,14 @@
 
             <div class="view-more-carousel-2 owl-action-styled">
 
-                @forelse ($more_course_instructor as $course)
+                @forelse ($more_course_instructor ?? collect() as $course)
                     <div class="card card-item">
                         <div class="card-image">
 
                             <a href="course-details.html" class="d-block">
                                 <img class="card-img-top lazy" width="240" height="240"
-                                    src="{{ asset($course->course_image) }}"
-                                    data-src="{{ asset($course->course_image) }}" alt="Card image cap">
+                                    src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'%3E%3Crect fill='%23f0f0f0' width='240' height='240'/%3E%3C/svg%3E"
+                                    data-src="{{ asset($course->course_image) }}" alt="Card image cap" loading="lazy">
                             </a>
 
                             <div class="course-badge-labels">

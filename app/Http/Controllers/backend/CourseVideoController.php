@@ -76,7 +76,7 @@ class CourseVideoController extends Controller
     // Xóa video
     public function destroy(Course_videos $video)
     {
-        // Xóa file nếu là video upload
+        
         if ($video->video_type === 'upload' && $video->video_file) {
             Storage::disk('public')->delete($video->video_file);
         }

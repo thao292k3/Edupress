@@ -15,17 +15,18 @@ return new class extends Migration
              $table->id();
             $table->integer('course_id')->nullable();
             $table->unsignedBigInteger('section_id');
-            $table->string('lecture_title')->nullable();
+            $table->string('lecture_title')->nullable();    
             $table->string('url')->nullable();
             $table->text('content')->nullable();
             $table->decimal('video_duration', 8, 2)->nullable();
             $table->integer('order')->default(0);
             $table->boolean('is_preview')->default(false);
-            $table->string('video_url')->nullable();    // youtube link
-            $table->string('video_file')->nullable();   // upload path (disk public)
+            $table->string('video_url')->nullable();    
+            $table->string('video_file')->nullable();   
             $table->string('lesson_file')->nullable();
             $table->string('lesson_document_link')->nullable();
             $table->string('slug')->nullable();
+            //$table->integer('position')->default(0);
             $table->timestamps();
 
              // Add foreign key constraint

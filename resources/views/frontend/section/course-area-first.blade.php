@@ -1,10 +1,11 @@
 <section class="course-area pb-120px">
     <div class="container">
         <div class="section-heading text-center">
-            <h5 class="ribbon ribbon-lg mb-2">Choose your desired courses</h5>
-            <h2 class="section__title">The world's largest selection of courses</h2>
+            <h5 class="ribbon ribbon-lg mb-2">Chọn các khóa học bạn mong muốn</h5>
+            <h2 class="section__title">Bộ sưu tập khóa học lớn nhất thế giới</h2>
             <span class="section-divider"></span>
-        </div><!-- end section-heading -->
+        </div>
+       
 
         <ul class="nav nav-tabs generic-tab justify-content-center pb-4" id="myTab" role="tablist">
 
@@ -17,7 +18,7 @@
             @endforeach
 
         </ul>
-    </div><!-- end container -->
+    </div>
     <div class="card-content-wrapper bg-gray pt-50px pb-120px">
         <div class="container">
             <div class="tab-content" id="myTabContent">
@@ -41,17 +42,17 @@
 
                                             </a>
                                             <div class="course-badge-labels">
-                                                <div class="course-badge">
-
-                                                    @if ($course->bestseller == 'yes')
-                                                        Bán chạy nhất
-                                                    @elseif($course->featured == 'yes')
-                                                        Nổi bật
-                                                    @else
-                                                        Đánh giá cao nhất
-                                                    @endif
-
-                                                </div>
+                                                @if ($course->bestseller == 'yes' || $course->featured == 'yes' || $course->highestrated == 'yes')
+                                                    <div class="course-badge">
+                                                        @if ($course->bestseller == 'yes')
+                                                            Bán chạy nhất
+                                                        @elseif($course->featured == 'yes')
+                                                            Nổi bật
+                                                        @else
+                                                            Đánh giá cao nhất
+                                                        @endif
+                                                    </div>
+                                                @endif
 
 
                                                 @php
@@ -59,26 +60,43 @@
                                                     $discount_price = $course->discount_price;
                                                     $discount_percent = 0;
 
-                                                    if (
-                                                        $course->is_free != 1 &&
-                                                        $selling_price > 0 &&
-                                                        $discount_price < $selling_price
-                                                    ) {
-                                                        $discount_percent = round(
-                                                            (($selling_price - $discount_price) / $selling_price) * 100,
-                                                        );
+                                                   
+                                                    if ($course->is_free != 1) {
+                                                        
+                                                        if (
+                                                            !empty($selling_price) &&
+                                                            $selling_price > 0 &&
+                                                            !empty($discount_price) &&
+                                                            $discount_price > 0 &&
+                                                            $discount_price < $selling_price
+                                                        ) {
+                                                            $discount_percent = round(
+                                                                (($selling_price - $discount_price) / $selling_price) *
+                                                                    100,
+                                                            );
+                                                        }
+
+                                                        
                                                     }
+                                                    
                                                 @endphp
 
+                                              
                                                 @if ($discount_percent > 0)
                                                     <div class="course-badge blue">
                                                         -{{ $discount_percent }}%
                                                     </div>
                                                 @endif
 
+                                               
+                                                @if ($course->is_free == 1)
+                                                    <div class="course-badge green">
+                                                        Miễn phí
+                                                    </div>
+                                                @endif
 
                                             </div>
-                                        </div><!-- end card-image -->
+                                        </div>
                                         <div class="card-body">
                                             <h6 class="ribbon ribbon-blue-bg fs-14 mb-3">
                                                 {{ $course->course_level }}
@@ -105,7 +123,7 @@
                                                     <span class="la la-star-o"></span>
                                                 </div>
                                                 <span class="rating-total pl-1">(20,230)</span>
-                                            </div><!-- end rating-wrap -->
+                                            </div>
                                             <div class="d-flex justify-content-between align-items-center">
 
                                                 @if ($course->is_free == 1 || ($course->selling_price == 0 && $course->discount_price == 0))
@@ -159,21 +177,21 @@
                                                 </div>
 
                                             </div>
-                                        </div><!-- end card-body -->
-                                    </div><!-- end card -->
-                                </div><!-- end col-lg-4 -->
+                                        </div>
+                                    </div>
+                                </div>
                             @endforeach
 
-                        </div><!-- end row -->
-                    </div><!-- end tab-pane -->
+                        </div>
+                    </div>
                 @endforeach
 
-            </div><!-- end tab-content -->
+            </div>
             <div class="more-btn-box mt-4 text-center">
-                <a href="course-grid.html" class="btn theme-btn">Browse all Courses <i
+                <a href={{ route('frontend.courses') }} class="btn theme-btn">Xem tất cả các khóa học <i
                         class="la la-arrow-right icon ml-1"></i></a>
-            </div><!-- end more-btn-box -->
-        </div><!-- end container -->
-    </div><!-- end card-content-wrapper -->
-    
-</section><!-- end courses-area -->
+            </div>
+        </div>
+    </div>
+
+</section>

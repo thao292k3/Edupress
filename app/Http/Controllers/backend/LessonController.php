@@ -31,24 +31,20 @@ class LessonController extends Controller
     }
 
     public function create()
-{
-}
+    {
+    }
 
 
    public function store(LessonRequest $request)
-{
-    $this->authorize('create', Lesson::class);
+    {
+        $this->authorize('create', Lesson::class);
 
-    $validated = $request->validated();
+        $validated = $request->validated();
 
-    $this->lessonService->createLesson($validated);
+        $this->lessonService->createLesson($validated);
 
-    // return redirect()
-    //     ->route('instructor.lessons.index')
-    //     ->with('success', 'Lesson created!');
-
-    return back()->with('success', 'Lesson created success');
-}
+        return back()->with('success', 'Lesson created success');
+    }
 
 
 
@@ -57,60 +53,51 @@ class LessonController extends Controller
         $this->authorize('update', $lesson);
 
         $request->validate([
-            'course_id'   => 'required',
-            'title'       => 'required|string|max:255',
-            'description' => 'nullable|string',
-
-            'is_preview' => 'boolean',
-            'video_url'  => 'nullable|url',
-            'video_file' => 'nullable|mimes:mp4,webm,ogg|max:50000',
-
-            'lesson_file' => 'nullable|mimes:pdf,doc,docx,zip|max:20000',
-            'lesson_document_link' => 'nullable|string',
-            'duration' => 'nullable|numeric|min:0',
+            'course_id'     => 'required',
+            'lecture_title' => 'required|string|max:255',
+            'content'       => 'nullable|string',
+            'is_preview'    => 'boolean',
+            'url'           => 'nullable|url', 
+            'video_file'    => 'nullable|mimes:mp4,webm,ogg|max:50000',
+            'lesson_file'   => 'nullable|mimes:pdf,doc,docx,zip|max:20000',
+            'lesson_document_link' => 'nullable|array', 
+            'duration'      => 'nullable|numeric|min:0',
+            'order'         => 'nullable|integer|min:0',
         ]);
 
         
         if ($request->hasFile('video_file')) {
-
             if ($lesson->video_file) {
                 Storage::disk('public')->delete($lesson->video_file);
             }
-
-            $lesson->video_file = $request
-                ->file('video_file')
-                ->store('lesson/videos', 'public');
-
+            $lesson->video_file = $request->file('video_file')->store('lesson/videos', 'public');
             
-            $lesson->video_url = null;
+            $lesson->url = null; 
         }
 
-        
+       
         if ($request->hasFile('lesson_file')) {
-
             if ($lesson->lesson_file) {
                 Storage::disk('public')->delete($lesson->lesson_file);
             }
-
-            $lesson->lesson_file = $request
-                ->file('lesson_file')
-                ->store('lesson/files', 'public');
+            $lesson->lesson_file = $request->file('lesson_file')->store('lesson/files', 'public');
         }
 
+        
         $lesson->update([
-            'course_id' => $request->course_id,
-            'title'     => $request->title,
-            'slug'      => Str::slug($request->title),
-            'description' => $request->description,
-            'is_preview' => $request->is_preview ?? false,
-            'video_url' => $request->video_url,
-            'lesson_document_link' => $request->lesson_document_link,
-            'order' => $request->order ?? $lesson->order,
-            'duration' => $request->duration,
+            'course_id'     => $request->course_id,
+            'lecture_title' => $request->lecture_title, 
+            'slug'          => Str::slug($request->lecture_title), 
+            'content'       => $request->content,       
+            'is_preview'    => $request->is_preview ?? false,
+            'url'           => $request->url,           
+            'duration'=> $request->duration,      
+            'order'         => $request->order ?? $lesson->order,
+            'lesson_document_link' => json_encode($request->lesson_document_link), 
         ]);
 
-        return redirect()->route('instructor.lessons.index')
-            ->with('success', 'Lesson updated!');
+       return redirect()->route('instructor.course-section.show', $request->course_id)
+                     ->with('success', 'Cập nhật bài học thành công!');
     }
 
     public function destroy(Lesson $lesson)

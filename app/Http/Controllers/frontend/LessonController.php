@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 
+
 class LessonController extends Controller
 {
    public function show($id)
@@ -75,9 +76,34 @@ class LessonController extends Controller
                 $youtubeId = $match[1] ?? null;
             }
         }
+        $userId = Auth::id();
+        $percentage = 0;
+
+        $completed_lessons_count = 0;
+        $total_lessons = 0;
+        
+
+        if ($userId) {
+            
+            $lessonIds = \App\Models\Lesson::whereHas('section', function($query) use ($course) {
+                    $query->where('course_id', $course->id);
+                })
+                ->whereNull('quiz_id') 
+                ->pluck('id');
+
+            
+            $completed_lessons_count = \App\Models\LessonProgress::where('user_id', $userId)
+                ->whereIn('lesson_id', $lessonIds)
+                ->where('is_completed', 1)
+                ->count();
+
+            
+            $total_lessons = $lessonIds->count();
+            $percentage = ($total_lessons > 0) ? round(($completed_lessons_count / $total_lessons) * 100) : 0;
+        }
 
         
-        // $user = auth()->user();
+
         $isEnrolled = $user ? CourseEnrollment::where('course_id', $course->id)->where('user_id', $user->id)->exists() : false;
         $courseIsFree = ($course->selling_price ?? 0) <= 0;
         $canViewFull = $user && ($isEnrolled || $courseIsFree);
@@ -85,7 +111,8 @@ class LessonController extends Controller
 
         return view('frontend.section.lesson-detail', compact(
             'lesson', 'course', 'course_content', 'isEnrolled', 
-            'canViewFull', 'canViewPreview', 'isYoutube', 'youtubeId', 'videoUrl'
+            'canViewFull', 'canViewPreview', 'isYoutube', 'youtubeId', 'videoUrl',
+            'percentage', 'completed_lessons_count', 'total_lessons'
         ));
     }
 
@@ -93,34 +120,30 @@ class LessonController extends Controller
      * Mark a lesson as watched (AJAX).
      */
     public function markWatched(Request $request, $id)
-    {
-        $lesson = Lesson::find($id);
-        if (! $lesson) {
-            return response()->json(['ok' => false, 'message' => 'Lesson not found'], 404);
-        }
+{
+    $lesson = \App\Models\Lesson::with('section')->find($id);
+    if (!$lesson || !Auth::check()) {
+        return response()->json(['ok' => false, 'msg' => 'Unauthorized'], 401);
+    }
 
-        
-        $watched = session()->get('watched_lessons', []);
-        if (! in_array($lesson->id, $watched)) {
-            $watched[] = $lesson->id;
-            session()->put('watched_lessons', $watched);
-        }
+    try {
+        // Đảm bảo lấy được ID khóa học
+        $courseId = $lesson->section ? $lesson->section->course_id : null;
 
-        
-            if (Auth::check() && Schema::hasTable('lesson_progress')) {
-            try {
-                    DB::table('lesson_progress')->insertOrIgnore([
-                    'user_id' => Auth::id(),
-                    'lesson_id' => $lesson->id,
-                    'course_id' => optional($lesson->section->course)->id,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
-            } catch (\Exception $e) {
-                
-            }
-        }
+        DB::table('lesson_progress')->updateOrInsert(
+            ['user_id' => Auth::id(), 'lesson_id' => $id],
+            [
+                'course_id' => $courseId,
+                'is_completed' => 1,
+                'completed_at' => now(),
+                'updated_at' => now(),
+            ]
+        );
 
         return response()->json(['ok' => true]);
+    } catch (\Exception $e) {
+        // Trả về lỗi chi tiết để xem ở tab Network
+        return response()->json(['ok' => false, 'error' => $e->getMessage()], 500);
     }
+}
 }
